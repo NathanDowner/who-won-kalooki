@@ -1,12 +1,12 @@
 import Header from '@/components/Header';
-import { Outlet } from 'react-router-dom';
+import { PropsWithChildren } from 'react';
 
-const DefaultLayout = () => {
+const DefaultLayout = ({children}: PropsWithChildren) => {
   return (
     <>
       <Header />
       <div className="p-4 max-w-5xl mx-auto">
-        <Outlet />
+        {children}
       </div>
     </>
   );

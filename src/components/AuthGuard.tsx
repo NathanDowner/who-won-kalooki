@@ -1,4 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext';
+import DefaultLayout from '@/layouts/DefaultLayout';
 import { AppRoutes } from '@/routes';
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -7,8 +8,12 @@ const AuthGuard = () => {
 
   if (loading) return <div>Loading...</div>;
 
-  if (!user) return <Navigate to={AppRoutes.newList} />;
-  return <Outlet />;
+  if (!user) return <Navigate to={AppRoutes.start} />;
+  return (
+    <DefaultLayout>
+      <Outlet />
+    </DefaultLayout>
+  );
 };
 
 export default AuthGuard;
