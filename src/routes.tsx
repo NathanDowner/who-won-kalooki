@@ -7,7 +7,7 @@ import RoundPage from './pages/RoundPage';
 export const AppRoutes = {
   root: '/',
   start: '/start',
-  addPlayers: '.play/add-players',
+  addPlayers: '/play/add-players',
   round: (round: string) => `/play/round/${round}`,
   // guestListBuilder: (listId: string) => `/lists/${listId}`,
 };

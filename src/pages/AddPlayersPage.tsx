@@ -2,7 +2,11 @@ import PlayerCard from '@/components/PlayerCard';
 import { useAuth } from '@/contexts/AuthContext';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { Player } from '@/models/player.interface';
-import { useEffect, useRef, useState } from 'react';
+import { AppRoutes } from '@/routes';
+import { useAppDispatch } from '@/store/hooks';
+import { bulkAddPlayers } from '@/store/playersSlice';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {};
 
@@ -10,6 +14,9 @@ const AddPlayersPage = ({}: Props) => {
   useSetPageTitle('Add Players');
 
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [showAddUserForm, setShowAddUserForm] = useState(false);
@@ -29,6 +36,11 @@ const AddPlayersPage = ({}: Props) => {
       inputRef.current.scrollIntoView({ behavior: 'smooth' });
       inputRef.current.focus();
     }
+  };
+
+  const handleStartRound = () => {
+    dispatch(bulkAddPlayers(players));
+    navigate(AppRoutes.round('333'));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -72,7 +84,9 @@ const AddPlayersPage = ({}: Props) => {
         <button onClick={handleAddPlayer} className="btn btn-lg text-3xl">
           +
         </button>
-        <button className="btn btn-lg flex-1">Start Round</button>
+        <button onClick={handleStartRound} className="btn btn-lg flex-1">
+          Start Round
+        </button>
       </footer>
     </div>
   );
