@@ -5,6 +5,7 @@ import { Player } from '@/models/player.interface';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
 import { bulkAddPlayers } from '@/store/playersSlice';
+import { setInitialScores } from '@/store/scoreSlice';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,7 +41,8 @@ const AddPlayersPage = ({}: Props) => {
 
   const handleStartRound = () => {
     dispatch(bulkAddPlayers(players));
-    navigate(AppRoutes.round('333'));
+    dispatch(setInitialScores(players.length));
+    navigate(AppRoutes.round('334'));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
