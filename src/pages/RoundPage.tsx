@@ -2,7 +2,7 @@ import RoundCard from '@/components/RoundCard';
 import { useTitle } from '@/contexts/TitleContext';
 import { useAppSelector } from '@/store/hooks';
 import { selectPlayers } from '@/store/playersSlice';
-import { selectTotalsUpToRound } from '@/store/scoreSlice';
+import { selectRoundScores, selectTotalsUpToRound } from '@/store/scoreSlice';
 import { formatRound } from '@/utils';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -13,14 +13,21 @@ const RoundPage = ({}: Props) => {
   const { round } = useParams();
   const { setTitle } = useTitle();
   const players = useAppSelector(selectPlayers);
+  const currentRoundScores = useAppSelector(selectRoundScores(round!));
   const totalsSoFar = useAppSelector(selectTotalsUpToRound(round!));
-  const [roundScores, setRoundScores] = useState<number[]>(() => {
-    return Array.from({ length: players.length }, () => 0);
-  });
+  const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
 
   useEffect(() => {
     setTitle(`Round ${formatRound(round!)}`);
   }, [round]);
+
+  const setScore = (idx: number, score: number) => {
+    setRoundScores((prev) => {
+      const newScores = [...prev];
+      newScores[idx] = score;
+      return newScores;
+    });
+  };
 
   return (
     <div className="h-full overflow-y-auto">
@@ -35,6 +42,7 @@ const RoundPage = ({}: Props) => {
             key={idx}
             isLeading={false}
             player={player}
+            setScore={(score: number) => setScore(idx, score)}
             currentScore={totalsSoFar[idx]}
             roundScore={roundScores[idx]}
           />

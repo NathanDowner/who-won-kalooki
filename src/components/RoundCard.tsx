@@ -6,6 +6,7 @@ interface Props {
   currentScore: number;
   player: Player;
   isLeading: boolean;
+  setScore: (score: number) => void;
 }
 
 const RoundCard = ({
@@ -13,6 +14,7 @@ const RoundCard = ({
   roundScore,
   currentScore,
   isLeading = false,
+  setScore,
 }: Props) => {
   const name = formatName(player.name);
   return (
@@ -25,7 +27,11 @@ const RoundCard = ({
       <h3 className="text-2xl font-bold">{name}</h3>
       <p>Score: {currentScore}</p>
       <p>Current:</p>
-      <p className="text-6xl text-center mb-4">{roundScore}</p>
+      <input
+        className="text-6xl text-center mb-4"
+        value={roundScore}
+        onChange={(e) => setScore(Number(e.target.value))}
+      />
       <button className="btn btn-sm btn-outline border-2 w-full mt-auto">
         Extra!
       </button>
