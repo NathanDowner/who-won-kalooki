@@ -11,9 +11,9 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
       {/* <Header /> */}
       <div className="drawer">
         <input type="checkbox" id="side-menu" className="drawer-toggle" />
-        <div className="drawer-content flex-flex-col">
+        <div className="drawer-content h-screen flex flex-col">
           {/* Navbar */}
-          <div className="w-full navbar">
+          <div className="w-full navbar flex-none">
             <div className="flex-none lg:hidden">
               <label
                 htmlFor="side-menu"
@@ -39,7 +39,9 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
           </div>
 
           {/* Content */}
-          <div className="p-4 max-w-5xl mx-auto">{children}</div>
+          <div className="relative pb-4 max-w-md mx-auto flex-1 overflow-y-auto w-full">
+            <div className="px-4">{children}</div>
+          </div>
         </div>
 
         <div className="drawer-side">
