@@ -26,3 +26,15 @@ export const createListName = (names: Contributor[]) => {
   const ownerNamesString = ownerFirstNames.join(', ');
   return `${ownerNamesString}, and ${lastOwnerName}'s List`;
 };
+
+export const formatName = (name: string) => {
+  const nameParts = name.split(' ');
+  if (nameParts.length === 2) {
+    return nameParts[0];
+  }
+  return name;
+};
+
+export const formatRound = (round: string) => {
+  return round.split('').join('-');
+};

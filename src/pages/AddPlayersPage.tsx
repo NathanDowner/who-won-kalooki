@@ -42,7 +42,7 @@ const AddPlayersPage = ({}: Props) => {
   const handleStartRound = () => {
     dispatch(bulkAddPlayers(players));
     dispatch(setInitialScores(players.length));
-    navigate(AppRoutes.round('334'));
+    navigate(AppRoutes.round('333'));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -82,7 +82,7 @@ const AddPlayersPage = ({}: Props) => {
           />
         </form>
       </div>
-      <footer className="flex absolute bottom-4 gap-4 w-full">
+      <footer className="flex fixed bottom-4 max-w-md gap-4 -ml-4 w-full">
         <button onClick={handleAddPlayer} className="btn btn-lg text-3xl">
           +
         </button>

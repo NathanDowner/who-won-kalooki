@@ -56,12 +56,15 @@ export const selectTotalsUpToRound = (round: string) => (state: RootState) => {
   const roundIndex = rounds.indexOf(round);
   const roundsInQuestion = rounds.slice(0, roundIndex);
 
+  if (roundsInQuestion.length === 0)
+    return Array.from({ length: state.playersSlice.players.length }, () => 0);
+
   const rowTotals: number[][] = roundsInQuestion.map((round) => {
     return state.scoreSlice.rounds[round];
   });
 
   const totals: number[] = rowTotals.reduce((acc, row) => {
-    return acc.map((val, i) => val + row[i] || 0);
+    return acc.map((val, i) => val + row[i]);
   });
   return totals;
 };
