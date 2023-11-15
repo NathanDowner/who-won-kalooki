@@ -1,17 +1,25 @@
 import RoundCard from '@/components/RoundCard';
 import { useTitle } from '@/contexts/TitleContext';
-import { useAppSelector } from '@/store/hooks';
+import { AppRoutes } from '@/routes';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectPlayers } from '@/store/playersSlice';
-import { selectRoundScores, selectTotalsUpToRound } from '@/store/scoreSlice';
-import { formatRound } from '@/utils';
+import {
+  selectRoundScores,
+  selectTotalsUpToRound,
+  setRoundScores as saveRoundScores,
+} from '@/store/scoreSlice';
+import { formatRound, getNextRound } from '@/utils';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type Props = {};
 
 const RoundPage = ({}: Props) => {
   const { round } = useParams();
   const { setTitle } = useTitle();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const players = useAppSelector(selectPlayers);
   const currentRoundScores = useAppSelector(selectRoundScores(round!));
   const totalsSoFar = useAppSelector(selectTotalsUpToRound(round!));
@@ -21,12 +29,29 @@ const RoundPage = ({}: Props) => {
     setTitle(`Round ${formatRound(round!)}`);
   }, [round]);
 
+  useEffect(() => {
+    setRoundScores(currentRoundScores);
+  }, [currentRoundScores]);
+
   const setScore = (idx: number, score: number) => {
     setRoundScores((prev) => {
       const newScores = [...prev];
       newScores[idx] = score;
       return newScores;
     });
+  };
+
+  const submitRound = () => {
+    dispatch(saveRoundScores({ round: round!, scores: roundScores }));
+  };
+
+  const handleNextRound = () => {
+    submitRound();
+    navigate(AppRoutes.round(getNextRound(round!)));
+  };
+
+  const handlePrevRound = () => {
+    navigate(AppRoutes.round(getNextRound(round!, true)));
   };
 
   return (
@@ -52,8 +77,20 @@ const RoundPage = ({}: Props) => {
         </div>
       </div>
       <footer className="flex fixed bottom-4 max-w-md gap-4 -ml-4 w-full">
-        <button className="btn btn-lg">Prev</button>
-        <button className="btn btn-lg flex-1">Next Round</button>
+        <button
+          disabled={round! === '333'}
+          onClick={handlePrevRound}
+          className="btn btn-lg"
+        >
+          Prev
+        </button>
+        <button
+          disabled={round! === '4444'}
+          onClick={handleNextRound}
+          className="btn btn-lg flex-1"
+        >
+          Next Round
+        </button>
       </footer>
     </div>
   );

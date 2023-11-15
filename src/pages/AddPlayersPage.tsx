@@ -25,7 +25,7 @@ const AddPlayersPage = ({}: Props) => {
     { name: user?.displayName!, image: user?.photoURL! },
 
     ...Array.from({ length: 3 }, (_, i) => ({
-      name: `Player ${i + 2}`,
+      name: `Player${i + 2}`,
       image: `https://avatar.iran.liara.run/public/boy?username=Player${i + 2}`,
     })),
   ]);
