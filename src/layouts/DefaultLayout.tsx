@@ -9,7 +9,7 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
   return (
     <>
       {/* <Header /> */}
-      <div className="drawer">
+      <div className="drawer max-w-md mx-auto">
         <input type="checkbox" id="side-menu" className="drawer-toggle" />
         <div className="drawer-content h-screen flex flex-col">
           {/* Navbar */}
@@ -39,7 +39,7 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
           </div>
 
           {/* Content */}
-          <div className="relative pb-4 max-w-md mx-auto flex-1 overflow-y-auto w-full">
+          <div className="relative pb-4 flex-1 overflow-y-auto w-full">
             <div className="px-4">{children}</div>
           </div>
         </div>
