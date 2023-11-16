@@ -69,7 +69,7 @@ const AddPlayersPage = ({}: Props) => {
   };
 
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="page">
       <div className="space-y-4 mx-2 mb-20 ">
         {players.map((player) => (
           <PlayerCard key={player.name} player={player} />

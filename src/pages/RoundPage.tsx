@@ -58,7 +58,7 @@ const RoundPage = ({}: Props) => {
   };
 
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="page">
       <header className="text-center mb-4">
         <h1 className="text-2xl">{round}</h1>
       </header>
