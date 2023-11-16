@@ -15,21 +15,22 @@ type Props = {};
 const AddPlayersPage = ({}: Props) => {
   useSetPageTitle('Add Players');
 
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [showAddUserForm, setShowAddUserForm] = useState(false);
-  const [players, setPlayers] = useState<Player[]>([
-    { name: user?.displayName!, image: user?.photoURL! },
+  const [players, setPlayers] = useState<Player[]>([]);
+  // const [players, setPlayers] = useState<Player[]>([
+  //   { name: user?.displayName!, image: user?.photoURL! },
 
-    ...Array.from({ length: 3 }, (_, i) => ({
-      name: `Player${i + 2}`,
-      image: `https://avatar.iran.liara.run/public/boy?username=Player${i + 2}`,
-    })),
-  ]);
+  //   ...Array.from({ length: 3 }, (_, i) => ({
+  //     name: `Player${i + 2}`,
+  //     image: `https://avatar.iran.liara.run/public/boy?username=Player${i + 2}`,
+  //   })),
+  // ]);
 
   const handleAddPlayer = () => {
     setShowAddUserForm(true);

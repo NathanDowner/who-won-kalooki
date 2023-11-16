@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useTitle } from '@/contexts/TitleContext';
 import { PropsWithChildren } from 'react';
+import { Outlet } from 'react-router-dom';
 
 const DefaultLayout = ({ children }: PropsWithChildren) => {
   const { logout } = useAuth();
@@ -40,7 +41,9 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
 
           {/* Content */}
           <div className="relative pb-4 flex-1 overflow-y-auto w-full">
-            <div className="px-4">{children}</div>
+            <div className="px-4">
+              <Outlet />
+            </div>
           </div>
         </div>
 
