@@ -7,7 +7,7 @@ import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
 import { bulkAddPlayers } from '@/store/playersSlice';
 import { setInitialScores } from '@/store/scoreSlice';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {};
@@ -32,14 +32,9 @@ const AddPlayersPage = ({}: Props) => {
   //   })),
   // ]);
 
-  const handleAddPlayer = () => {
-    setShowAddUserForm(true);
-
-    if (inputRef.current) {
-      inputRef.current.scrollIntoView({ behavior: 'smooth' });
-      inputRef.current.focus();
-    }
-  };
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleStartRound = () => {
     dispatch(bulkAddPlayers(players));
@@ -57,6 +52,20 @@ const AddPlayersPage = ({}: Props) => {
     setPlayers((prev) => [...prev, newPlayer]);
     setShowAddUserForm(false);
     setNewPlayerName('');
+    // create a promise that resolves after 500 ms in which the inputRef is scrolled into view
+    const scrollPromise = new Promise((resolve) => {
+      setTimeout(() => {
+        inputRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+        resolve(true);
+      }, 0);
+    });
+
+    scrollPromise.then(() => {
+      inputRef.current?.focus();
+    });
   };
 
   return (
@@ -68,9 +77,7 @@ const AddPlayersPage = ({}: Props) => {
 
         <form
           onSubmit={handleSubmit}
-          className={`${
-            showAddUserForm ? 'visible' : 'invisible'
-          } flex gap-4 items-center border-4 text-xl border-gray-700 p-3 rounded-md`}
+          className={`flex gap-4 items-center border-4 text-xl border-gray-700 p-3 rounded-md`}
         >
           <div className="border-4 border-gray-700 rounded-full w-14 h-14" />
           <input
@@ -85,10 +92,14 @@ const AddPlayersPage = ({}: Props) => {
         </form>
       </div>
       <ButtonContainer>
-        <button onClick={handleAddPlayer} className="btn btn-lg text-3xl">
+        {/* <button onClick={handleAddPlayer} className="btn btn-lg text-3xl">
           +
-        </button>
-        <button onClick={handleStartRound} className="btn btn-lg flex-1">
+        </button> */}
+        <button
+          disabled={players.length < 2}
+          onClick={handleStartRound}
+          className="btn btn-lg w-full"
+        >
           Start Round
         </button>
       </ButtonContainer>
