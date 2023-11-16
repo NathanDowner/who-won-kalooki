@@ -75,7 +75,7 @@ const RoundPage = ({}: Props) => {
             currentRoundScore={roundScores[idx]}
           />
         ))}
-        <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl h-[212px] border-black border-dashed hover:border-solid">
+        <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
           <div className="text-4xl">+</div> <div>Add Player</div>
         </div>
       </div>
