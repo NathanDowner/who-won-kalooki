@@ -2,8 +2,8 @@ import { Player } from '@/models/player.interface';
 import { formatName } from '@/utils';
 
 interface Props {
-  roundScore: number;
-  currentScore: number;
+  currentRoundScore: number;
+  scoreSoFar: number;
   player: Player;
   isLeading: boolean;
   setScore: (score: number) => void;
@@ -11,8 +11,8 @@ interface Props {
 
 const RoundCard = ({
   player,
-  roundScore,
-  currentScore,
+  currentRoundScore,
+  scoreSoFar,
   isLeading = false,
   setScore,
 }: Props) => {
@@ -20,16 +20,15 @@ const RoundCard = ({
   return (
     <div
       className={`${
-        isLeading &&
-        'relative after:-inset-3 after:border-4 after:border-black after:absolute after:rounded-md'
-      } border-4 border-black rounded-md p-2 flex flex-col`}
+        isLeading ? 'border-yellow-500 bg-yellow-400' : 'border-black'
+      } border-4 rounded-md p-2 flex flex-col`}
     >
       <h3 className="text-2xl font-bold">{name}</h3>
-      <p>Score: {currentScore}</p>
+      <p>Score: {scoreSoFar}</p>
       <p>Current:</p>
       <input
-        className="text-6xl text-center mb-4"
-        value={roundScore}
+        className="text-6xl text-center mb-4 bg-transparent"
+        value={currentRoundScore}
         onChange={(e) => setScore(Number(e.target.value))}
       />
       <button className="btn btn-sm btn-outline border-2 w-full mt-auto">

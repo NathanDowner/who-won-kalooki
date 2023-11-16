@@ -1,3 +1,4 @@
+import ButtonContainer from '@/components/ButtonContainer';
 import RoundCard from '@/components/RoundCard';
 import { useTitle } from '@/contexts/TitleContext';
 import { AppRoutes } from '@/routes';
@@ -9,7 +10,7 @@ import {
   setRoundScores as saveRoundScores,
 } from '@/store/scoreSlice';
 import { formatRound, getNextRound } from '@/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 type Props = {};
@@ -24,6 +25,8 @@ const RoundPage = ({}: Props) => {
   const currentRoundScores = useAppSelector(selectRoundScores(round!));
   const totalsSoFar = useAppSelector(selectTotalsUpToRound(round!));
   const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
+
+  const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
 
   useEffect(() => {
     setTitle(`Round ${formatRound(round!)}`);
@@ -65,18 +68,18 @@ const RoundPage = ({}: Props) => {
         {players.map((player, idx) => (
           <RoundCard
             key={idx}
-            isLeading={false}
+            isLeading={round !== '333' && totalsSoFar[idx] === lowestScore}
             player={player}
             setScore={(score: number) => setScore(idx, score)}
-            currentScore={totalsSoFar[idx]}
-            roundScore={roundScores[idx]}
+            scoreSoFar={totalsSoFar[idx]}
+            currentRoundScore={roundScores[idx]}
           />
         ))}
         <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl h-[212px] border-black border-dashed hover:border-solid">
           <div className="text-4xl">+</div> <div>Add Player</div>
         </div>
       </div>
-      <footer className="flex fixed bottom-4 max-w-md gap-4 -ml-4 w-full">
+      <ButtonContainer>
         <button
           disabled={round! === '333'}
           onClick={handlePrevRound}
@@ -91,7 +94,7 @@ const RoundPage = ({}: Props) => {
         >
           Next Round
         </button>
-      </footer>
+      </ButtonContainer>
     </div>
   );
 };
