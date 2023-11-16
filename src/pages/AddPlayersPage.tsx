@@ -1,3 +1,4 @@
+import ButtonContainer from '@/components/ButtonContainer';
 import PlayerCard from '@/components/PlayerCard';
 import { useAuth } from '@/contexts/AuthContext';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
@@ -67,8 +68,8 @@ const AddPlayersPage = ({}: Props) => {
         <form
           onSubmit={handleSubmit}
           className={`${
-            showAddUserForm ? 'flex' : 'hidden'
-          } gap-4 items-center border-4 text-xl border-gray-700 p-3 rounded-md`}
+            showAddUserForm ? 'visible' : 'invisible'
+          } flex gap-4 items-center border-4 text-xl border-gray-700 p-3 rounded-md`}
         >
           <div className="border-4 border-gray-700 rounded-full w-14 h-14" />
           <input
@@ -82,14 +83,14 @@ const AddPlayersPage = ({}: Props) => {
           />
         </form>
       </div>
-      <footer className="flex fixed bottom-4 max-w-md gap-4 -ml-4 w-full">
+      <ButtonContainer>
         <button onClick={handleAddPlayer} className="btn btn-lg text-3xl">
           +
         </button>
         <button onClick={handleStartRound} className="btn btn-lg flex-1">
           Start Round
         </button>
-      </footer>
+      </ButtonContainer>
     </div>
   );
 };
