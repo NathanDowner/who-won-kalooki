@@ -13,11 +13,37 @@ const StartPage = ({}: StartPageProps) => {
     <div className="max-w-sm mx-auto bg-gray-50 min-h-screen flex flex-col items-center justify-between pt-10 pb-32">
       <header className="flex flex-col items-center">
         <h1 className="text-4xl font-bold mb-14">Who Won?</h1>
-        <img
+        {/* <img
           className="w-28 h-28 rounded-full border-2"
           src={user ? user.photoURL! : 'https://avatar.iran.liara.run/public'}
           alt="Random avatar image"
-        />
+        /> */}
+        <div className="grid gap-4 grid-cols-2 grid-rows-2">
+          <img
+            className="w-28 h-28 rounded-full"
+            src={
+              user
+                ? user.photoURL!
+                : 'https://avatar.iran.liara.run/public/girl?username=0'
+            }
+            alt={user ? user.displayName! : 'Random avatar image 1'}
+          />
+          <img
+            className="w-28 h-28"
+            src="https://avatar.iran.liara.run/public/boy?username=1"
+            alt="Random avatar image 2"
+          />
+          <img
+            className="w-28 h-28"
+            src="https://avatar.iran.liara.run/public/girl?username=2"
+            alt="Random avatar image 3"
+          />
+          <img
+            className="w-28 h-28"
+            src="https://avatar.iran.liara.run/public/boy?username=3"
+            alt="Random avatar image 4"
+          />
+        </div>
       </header>
       {user ? (
         <div className="flex flex-col items-center gap-4">
