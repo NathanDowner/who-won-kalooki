@@ -27,10 +27,14 @@ export const playersSlice = createSlice({
     bulkAddPlayers: (state, action: PayloadAction<Player[]>) => {
       state.players = action.payload;
     },
+
+    clearPlayers: (state) => {
+      state.players = [];
+    },
   },
 });
 
-export const { bulkAddPlayers } = playersSlice.actions;
+export const { bulkAddPlayers, clearPlayers } = playersSlice.actions;
 
 export default playersSlice.reducer;
 

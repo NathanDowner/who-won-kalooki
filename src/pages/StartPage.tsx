@@ -1,5 +1,9 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { AppRoutes } from '@/routes';
+import { useAppDispatch } from '@/store/hooks';
+import { clearPlayers } from '@/store/playersSlice';
+import { resetScores } from '@/store/scoreSlice';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 // https://i.pravatar.cc/300
@@ -9,6 +13,12 @@ type StartPageProps = {};
 const StartPage = ({}: StartPageProps) => {
   // const { user, signInWithGoogle, logout } = useAuth();
   const user = null;
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(clearPlayers());
+    dispatch(resetScores());
+  }, []);
 
   return (
     <div className="max-w-sm mx-auto bg-gray-50 min-h-screen flex flex-col items-center justify-between pt-10 pb-32">

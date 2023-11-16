@@ -41,10 +41,18 @@ export const scoreSlice = createSlice({
         state.rounds[round] = Array.from({ length: numOfPlayers }, () => 0);
       });
     },
+
+    resetScores: (state) => {
+      const rounds = Object.keys(state.rounds);
+      rounds.forEach((round) => {
+        state.rounds[round] = [];
+      });
+    },
   },
 });
 
-export const { setRoundScores, setInitialScores } = scoreSlice.actions;
+export const { setRoundScores, setInitialScores, resetScores } =
+  scoreSlice.actions;
 
 export default scoreSlice.reducer;
 
