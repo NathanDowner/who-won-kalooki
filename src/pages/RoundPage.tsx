@@ -8,10 +8,12 @@ import {
   selectRoundScores,
   selectTotalsUpToRound,
   setRoundScores as saveRoundScores,
+  setInitialScores,
 } from '@/store/scoreSlice';
 import { formatRound, getNextRound } from '@/utils';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import FinalScorePage from './FinalScorePage';
 
 type Props = {};
 
@@ -24,7 +26,9 @@ const RoundPage = ({}: Props) => {
   const players = useAppSelector(selectPlayers);
   const currentRoundScores = useAppSelector(selectRoundScores(round!));
   const totalsSoFar = useAppSelector(selectTotalsUpToRound(round!));
+
   const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
+  const [isGameFinished, setIsGameFinished] = useState(false);
 
   const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
 
@@ -57,7 +61,26 @@ const RoundPage = ({}: Props) => {
     navigate(AppRoutes.round(getNextRound(round!, true)));
   };
 
-  return (
+  const handleEndGame = () => {
+    setIsGameFinished(true);
+  };
+
+  const handlePlayAgain = () => {
+    dispatch(setInitialScores(players.length));
+    setIsGameFinished(false);
+    navigate(AppRoutes.round('333'));
+  };
+
+  const handleStartOver = () => {
+    navigate(AppRoutes.start);
+  };
+
+  return isGameFinished ? (
+    <FinalScorePage
+      onPlayAgain={handlePlayAgain}
+      onStartOver={handleStartOver}
+    />
+  ) : (
     <div className="page">
       <header className="text-center mb-4">
         <h1 className="text-2xl">{round}</h1>
@@ -86,6 +109,9 @@ const RoundPage = ({}: Props) => {
           className="btn btn-lg"
         >
           Prev
+        </button>
+        <button onClick={handleEndGame} className="btn btn-lg">
+          End Game
         </button>
         <button
           disabled={round! === '4444'}

@@ -1,26 +1,17 @@
 import ButtonContainer from '@/components/ButtonContainer';
 import PlayerCard from '@/components/PlayerCard';
-import { AppRoutes } from '@/routes';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useAppSelector } from '@/store/hooks';
 import { selectPlayers } from '@/store/playersSlice';
-import { selectTotalsUpToRound, setInitialScores } from '@/store/scoreSlice';
-import { useNavigate } from 'react-router-dom';
+import { selectTotalsUpToRound } from '@/store/scoreSlice';
 
-const FinalScorePage = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+interface Props {
+  onPlayAgain: () => void;
+  onStartOver: () => void;
+}
 
+const FinalScorePage = ({ onPlayAgain, onStartOver }: Props) => {
   const players = useAppSelector(selectPlayers);
   const totalsSoFar = useAppSelector(selectTotalsUpToRound('4444'));
-
-  const handleStartOver = () => {
-    navigate(AppRoutes.start);
-  };
-
-  const handlePlayAgain = () => {
-    dispatch(setInitialScores(players.length));
-    navigate(AppRoutes.round('333'));
-  };
 
   const lowestScore = Math.min(...totalsSoFar);
 
@@ -37,10 +28,10 @@ const FinalScorePage = () => {
         ))}
       </div>
       <ButtonContainer>
-        <button className="btn btn-lg btn-outline" onClick={handlePlayAgain}>
+        <button className="btn btn-lg btn-outline" onClick={onPlayAgain}>
           Play Again
         </button>
-        <button className="btn btn-lg btn-outline" onClick={handleStartOver}>
+        <button className="btn btn-lg btn-outline" onClick={onStartOver}>
           Start Over
         </button>
       </ButtonContainer>
