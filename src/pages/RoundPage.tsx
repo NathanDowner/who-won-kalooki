@@ -14,6 +14,7 @@ import { formatRound, getNextRound } from '@/utils';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import FinalScorePage from './FinalScorePage';
+import { PENALTY_AMOUNT } from '@/utils/constants';
 
 type Props = {};
 
@@ -29,6 +30,7 @@ const RoundPage = ({}: Props) => {
 
   const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
   const [isGameFinished, setIsGameFinished] = useState(false);
+  const [rewardedIndices, setRewardedIndices] = useState<number[]>([]);
 
   const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
 
@@ -48,12 +50,26 @@ const RoundPage = ({}: Props) => {
     });
   };
 
+  const handlePenalty = (idx: number) => {
+    setScore(idx, roundScores[idx] + PENALTY_AMOUNT);
+  };
+
+  const handleReward = (idx: number) => {
+    if (rewardedIndices.includes(idx)) {
+      return;
+    }
+
+    setRewardedIndices([...rewardedIndices, idx]);
+    setScore(idx, roundScores[idx] - PENALTY_AMOUNT);
+  };
+
   const submitRound = () => {
     dispatch(saveRoundScores({ round: round!, scores: roundScores }));
   };
 
   const handleNextRound = () => {
     submitRound();
+    setRewardedIndices([]);
     navigate(AppRoutes.round(getNextRound(round!)));
   };
 
@@ -95,6 +111,9 @@ const RoundPage = ({}: Props) => {
             player={player}
             setScore={(score: number) => setScore(idx, score)}
             scoreSoFar={totalsSoFar[idx]}
+            disableReward={rewardedIndices.includes(idx)}
+            onPenalty={() => handlePenalty(idx)}
+            onReward={() => handleReward(idx)}
             currentRoundScore={roundScores[idx]}
           />
         ))}

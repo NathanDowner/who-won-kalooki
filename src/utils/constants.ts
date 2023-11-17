@@ -9,3 +9,5 @@ export const ROUNDS: string[] = [
   '3444',
   '4444',
 ];
+
+export const PENALTY_AMOUNT = 50;
