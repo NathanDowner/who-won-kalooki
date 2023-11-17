@@ -1,5 +1,4 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
-import AuthGuard from './components/AuthGuard';
 import AddPlayersPage from './pages/AddPlayersPage';
 import StartPage from './pages/StartPage';
 import RoundPage from './pages/RoundPage';

@@ -1,6 +1,5 @@
 import ButtonContainer from '@/components/ButtonContainer';
 import PlayerCard from '@/components/PlayerCard';
-import { useAuth } from '@/contexts/AuthContext';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { Player } from '@/models/player.interface';
 import { AppRoutes } from '@/routes';
@@ -15,22 +14,12 @@ type Props = {};
 const AddPlayersPage = ({}: Props) => {
   useSetPageTitle('Add Players');
 
-  // const { user } = useAuth();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [newPlayerName, setNewPlayerName] = useState('');
-  const [showAddUserForm, setShowAddUserForm] = useState(false);
   const [players, setPlayers] = useState<Player[]>([]);
-  // const [players, setPlayers] = useState<Player[]>([
-  //   { name: user?.displayName!, image: user?.photoURL! },
-
-  //   ...Array.from({ length: 3 }, (_, i) => ({
-  //     name: `Player${i + 2}`,
-  //     image: `https://avatar.iran.liara.run/public/boy?username=Player${i + 2}`,
-  //   })),
-  // ]);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -50,9 +39,8 @@ const AddPlayersPage = ({}: Props) => {
     };
 
     setPlayers((prev) => [...prev, newPlayer]);
-    setShowAddUserForm(false);
     setNewPlayerName('');
-    // create a promise that resolves after 500 ms in which the inputRef is scrolled into view
+
     const scrollPromise = new Promise((resolve) => {
       setTimeout(() => {
         inputRef.current?.scrollIntoView({
@@ -92,9 +80,6 @@ const AddPlayersPage = ({}: Props) => {
         </form>
       </div>
       <ButtonContainer>
-        {/* <button onClick={handleAddPlayer} className="btn btn-lg text-3xl">
-          +
-        </button> */}
         <button
           disabled={players.length < 2}
           onClick={handleStartRound}

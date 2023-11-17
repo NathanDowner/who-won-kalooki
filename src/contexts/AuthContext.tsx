@@ -13,9 +13,8 @@ type AuthContextData = {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [user, loading, authStateError] = useAuthState(auth);
-  const [signInWithGoogle, loggedInUser, isLoggingIn, loginError] =
-    useSignInWithGoogle(auth);
+  const [user, loading] = useAuthState(auth);
+  const [signInWithGoogle] = useSignInWithGoogle(auth);
 
   const logout = async () => await auth.signOut();
 

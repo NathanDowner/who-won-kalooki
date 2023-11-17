@@ -1,9 +1,8 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useTitle } from '@/contexts/TitleContext';
-import { PropsWithChildren } from 'react';
 import { Outlet } from 'react-router-dom';
 
-const DefaultLayout = ({ children }: PropsWithChildren) => {
+const DefaultLayout = () => {
   const { logout } = useAuth();
   const { title } = useTitle();
 

@@ -1,4 +1,3 @@
-import { useAuth } from '@/contexts/AuthContext';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
 import { clearPlayers } from '@/store/playersSlice';
@@ -12,7 +11,6 @@ type StartPageProps = {};
 
 const StartPage = ({}: StartPageProps) => {
   // const { user, signInWithGoogle, logout } = useAuth();
-  const user = null;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
