@@ -11,7 +11,7 @@ interface Props {
 
 const FinalScorePage = ({ onPlayAgain, onStartOver }: Props) => {
   const players = useAppSelector(selectPlayers);
-  const totalsSoFar = useAppSelector(selectTotalsUpToRound('4444'));
+  const totalsSoFar = useAppSelector(selectTotalsUpToRound('4444', true));
 
   const lowestScore = Math.min(...totalsSoFar);
 
@@ -28,10 +28,10 @@ const FinalScorePage = ({ onPlayAgain, onStartOver }: Props) => {
         ))}
       </div>
       <ButtonContainer>
-        <button className="btn btn-lg btn-outline" onClick={onPlayAgain}>
+        <button className="btn btn-lg btn-outline flex-1" onClick={onPlayAgain}>
           Play Again
         </button>
-        <button className="btn btn-lg btn-outline" onClick={onStartOver}>
+        <button className="btn btn-lg btn-outline flex-1" onClick={onStartOver}>
           Start Over
         </button>
       </ButtonContainer>
