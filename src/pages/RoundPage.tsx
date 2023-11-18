@@ -78,6 +78,7 @@ const RoundPage = ({}: Props) => {
   };
 
   const handleEndGame = () => {
+    submitRound();
     setIsGameFinished(true);
   };
 
