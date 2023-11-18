@@ -18,14 +18,18 @@ const FinalScorePage = ({ onPlayAgain, onStartOver }: Props) => {
   return (
     <div className="page">
       <div className="space-y-4 mx-2">
-        {players.map((player, idx) => (
-          <PlayerCard
-            key={idx}
-            player={player}
-            score={totalsSoFar[idx]}
-            winner={totalsSoFar[idx] === lowestScore}
-          />
-        ))}
+        {players
+          .map((player, idx) => ({ ...player, score: totalsSoFar[idx] }))
+          .sort((a, b) => a.score - b.score)
+          .map((player, idx) => (
+            <PlayerCard
+              key={idx}
+              player={player}
+              score={player.score}
+              order={idx + 1}
+              winner={player.score === lowestScore}
+            />
+          ))}
       </div>
       <ButtonContainer>
         <button className="btn btn-lg btn-outline flex-1" onClick={onPlayAgain}>
