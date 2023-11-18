@@ -60,3 +60,20 @@ export const getNextRound = (round: string, reverseOrder = false) => {
 
   return ROUNDS[roundIndex + 1];
 };
+
+export const getOrdinalSuffix = (number: number) => {
+  const lastDigit = number % 10;
+  if (lastDigit === 1) {
+    return 'st';
+  }
+
+  if (lastDigit === 2) {
+    return 'nd';
+  }
+
+  if (lastDigit === 3) {
+    return 'rd';
+  }
+
+  return 'th';
+};

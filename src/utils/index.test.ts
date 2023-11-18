@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatName, formatRound, getNextRound } from '.';
+import { formatName, formatRound, getNextRound, getOrdinalSuffix } from '.';
 
 describe('formatName function', () => {
   it('should return the name if it is not more than one word', () => {
@@ -136,5 +136,61 @@ describe('getNextRound function', () => {
     const round = '4444';
     const nextRound = getNextRound(round, true);
     expect(nextRound).toEqual('3444');
+  });
+});
+
+describe('getOrdinalSuffix function', () => {
+  it('should return "st" for number 1', () => {
+    const number = 1;
+    const suffix = getOrdinalSuffix(number);
+    expect(suffix).toEqual('st');
+  });
+
+  it('should return "nd" for number 2', () => {
+    const number = 2;
+    const suffix = getOrdinalSuffix(number);
+    expect(suffix).toEqual('nd');
+  });
+
+  it('should return "rd" for number 3', () => {
+    const number = 3;
+    const suffix = getOrdinalSuffix(number);
+    expect(suffix).toEqual('rd');
+  });
+
+  it('should return "th" for number 4', () => {
+    const number = 4;
+    const suffix = getOrdinalSuffix(number);
+    expect(suffix).toEqual('th');
+  });
+
+  it('should return "th" for number 10', () => {
+    const number = 10;
+    const suffix = getOrdinalSuffix(number);
+    expect(suffix).toEqual('th');
+  });
+
+  it('should return "th" for number 11', () => {
+    const number = 11;
+    const suffix = getOrdinalSuffix(number);
+    expect(suffix).toEqual('th');
+  });
+
+  it('should return "th" for number 12', () => {
+    const number = 12;
+    const suffix = getOrdinalSuffix(number);
+    expect(suffix).toEqual('th');
+  });
+
+  it('should return "th" for number 13', () => {
+    const number = 13;
+    const suffix = getOrdinalSuffix(number);
+    expect(suffix).toEqual('th');
+  });
+
+  it('should return "th" for number 20', () => {
+    const number = 20;
+    const suffix = getOrdinalSuffix(number);
+    expect(suffix).toEqual('th');
   });
 });
