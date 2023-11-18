@@ -30,7 +30,7 @@ const RoundPage = ({}: Props) => {
 
   const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
   const [isGameFinished, setIsGameFinished] = useState(false);
-  const [rewardedIndices, setRewardedIndices] = useState<number[]>([]);
+  const [someoneRewarded, setSomeoneRewarded] = useState(false);
 
   const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
 
@@ -50,16 +50,10 @@ const RoundPage = ({}: Props) => {
     });
   };
 
-  const handlePenalty = (idx: number) => {
-    setScore(idx, roundScores[idx] + PENALTY_AMOUNT);
-  };
-
   const handleReward = (idx: number) => {
-    if (rewardedIndices.includes(idx)) {
-      return;
-    }
+    if (someoneRewarded) return;
 
-    setRewardedIndices([...rewardedIndices, idx]);
+    setSomeoneRewarded(true);
     setScore(idx, roundScores[idx] - PENALTY_AMOUNT);
   };
 
@@ -69,7 +63,7 @@ const RoundPage = ({}: Props) => {
 
   const handleNextRound = () => {
     submitRound();
-    setRewardedIndices([]);
+    setSomeoneRewarded(false);
     navigate(AppRoutes.round(getNextRound(round!)));
   };
 
@@ -112,8 +106,7 @@ const RoundPage = ({}: Props) => {
             player={player}
             setScore={(score: number) => setScore(idx, score)}
             scoreSoFar={totalsSoFar[idx]}
-            disableReward={rewardedIndices.includes(idx)}
-            onPenalty={() => handlePenalty(idx)}
+            disableReward={someoneRewarded}
             onReward={() => handleReward(idx)}
             currentRoundScore={roundScores[idx]}
           />
