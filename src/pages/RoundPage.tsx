@@ -15,6 +15,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import FinalScorePage from './FinalScorePage';
 import { PENALTY_AMOUNT } from '@/utils/constants';
+import { motion } from 'framer-motion';
+import ScoreSheetPage from './ScoreSheetPage';
 
 type Props = {};
 
@@ -86,55 +88,62 @@ const RoundPage = ({}: Props) => {
     navigate(AppRoutes.start);
   };
 
-  return isGameFinished ? (
-    <FinalScorePage
-      onPlayAgain={handlePlayAgain}
-      onStartOver={handleStartOver}
-    />
-  ) : (
-    <div className="page">
-      <header className="text-center mb-4">
-        <h1 className="text-2xl">{round}</h1>
-      </header>
+  return (
+    <>
+      {isGameFinished ? (
+        <FinalScorePage
+          onPlayAgain={handlePlayAgain}
+          onStartOver={handleStartOver}
+        />
+      ) : (
+        <div className="page">
+          <header className="text-center mb-4">
+            <h1 className="text-2xl">{round}</h1>
+          </header>
 
-      {/* Cards */}
-      <div className="grid grid-cols-2 gap-6 mb-20">
-        {players.map((player, idx) => (
-          <RoundCard
-            key={idx}
-            isLeading={round !== '333' && totalsSoFar[idx] === lowestScore}
-            player={player}
-            setScore={(score: number) => setScore(idx, score)}
-            scoreSoFar={totalsSoFar[idx]}
-            disableReward={someoneRewarded}
-            onReward={() => handleReward(idx)}
-            currentRoundScore={roundScores[idx]}
-          />
-        ))}
-        <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
-          <div className="text-4xl">+</div> <div>Add Player</div>
+          {/* Cards */}
+          <div className="grid grid-cols-2 gap-6 mb-20">
+            {players.map((player, idx) => (
+              <RoundCard
+                key={idx}
+                isLeading={round !== '333' && totalsSoFar[idx] === lowestScore}
+                player={player}
+                setScore={(score: number) => setScore(idx, score)}
+                scoreSoFar={totalsSoFar[idx]}
+                disableReward={someoneRewarded}
+                onReward={() => handleReward(idx)}
+                currentRoundScore={roundScores[idx]}
+              />
+            ))}
+            <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
+              <div className="text-4xl">+</div> <div>Add Player</div>
+            </div>
+          </div>
+          <ButtonContainer>
+            <button
+              disabled={round! === '333'}
+              onClick={handlePrevRound}
+              className="btn btn-lg"
+            >
+              Prev
+            </button>
+            <button onClick={handleEndGame} className="btn btn-lg">
+              End Game
+            </button>
+            <button
+              disabled={round! === '4444'}
+              onClick={handleNextRound}
+              className="btn btn-lg flex-1"
+            >
+              Next Round
+            </button>
+          </ButtonContainer>
         </div>
-      </div>
-      <ButtonContainer>
-        <button
-          disabled={round! === '333'}
-          onClick={handlePrevRound}
-          className="btn btn-lg"
-        >
-          Prev
-        </button>
-        <button onClick={handleEndGame} className="btn btn-lg">
-          End Game
-        </button>
-        <button
-          disabled={round! === '4444'}
-          onClick={handleNextRound}
-          className="btn btn-lg flex-1"
-        >
-          Next Round
-        </button>
-      </ButtonContainer>
-    </div>
+      )}
+      <motion.div initial={{ x: '100%' }} animate={{ x: 0 }}>
+        <ScoreSheetPage />
+      </motion.div>
+    </>
   );
 };
 

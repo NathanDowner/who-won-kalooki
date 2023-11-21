@@ -12,8 +12,8 @@ export interface SetRoundScorePayload {
 
 const initialState: ScoreSliceState = {
   rounds: {
-    '333': [],
-    '334': [],
+    '333': [0, 1, 2, 3, 4, 5, 6],
+    '334': [0, 30, 89, 144, 200, 255, 311],
     '344': [],
     '444': [],
     '3333': [],
