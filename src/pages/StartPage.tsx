@@ -19,7 +19,7 @@ const StartPage = ({}: StartPageProps) => {
   }, []);
 
   return (
-    <div className="max-w-sm mx-auto bg-gray-50 min-h-screen flex flex-col items-center justify-between pt-10 pb-32">
+    <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-between pt-10 pb-32">
       <header className="flex flex-col items-center">
         <h1 className="text-4xl font-bold mb-14">Who Won?</h1>
 

@@ -9,7 +9,7 @@ const DefaultLayout = () => {
   return (
     <>
       {/* <Header /> */}
-      <div className="drawer max-w-md mx-auto">
+      <div className="drawer">
         <input type="checkbox" id="side-menu" className="drawer-toggle" />
         <div className="drawer-content h-screen flex flex-col">
           {/* Navbar */}
@@ -40,7 +40,7 @@ const DefaultLayout = () => {
 
           {/* Content */}
           <div className="relative pb-4 flex-1 overflow-y-auto w-full">
-            <div className="px-4">
+            <div className="w-screen">
               <Outlet />
             </div>
           </div>
