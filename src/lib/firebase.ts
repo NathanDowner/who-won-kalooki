@@ -13,8 +13,6 @@ import {
   useCollectionData,
   useDocumentData,
 } from 'react-firebase-hooks/firestore';
-import { listConverter } from '@/models/list.interface';
-import { listContributorConverter } from '@/models/contributor.interface';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -35,31 +33,3 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-
-// Custom hooks
-
-export const useGetList = (listId: string) =>
-  useDocumentData(doc(db, 'lists', `${listId}`).withConverter(listConverter));
-
-export const useGetListCollection = (listId: string) =>
-  useCollectionData(
-    collection(db, 'lists', `${listId}`).withConverter(listConverter),
-    { initialValue: [] },
-  );
-
-export const useGetListContributors = (listId: string) =>
-  useCollectionData(
-    collection(db, 'lists', `${listId}`, 'contributors').withConverter(
-      listContributorConverter,
-    ),
-    { initialValue: [] },
-  );
-
-export const useGetUserLists = (email: string) => {
-  const path: FieldPath = new FieldPath('contributors', email);
-  const q = query(collection(db, 'lists'), where(path, '!=', '')).withConverter(
-    listConverter,
-  );
-
-  return useCollectionData(q, { initialValue: [] });
-};
