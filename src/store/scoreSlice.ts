@@ -12,15 +12,15 @@ export interface SetRoundScorePayload {
 
 const initialState: ScoreSliceState = {
   rounds: {
-    '333': [0, 1, 2, 3, 4, 5, 6],
-    '334': [0, 30, 89, 144, 200, 255, 311],
-    '344': [],
-    '444': [],
-    '3333': [],
-    '3334': [],
-    '3344': [],
-    '3444': [],
-    '4444': [],
+    '333': [0, 1, 2],
+    '334': [0, 30, 89],
+    '344': [0, 20, 30],
+    '444': [0, 0, 0],
+    '3333': [0, 0, 0],
+    '3334': [0, 0, 0],
+    '3344': [0, 0, 0],
+    '3444': [0, 0, 0],
+    '4444': [0, 0, 0],
   },
 };
 export const scoreSlice = createSlice({
@@ -58,6 +58,8 @@ export default scoreSlice.reducer;
 
 export const selectRoundScores = (round: string) => (state: RootState) =>
   state.scoreSlice.rounds[round];
+
+export const selectRounds = (state: RootState) => state.scoreSlice.rounds;
 
 /**
  * Selects the totals up to but not including a specific round from the state.

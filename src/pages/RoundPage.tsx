@@ -33,6 +33,7 @@ const RoundPage = ({}: Props) => {
   const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [someoneRewarded, setSomeoneRewarded] = useState(false);
+  const [scoreSheetOpen, setScoreSheetOpen] = useState(false);
 
   const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
 
@@ -97,8 +98,14 @@ const RoundPage = ({}: Props) => {
         />
       ) : (
         <div className="page">
-          <header className="text-center mb-4">
-            <h1 className="text-2xl">{round}</h1>
+          <header className="text-center mb-4 relative">
+            <h1 className="text-2xl">{round}</h1>{' '}
+            <button
+              onClick={() => setScoreSheetOpen(true)}
+              className="absolute btn btn-sm right-5 top-0"
+            >
+              sheet
+            </button>
           </header>
 
           {/* Cards */}
@@ -123,26 +130,44 @@ const RoundPage = ({}: Props) => {
             <button
               disabled={round! === '333'}
               onClick={handlePrevRound}
-              className="btn btn-lg"
+              className="btn btn-lg flex-[2]"
             >
               Prev
             </button>
-            <button onClick={handleEndGame} className="btn btn-lg">
+            <button onClick={handleEndGame} className="btn btn-lg flex-1">
               End Game
             </button>
             <button
               disabled={round! === '4444'}
               onClick={handleNextRound}
-              className="btn btn-lg flex-1"
+              className="btn btn-lg flex-[2]"
             >
               Next Round
             </button>
           </ButtonContainer>
         </div>
       )}
-      <motion.div initial={{ x: '100%' }} animate={{ x: 0 }}>
-        <ScoreSheetPage />
-      </motion.div>
+      <>
+        {/* backdrop */}
+        {scoreSheetOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="z-20 fixed inset-0 bg-black/20"
+          />
+        )}
+        <motion.div
+          className="z-30 fixed bottom-0"
+          transition={{
+            type: 'tween',
+            duration: 0.2,
+          }}
+          animate={{ y: scoreSheetOpen ? 0 : '100%' }}
+        >
+          <ScoreSheetPage onClose={() => setScoreSheetOpen(false)} />
+        </motion.div>
+      </>
     </>
   );
 };

@@ -13,7 +13,7 @@ const initialState: PlayersSliceState = {
       image:
         'https://lh3.googleusercontent.com/a/ACg8ocIFi7YpIJyNhHDiWZtjh953jvdQPBZsPLmUI9HRXXX7suwe=s96-c',
     },
-    ...Array.from({ length: 6 }, (_, i) => ({
+    ...Array.from({ length: 2 }, (_, i) => ({
       name: `Player${i + 2}`,
       image: `https://avatar.iran.liara.run/public/boy?username=Player${i + 2}`,
     })),
