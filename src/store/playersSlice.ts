@@ -8,15 +8,15 @@ export interface PlayersSliceState {
 
 const initialState: PlayersSliceState = {
   players: [
-    {
-      name: 'Nathan Dowenr',
-      image:
-        'https://lh3.googleusercontent.com/a/ACg8ocIFi7YpIJyNhHDiWZtjh953jvdQPBZsPLmUI9HRXXX7suwe=s96-c',
-    },
-    ...Array.from({ length: 2 }, (_, i) => ({
-      name: `Player${i + 2}`,
-      image: `https://avatar.iran.liara.run/public/boy?username=Player${i + 2}`,
-    })),
+    // {
+    //   name: 'Nathan Dowenr',
+    //   image:
+    //     'https://lh3.googleusercontent.com/a/ACg8ocIFi7YpIJyNhHDiWZtjh953jvdQPBZsPLmUI9HRXXX7suwe=s96-c',
+    // },
+    // ...Array.from({ length: 3 }, (_, i) => ({
+    //   name: `Player${i + 2}`,
+    //   image: `https://avatar.iran.liara.run/public/boy?username=Player${i + 2}`,
+    // })),
   ],
 };
 
