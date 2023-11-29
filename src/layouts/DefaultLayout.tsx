@@ -13,7 +13,7 @@ const DefaultLayout = () => {
         <input type="checkbox" id="side-menu" className="drawer-toggle" />
         <div className="drawer-content h-screen flex flex-col">
           {/* Navbar */}
-          <div className="w-full navbar flex-none">
+          <div className="w-full navbar sticky top-0 flex-none">
             <div className="flex-none lg:hidden">
               <label
                 htmlFor="side-menu"
@@ -40,9 +40,10 @@ const DefaultLayout = () => {
 
           {/* Content */}
           <div className="relative pb-4 flex-1 overflow-y-auto w-full">
-            <div className="w-screen">
+            <div className="w-screen px-4">
               <Outlet />
             </div>
+            <div id="button-container"></div>
           </div>
         </div>
 
