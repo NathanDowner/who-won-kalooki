@@ -25,7 +25,9 @@ export const ScoreSheetRow = ({
 
   return (
     <tr>
-      <th className="text-end border-r-2 border-gray-300 py-3 z-10">{round}</th>
+      <th className="text-end border-r border-gray-300 bg-gray-300 py-3 z-10">
+        {round}
+      </th>
       {players.map((player, idx) => (
         <td
           key={player.name}
@@ -51,7 +53,6 @@ export const ScoreSheetRow = ({
           )}
         </td>
       ))}
-      <td className="px-1" />
     </tr>
   );
 };

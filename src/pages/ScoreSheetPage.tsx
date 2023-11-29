@@ -25,20 +25,19 @@ const ScoreSheetPage = ({ onClose }: Props) => {
         <h2 className="text-center text-xl mb-4">Score Sheet View</h2>
       </header>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-auto">
         <table className="table table-sm table-pin-rows table-pin-cols">
           <thead>
             <tr>
-              <th className="border-r border-gray-300" />
+              <th className="border-r border-gray-300 bg-gray-400" />
               {players.map((player) => (
-                <th
-                  className="text-center border-r border-gray-300"
+                <td
+                  className="text-center border-r border-gray-300 bg-gray-300"
                   key={player.name}
                 >
                   {formatName(player.name)}
-                </th>
+                </td>
               ))}
-              <th className="px-1" />
             </tr>
           </thead>
 
