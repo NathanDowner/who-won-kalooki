@@ -14,7 +14,7 @@ const ScoreSheetPage = ({ onClose }: Props) => {
   const rounds = useAppSelector(selectRounds);
 
   return (
-    <div className="bg-white p-4 rounded-t-sm w-screen">
+    <div className="bg-white p-4 rounded-t-sm w-screen max-h-screen">
       <header className="flex flex-col">
         <button
           className="btn btn-square btn-outline ml-auto"
@@ -29,15 +29,16 @@ const ScoreSheetPage = ({ onClose }: Props) => {
         <table className="table table-sm table-pin-rows table-pin-cols">
           <thead>
             <tr>
-              <th></th>
+              <th className="border-r border-gray-300" />
               {players.map((player) => (
-                <td
+                <th
                   className="text-center border-r border-gray-300"
                   key={player.name}
                 >
                   {formatName(player.name)}
-                </td>
+                </th>
               ))}
+              <th className="px-1" />
             </tr>
           </thead>
 
