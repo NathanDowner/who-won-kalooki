@@ -17,6 +17,7 @@ import FinalScorePage from './FinalScorePage';
 import { PENALTY_AMOUNT } from '@/utils/constants';
 import { motion } from 'framer-motion';
 import ScoreSheetPage from './ScoreSheetPage';
+import Portal from '@/components/Portal';
 
 type Props = {};
 
@@ -147,7 +148,7 @@ const RoundPage = ({}: Props) => {
           </ButtonContainer>
         </div>
       )}
-      <>
+      <Portal>
         {/* backdrop */}
         {scoreSheetOpen && (
           <motion.div
@@ -167,7 +168,7 @@ const RoundPage = ({}: Props) => {
         >
           <ScoreSheetPage onClose={() => setScoreSheetOpen(false)} />
         </motion.div>
-      </>
+      </Portal>
     </>
   );
 };
