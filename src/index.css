@@ -4,6 +4,6 @@
 
 @layer components {
   .page {
-    @apply h-full overflow-y-auto;
+    @apply mb-20 pt-4 overflow-y-auto;
   }
 }

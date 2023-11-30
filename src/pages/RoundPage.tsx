@@ -94,6 +94,7 @@ const RoundPage = ({}: Props) => {
     <>
       {isGameFinished ? (
         <FinalScorePage
+          onShowScoreSheet={() => setScoreSheetOpen(true)}
           onPlayAgain={handlePlayAgain}
           onStartOver={handleStartOver}
         />
@@ -110,7 +111,7 @@ const RoundPage = ({}: Props) => {
           </header>
 
           {/* Cards */}
-          <div className="grid grid-cols-2 gap-6 mb-20">
+          <div className="grid grid-cols-2 gap-6">
             {players.map((player, idx) => (
               <RoundCard
                 key={idx}
@@ -123,9 +124,9 @@ const RoundPage = ({}: Props) => {
                 currentRoundScore={roundScores[idx]}
               />
             ))}
-            <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
+            {/* <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
               <div className="text-4xl">+</div> <div>Add Player</div>
-            </div>
+            </div> */}
           </div>
           <ButtonContainer>
             <button

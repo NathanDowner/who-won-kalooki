@@ -33,7 +33,7 @@ export const ScoreSheetRow = ({
           key={player.name}
           className={`text-center border-r border-gray-300 ${
             showTotalsSoFar && shouldShowScores
-              ? 'relative after:absolute after:inset-0 after:w-3/5 after:h-0.5 after:bg-gray-300 after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:-rotate-[35deg]'
+              ? 'relative after:absolute after:inset-0 after:w-3/5 after:max-w-[50px] after:h-0.5 after:bg-gray-300 after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:-rotate-[35deg]'
               : ''
           }`}
         >

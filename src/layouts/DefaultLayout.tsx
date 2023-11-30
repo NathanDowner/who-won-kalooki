@@ -13,7 +13,7 @@ const DefaultLayout = () => {
         <input type="checkbox" id="side-menu" className="drawer-toggle" />
         <div className="drawer-content h-screen flex flex-col">
           {/* Navbar */}
-          <div className="w-full navbar sticky top-0 flex-none">
+          <div className="w-full navbar sticky top-0 shadow-md flex-none">
             <div className="flex-none lg:hidden">
               <label
                 htmlFor="side-menu"

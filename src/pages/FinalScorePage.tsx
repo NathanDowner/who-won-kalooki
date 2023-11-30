@@ -1,5 +1,6 @@
 import ButtonContainer from '@/components/ButtonContainer';
 import PlayerCard from '@/components/PlayerCard';
+import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { useAppSelector } from '@/store/hooks';
 import { selectPlayers } from '@/store/playersSlice';
 import { selectTotalsUpToRound } from '@/store/scoreSlice';
@@ -7,17 +8,26 @@ import { selectTotalsUpToRound } from '@/store/scoreSlice';
 interface Props {
   onPlayAgain: () => void;
   onStartOver: () => void;
+  onShowScoreSheet: () => void;
 }
 
-const FinalScorePage = ({ onPlayAgain, onStartOver }: Props) => {
+const FinalScorePage = ({
+  onPlayAgain,
+  onStartOver,
+  onShowScoreSheet,
+}: Props) => {
   const players = useAppSelector(selectPlayers);
   const totalsSoFar = useAppSelector(selectTotalsUpToRound('4444', true));
+  useSetPageTitle('Final Score');
 
   const lowestScore = Math.min(...totalsSoFar);
 
   return (
     <div className="page">
-      <div className="space-y-4 mx-2">
+      <button onClick={onShowScoreSheet} className="btn btn-sm mb-4">
+        View score sheet
+      </button>
+      <div className="space-y-4">
         {players
           .map((player, idx) => ({ ...player, score: totalsSoFar[idx] }))
           .sort((a, b) => a.score - b.score)
@@ -32,10 +42,10 @@ const FinalScorePage = ({ onPlayAgain, onStartOver }: Props) => {
           ))}
       </div>
       <ButtonContainer>
-        <button className="btn btn-lg btn-outline flex-1" onClick={onPlayAgain}>
+        <button className="btn btn-lg flex-1" onClick={onPlayAgain}>
           Play Again
         </button>
-        <button className="btn btn-lg btn-outline flex-1" onClick={onStartOver}>
+        <button className="btn btn-lg flex-1" onClick={onStartOver}>
           Start Over
         </button>
       </ButtonContainer>

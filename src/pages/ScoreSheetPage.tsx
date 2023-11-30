@@ -29,7 +29,7 @@ const ScoreSheetPage = ({ onClose }: Props) => {
         <table className="table table-sm table-pin-rows table-pin-cols">
           <thead>
             <tr>
-              <th className="border-r border-gray-300 bg-gray-400" />
+              <th className="border-r border-gray-300 bg-gray-400 w-16" />
               {players.map((player) => (
                 <td
                   className="text-center border-r border-gray-300 bg-gray-300"
