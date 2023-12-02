@@ -26,7 +26,7 @@ const ScoreSheetPage = ({ onClose }: Props) => {
       </header>
 
       <div className="overflow-auto">
-        <table className="table table-sm table-pin-rows table-pin-cols">
+        <table className="table table-sm table-pin-rows table-pin-cols max-w-xl mx-auto">
           <thead>
             <tr>
               <th className="border-r border-gray-300 bg-gray-400 w-16" />

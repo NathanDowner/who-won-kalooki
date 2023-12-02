@@ -39,6 +39,11 @@ export const getNextRound = (round: string, reverseOrder = false) => {
 
 export const getOrdinalSuffix = (number: number) => {
   const lastDigit = number % 10;
+
+  if (number > 10 && number < 20) {
+    return 'th';
+  }
+
   if (lastDigit === 1) {
     return 'st';
   }
