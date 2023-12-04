@@ -58,3 +58,14 @@ export const getOrdinalSuffix = (number: number) => {
 
   return 'th';
 };
+
+export const findNextRoundToPlay = (
+  rounds: Record<string, number[]>,
+): string => {
+  const round = Object.keys(rounds).find((round) => {
+    const scores = rounds[round];
+    return scores.every((score) => score === 0);
+  });
+
+  return round || '333';
+};

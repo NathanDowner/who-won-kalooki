@@ -1,5 +1,12 @@
-import { describe, it, expect } from 'vitest';
-import { formatName, formatRound, getNextRound, getOrdinalSuffix } from '.';
+import { describe, it, expect, beforeEach } from 'vitest';
+import {
+  findNextRoundToPlay,
+  formatName,
+  formatRound,
+  getNextRound,
+  getOrdinalSuffix,
+} from '.';
+import { INITIAL_SCORES } from './constants';
 
 describe('formatName function', () => {
   it('should return the name if it is not more than one word', () => {
@@ -192,5 +199,50 @@ describe('getOrdinalSuffix function', () => {
     const number = 20;
     const suffix = getOrdinalSuffix(number);
     expect(suffix).toEqual('th');
+  });
+});
+
+describe('findNextRoundToPlay function', () => {
+  let rounds: Record<string, number[]>;
+  beforeEach(() => {
+    rounds = INITIAL_SCORES;
+  });
+
+  it('should return 333 if all rounds are empty', () => {
+    const round = findNextRoundToPlay(rounds);
+    expect(round).toEqual('333');
+  });
+
+  it('should return 333 if all rounds are full', () => {
+    rounds = {
+      '333': [1, 2, 3],
+      '334': [1, 2, 3],
+      '344': [1, 2, 3],
+      '444': [1, 2, 3],
+      '3333': [1, 2, 3],
+      '3334': [1, 2, 3],
+      '3344': [1, 2, 3],
+      '3444': [1, 2, 3],
+      '4444': [1, 2, 3],
+    };
+    const round = findNextRoundToPlay(rounds);
+    expect(round).toEqual('333');
+  });
+
+  it('should return the first round with all zeros', () => {
+    rounds = {
+      '333': [1, 2, 3],
+      '334': [1, 2, 3],
+      '344': [1, 2, 3],
+      '444': [0, 0, 0],
+      '3333': [0, 0, 0],
+      '3334': [0, 0, 0],
+      '3344': [0, 0, 0],
+      '3444': [0, 0, 0],
+      '4444': [0, 0, 0],
+    };
+
+    const round = findNextRoundToPlay(rounds);
+    expect(round).toEqual('444');
   });
 });
