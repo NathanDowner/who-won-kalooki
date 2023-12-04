@@ -6,6 +6,7 @@ import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
 import { bulkAddPlayers } from '@/store/playersSlice';
 import { setInitialScores } from '@/store/scoreSlice';
+import { storage } from '@/utils/storage';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,6 +29,7 @@ const AddPlayersPage = ({}: Props) => {
   const handleStartRound = () => {
     dispatch(bulkAddPlayers(players));
     dispatch(setInitialScores(players.length));
+    storage.setPlayers(players);
     navigate(AppRoutes.round('333'));
   };
 

@@ -4,6 +4,8 @@ import { selectPlayers } from '@/store/playersSlice';
 import { selectRounds } from '@/store/scoreSlice';
 import { formatName } from '@/utils';
 import { ROUNDS } from '@/utils/constants';
+import { storage } from '@/utils/storage';
+import { useEffect } from 'react';
 
 interface Props {
   onClose: () => void;
@@ -12,6 +14,10 @@ interface Props {
 const ScoreSheetPage = ({ onClose }: Props) => {
   const players = useAppSelector(selectPlayers);
   const rounds = useAppSelector(selectRounds);
+
+  useEffect(() => {
+    storage.setScores(rounds);
+  }, [rounds]);
 
   return (
     <div className="bg-white p-4 rounded-t-sm w-screen max-h-screen">

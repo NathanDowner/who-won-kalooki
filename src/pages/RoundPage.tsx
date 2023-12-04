@@ -104,7 +104,7 @@ const RoundPage = ({}: Props) => {
             <h1 className="text-2xl">{round}</h1>{' '}
             <button
               onClick={() => setScoreSheetOpen(true)}
-              className="absolute btn btn-sm right-5 top-0"
+              className="absolute btn btn-sm right-0 top-0"
             >
               sheet
             </button>

@@ -1,5 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
+import { INITIAL_SCORES } from '@/utils/constants';
+import { storage } from '@/utils/storage';
 
 export interface ScoreSliceState {
   rounds: Record<string, number[]>;
@@ -10,18 +12,20 @@ export interface SetRoundScorePayload {
   scores: number[];
 }
 
+// {
+//   '333': [0, 5, 20, 52, 89, 32, 18, 4],
+//   '334': [12, 0, 124, 96, 198, 54, 24, 8],
+//   '344': [0, 0, 0, 0, 0, 0, 0, 0],
+//   '444': [0, 0, 0, 0, 0, 0, 0, 0],
+//   '3333': [0, 0, 0, 0, 0, 0, 0, 0],
+//   '3334': [0, 0, 0, 0, 0, 0, 0, 0],
+//   '3344': [0, 0, 0, 0, 0, 0, 0, 0],
+//   '3444': [0, 0, 0, 0, 0, 0, 0, 0],
+//   '4444': [0, 0, 0, 0, 0, 0, 0, 0],
+// },
+
 const initialState: ScoreSliceState = {
-  rounds: {
-    '333': [],
-    '334': [],
-    '344': [],
-    '444': [],
-    '3333': [],
-    '3334': [],
-    '3344': [],
-    '3444': [],
-    '4444': [],
-  },
+  rounds: storage.getScores(),
 };
 export const scoreSlice = createSlice({
   name: 'scoreSlice',
@@ -42,6 +46,13 @@ export const scoreSlice = createSlice({
       });
     },
 
+    bulkSetRoundScores: (
+      state,
+      action: PayloadAction<Record<string, number[]>>,
+    ) => {
+      state.rounds = action.payload;
+    },
+
     resetScores: (state) => {
       const rounds = Object.keys(state.rounds);
       rounds.forEach((round) => {
@@ -51,8 +62,12 @@ export const scoreSlice = createSlice({
   },
 });
 
-export const { setRoundScores, setInitialScores, resetScores } =
-  scoreSlice.actions;
+export const {
+  setRoundScores,
+  bulkSetRoundScores,
+  setInitialScores,
+  resetScores,
+} = scoreSlice.actions;
 
 export default scoreSlice.reducer;
 

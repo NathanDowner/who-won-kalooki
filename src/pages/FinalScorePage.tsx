@@ -4,6 +4,8 @@ import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { useAppSelector } from '@/store/hooks';
 import { selectPlayers } from '@/store/playersSlice';
 import { selectTotalsUpToRound } from '@/store/scoreSlice';
+import { storage } from '@/utils/storage';
+import { useEffect } from 'react';
 
 interface Props {
   onPlayAgain: () => void;
@@ -19,6 +21,10 @@ const FinalScorePage = ({
   const players = useAppSelector(selectPlayers);
   const totalsSoFar = useAppSelector(selectTotalsUpToRound('4444', true));
   useSetPageTitle('Final Score');
+
+  useEffect(() => {
+    storage.clearData();
+  }, []);
 
   const lowestScore = Math.min(...totalsSoFar);
 
