@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import { INITIAL_SCORES } from '@/utils/constants';
 import { storage } from '@/utils/storage';
 
 export interface ScoreSliceState {
