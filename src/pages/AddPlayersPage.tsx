@@ -80,6 +80,12 @@ const AddPlayersPage = ({}: Props) => {
             className="input input-ghost -ml-1 pl-0 flex-1 text-xl"
           />
         </form>
+        {/* Add Player instructions */}
+        {players.length <= 2 && (
+          <div className="text-center text-gray-500 text-sm">
+            <p>Hit enter/return after inputting a name to save it!</p>
+          </div>
+        )}
       </div>
       <ButtonContainer>
         <button
