@@ -19,9 +19,7 @@ import { motion } from 'framer-motion';
 import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
 
-type Props = {};
-
-const RoundPage = ({}: Props) => {
+const RoundPage = () => {
   const { round } = useParams();
   const { setTitle } = useTitle();
   const dispatch = useAppDispatch();

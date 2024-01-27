@@ -5,6 +5,7 @@ import {
   formatRound,
   getNextRound,
   getOrdinalSuffix,
+  removeLeadingZero,
 } from '.';
 import { INITIAL_SCORES } from './constants';
 
@@ -244,5 +245,24 @@ describe('findNextRoundToPlay function', () => {
 
     const round = findNextRoundToPlay(rounds);
     expect(round).toEqual('444');
+  });
+});
+describe('removeLeadingZero function', () => {
+  it('should remove leading zeros from a number string', () => {
+    const num = '00123';
+    const result = removeLeadingZero(num);
+    expect(result).toEqual(123);
+  });
+
+  it('should return 0 if the number string is empty', () => {
+    const num = '';
+    const result = removeLeadingZero(num);
+    expect(result).toEqual(0);
+  });
+
+  it('should return the same number if it does not have leading zeros', () => {
+    const num = '123';
+    const result = removeLeadingZero(num);
+    expect(result).toEqual(123);
   });
 });

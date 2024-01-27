@@ -69,3 +69,7 @@ export const findNextRoundToPlay = (
 
   return round || '333';
 };
+
+export const removeLeadingZero = (num: string) => {
+  return parseInt(num.replace(/^0+/, '')) || 0;
+};

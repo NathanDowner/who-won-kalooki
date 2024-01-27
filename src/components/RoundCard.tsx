@@ -1,5 +1,5 @@
 import { Player } from '@/models/player.interface';
-import { formatName } from '@/utils';
+import { formatName, removeLeadingZero } from '@/utils';
 import { PENALTY_AMOUNT } from '@/utils/constants';
 
 interface Props {
@@ -29,6 +29,10 @@ const RoundCard = ({
     setScore(currentRoundScore + PENALTY_AMOUNT);
   };
 
+  const formatNumber = (num: string) => {
+    setScore(removeLeadingZero(num));
+  };
+
   return (
     <div
       className={`${
@@ -39,10 +43,10 @@ const RoundCard = ({
       <p className="text-xl">Score: {scoreSoFar}</p>
       <p>Current:</p>
       <input
-        className="text-6xl text-center mb-4 -mr-3 bg-transparent"
-        type="number"
+        className="text-6xl text-center mb-4 bg-transparent"
+        type="text"
         value={currentRoundScore}
-        onChange={(e) => setScore(Number(e.target.value))}
+        onChange={(e) => formatNumber(e.target.value)}
       />
 
       {/* buttons */}

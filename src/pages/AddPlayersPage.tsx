@@ -10,9 +10,7 @@ import { storage } from '@/utils/storage';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-type Props = {};
-
-const AddPlayersPage = ({}: Props) => {
+const AddPlayersPage = () => {
   useSetPageTitle('Add Players');
 
   const navigate = useNavigate();
