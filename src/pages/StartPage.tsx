@@ -4,6 +4,10 @@ import { clearPlayers } from '@/store/playersSlice';
 import { resetScores } from '@/store/scoreSlice';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import girl1 from '../assets/girl_1.png';
+import girl2 from '../assets/girl_2.png';
+import boy1 from '../assets/boy_1.png';
+import boy2 from '../assets/boy_2.png';
 
 // https://i.pravatar.cc/300
 
@@ -35,24 +39,12 @@ const StartPage = ({}: StartPageProps) => {
           /> */}
           <img
             className="w-28 h-28 rounded-full"
-            src="https://avatar.iran.liara.run/public/girl?username=0"
+            src={girl1}
             alt="Random avatar image 1"
           />
-          <img
-            className="w-28 h-28"
-            src="https://avatar.iran.liara.run/public/boy?username=1"
-            alt="Random avatar image 2"
-          />
-          <img
-            className="w-28 h-28"
-            src="https://avatar.iran.liara.run/public/girl?username=2"
-            alt="Random avatar image 3"
-          />
-          <img
-            className="w-28 h-28"
-            src="https://avatar.iran.liara.run/public/boy?username=3"
-            alt="Random avatar image 4"
-          />
+          <img className="w-28 h-28" src={boy1} alt="Random avatar image 2" />
+          <img className="w-28 h-28" src={girl2} alt="Random avatar image 3" />
+          <img className="w-28 h-28" src={boy2} alt="Random avatar image 4" />
         </div>
       </header>
       {/* {user ? ( */}
