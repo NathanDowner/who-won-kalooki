@@ -15,9 +15,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import FinalScorePage from './FinalScorePage';
 import { PENALTY_AMOUNT } from '@/utils/constants';
-import { motion } from 'framer-motion';
 import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
+import { Animations } from '@/components/animations';
 
 const RoundPage = () => {
   const { round } = useParams();
@@ -148,25 +148,9 @@ const RoundPage = () => {
         </div>
       )}
       <Portal>
-        {/* backdrop */}
-        {scoreSheetOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="z-20 fixed inset-0 bg-black/20"
-          />
-        )}
-        <motion.div
-          className="z-30 fixed bottom-0"
-          transition={{
-            type: 'tween',
-            duration: 0.2,
-          }}
-          animate={{ y: scoreSheetOpen ? 0 : '100%' }}
-        >
+        <Animations.SlideUp show={scoreSheetOpen}>
           <ScoreSheetPage onClose={() => setScoreSheetOpen(false)} />
-        </motion.div>
+        </Animations.SlideUp>
       </Portal>
     </>
   );
