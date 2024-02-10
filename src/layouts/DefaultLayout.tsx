@@ -47,7 +47,7 @@ const DefaultLayout = () => {
           </div>
         </div>
 
-        <div className="drawer-side">
+        <div className="drawer-side z-50">
           <label
             htmlFor="side-menu"
             aria-label="close sidebar"
