@@ -1,13 +1,16 @@
 import { Player } from '@/models/player.interface';
 import { formatName, removeLeadingZero } from '@/utils';
 import { PENALTY_AMOUNT } from '@/utils/constants';
+import { useState } from 'react';
+import Portal from './Portal';
+import { Animations } from './animations';
+import Keypad from './Keypad';
 
 interface Props {
   currentRoundScore: number;
   scoreSoFar: number;
   player: Player;
   isLeading: boolean;
-  // onPenalty: () => void;
   onReward: () => void;
   disableReward: boolean;
   setScore: (score: number) => void;
@@ -23,6 +26,8 @@ const RoundCard = ({
   onReward,
   disableReward,
 }: Props) => {
+  const [showKeypad, setShowKeypad] = useState(false);
+
   const name = formatName(player.name);
 
   const handlePenalty = () => {
@@ -30,7 +35,7 @@ const RoundCard = ({
   };
 
   const formatNumber = (num: string) => {
-    setScore(removeLeadingZero(num));
+    setScore(parseInt(removeLeadingZero(num)) || 0);
   };
 
   return (
@@ -45,8 +50,8 @@ const RoundCard = ({
       <input
         className="text-6xl text-center mb-4 bg-transparent"
         type="text"
+        onFocus={() => setShowKeypad(true)}
         value={currentRoundScore}
-        onChange={(e) => formatNumber(e.target.value)}
       />
 
       {/* buttons */}
@@ -67,6 +72,15 @@ const RoundCard = ({
           +50
         </button>
       </div>
+      <Portal>
+        <Animations.SlideUp show={showKeypad}>
+          <Keypad
+            initialValue={currentRoundScore}
+            onChange={formatNumber}
+            onClose={() => setShowKeypad(false)}
+          />
+        </Animations.SlideUp>
+      </Portal>
     </div>
   );
 };

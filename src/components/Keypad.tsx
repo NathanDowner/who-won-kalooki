@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useMemo, useReducer } from 'react';
 import { evaluate as ev } from 'mathjs';
 import KeypadKey from './KeypadKey';
 import { removeLeadingZero } from '@/utils';
@@ -6,7 +6,7 @@ import { removeLeadingZero } from '@/utils';
 interface Props {
   initialValue: number;
   onClose: (value: string) => void;
-  onChange?: (value: string) => void;
+  onChange: (value: string) => void;
 }
 
 const LEFT_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -16,6 +16,7 @@ enum ActionType {
   CLEAR = 'clear',
   DELETE_DIGIT = 'delete-digit',
   EVALUATE = 'evaluate',
+  SET = 'set-value',
 }
 
 interface Action {
@@ -57,8 +58,14 @@ const calculatorReducer: CalculatorReducer = (state, { type, payload }) => {
 
     case ActionType.EVALUATE:
       return {
-        value: ev(state.value),
+        value: String(ev(state.value)),
         isEvaluating: false,
+      };
+
+    case ActionType.SET:
+      return {
+        ...state,
+        value: payload!,
       };
 
     default:
@@ -80,20 +87,25 @@ const evaluate = () => ({
   type: ActionType.EVALUATE,
 });
 
+const setValue = (value: string) => ({ type: ActionType.SET, payload: value });
+
 const Keypad = ({ initialValue, onClose, onChange }: Props) => {
   const [state, dispatch] = useReducer(calculatorReducer, {
     value: initialValue.toString(),
     isEvaluating: false,
   });
 
+  const isEvaluating = useMemo(
+    () => ['+', '-', '*'].some((operator) => state.value.includes(operator)),
+    [state.value],
+  );
+
   useEffect(() => {
-    if (onChange) {
-      onChange(state.value);
-    }
-  }, [state.value]);
+    dispatch(setValue(initialValue.toString()));
+  }, [initialValue]);
 
   return (
-    <div className="p-4 w-full border-black border-4 rounded-2xl shadow-md">
+    <div className="p-4 w-screen bg-white border-black border-4 rounded-2xl shadow-lg">
       {/* Display */}
       <div className="bg-gray-200 mb-4 rounded-lg px-2 py-1 font-mono text-3xl">
         {state.value}
@@ -117,7 +129,7 @@ const Keypad = ({ initialValue, onClose, onChange }: Props) => {
           <KeypadKey value="+" onClick={() => dispatch(addDigit('+'))} />
           <KeypadKey value="-" onClick={() => dispatch(addDigit('-'))} />
           <KeypadKey value="*" onClick={() => dispatch(addDigit('*'))} />
-          {state.isEvaluating ? (
+          {isEvaluating ? (
             <KeypadKey
               css="bg-gray-200 border-gray-200"
               value="="
