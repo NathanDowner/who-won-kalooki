@@ -18,6 +18,8 @@ import { PENALTY_AMOUNT } from '@/utils/constants';
 import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
 import { Animations } from '@/components/animations';
+import { useKeypad } from '@/contexts/KeypadContext';
+import Keypad from '@/components/Keypad';
 
 const RoundPage = () => {
   const { round } = useParams();
@@ -33,6 +35,8 @@ const RoundPage = () => {
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [someoneRewarded, setSomeoneRewarded] = useState(false);
   const [scoreSheetOpen, setScoreSheetOpen] = useState(false);
+
+  const { value: initialValue, isVisible, onCloseKeypad } = useKeypad();
 
   const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
 
@@ -148,6 +152,10 @@ const RoundPage = () => {
         </div>
       )}
       <Portal>
+        <Animations.SlideUp show={isVisible}>
+          <Keypad initialValue={initialValue} onClose={onCloseKeypad} />
+        </Animations.SlideUp>
+
         <Animations.SlideUp show={scoreSheetOpen}>
           <ScoreSheetPage onClose={() => setScoreSheetOpen(false)} />
         </Animations.SlideUp>

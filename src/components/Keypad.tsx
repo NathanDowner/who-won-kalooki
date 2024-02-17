@@ -1,145 +1,82 @@
-import React, { useEffect, useMemo, useReducer } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { evaluate as ev } from 'mathjs';
 import KeypadKey from './KeypadKey';
 import { removeLeadingZero } from '@/utils';
 
 interface Props {
-  initialValue: number;
+  initialValue: string;
   onClose: (value: string) => void;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
 }
 
 const LEFT_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-enum ActionType {
-  ADD_DIGIT = 'add-digit',
-  CLEAR = 'clear',
-  DELETE_DIGIT = 'delete-digit',
-  EVALUATE = 'evaluate',
-  SET = 'set-value',
-}
-
-interface Action {
-  type: ActionType;
-  payload?: string;
-}
-
-interface State {
-  value: string;
-  isEvaluating: boolean;
-}
-
-type CalculatorReducer = (state: State, action: Action) => State;
-
-const calculatorReducer: CalculatorReducer = (state, { type, payload }) => {
-  switch (type) {
-    case ActionType.ADD_DIGIT:
-      if (state.value === '0' && payload === '0') return state;
-
-      return {
-        isEvaluating: true,
-        value: removeLeadingZero((state.value += payload)),
-      };
-
-    case ActionType.DELETE_DIGIT:
-      if (state.value.length > 1) {
-        return {
-          ...state,
-          value: state.value.slice(0, -1),
-        };
-      }
-      return { value: '0', isEvaluating: false };
-
-    case ActionType.CLEAR:
-      return {
-        isEvaluating: false,
-        value: '0',
-      };
-
-    case ActionType.EVALUATE:
-      return {
-        value: String(ev(state.value)),
-        isEvaluating: false,
-      };
-
-    case ActionType.SET:
-      return {
-        ...state,
-        value: payload!,
-      };
-
-    default:
-      return state;
-  }
-};
-
-//--- Action Creators ---//
-const addDigit = (digit: string): Action => ({
-  type: ActionType.ADD_DIGIT,
-  payload: digit,
-});
-
-const clearDigit = () => ({ type: ActionType.CLEAR });
-
-const deleteDigit = () => ({ type: ActionType.DELETE_DIGIT });
-
-const evaluate = () => ({
-  type: ActionType.EVALUATE,
-});
-
-const setValue = (value: string) => ({ type: ActionType.SET, payload: value });
-
 const Keypad = ({ initialValue, onClose, onChange }: Props) => {
-  const [state, dispatch] = useReducer(calculatorReducer, {
-    value: initialValue.toString(),
-    isEvaluating: false,
-  });
+  const [value, setValue] = useState('');
 
   const isEvaluating = useMemo(
-    () => ['+', '-', '*'].some((operator) => state.value.includes(operator)),
-    [state.value],
+    () => ['+', '-', '*'].some((operator) => value.includes(operator)),
+    [value],
   );
 
+  const addDigit = (digit: string) =>
+    setValue((prev) => removeLeadingZero(prev + digit));
+
+  const deleteDigit = () => {
+    if (value.length > 1) {
+      return setValue((prev) => prev.slice(0, -1));
+    }
+
+    clear();
+  };
+
+  const clear = () => setValue('0');
+
+  const evaluate = () => {
+    const answer = ev(value);
+    console.log(answer);
+    setValue(String(answer));
+    if (onChange) {
+      onChange(value);
+    }
+  };
+
   useEffect(() => {
-    dispatch(setValue(initialValue.toString()));
+    setValue(initialValue);
   }, [initialValue]);
 
   return (
     <div className="p-4 w-screen bg-white border-black border-4 rounded-2xl shadow-lg">
       {/* Display */}
       <div className="bg-gray-200 mb-4 rounded-lg px-2 py-1 font-mono text-3xl">
-        {state.value}
+        {value}
       </div>
 
       <div className="flex gap-3 w-full">
         <div className="grid grid-cols-3 grid-rows-4 gap-2 w-4/6">
           {LEFT_KEYS.map((key) => (
-            <KeypadKey
-              value={key}
-              onClick={() => dispatch(addDigit(key))}
-              key={key}
-            />
+            <KeypadKey value={key} onClick={() => addDigit(key)} key={key} />
           ))}
-          <KeypadKey value="AC" onClick={() => dispatch(clearDigit())} />
-          <KeypadKey value="0" onClick={() => dispatch(addDigit('0'))} />
-          <KeypadKey value="del" onClick={() => dispatch(deleteDigit())} />
+          <KeypadKey value="AC" onClick={() => clear()} />
+          <KeypadKey value="0" onClick={() => addDigit('0')} />
+          <KeypadKey value="del" onClick={() => deleteDigit()} />
         </div>
 
         <div className="grid gap-2 grid-cols-1 grid-rows-4 w-2/6">
-          <KeypadKey value="+" onClick={() => dispatch(addDigit('+'))} />
-          <KeypadKey value="-" onClick={() => dispatch(addDigit('-'))} />
-          <KeypadKey value="*" onClick={() => dispatch(addDigit('*'))} />
+          <KeypadKey value="+" onClick={() => addDigit('+')} />
+          <KeypadKey value="-" onClick={() => addDigit('-')} />
+          <KeypadKey value="*" onClick={() => addDigit('*')} />
           {isEvaluating ? (
             <KeypadKey
               css="bg-gray-200 border-gray-200"
               value="="
-              onClick={() => dispatch(evaluate())}
+              onClick={() => evaluate()}
             />
           ) : (
             <KeypadKey
               css="bg-gray-200 border-gray-200"
               value="Done"
-              onClick={() => onClose(state.value)}
+              onClick={() => onClose(value)}
             />
           )}
         </div>
