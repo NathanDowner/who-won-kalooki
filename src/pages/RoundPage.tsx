@@ -18,7 +18,6 @@ import { PENALTY_AMOUNT } from '@/utils/constants';
 import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
 import { Animations } from '@/components/animations';
-import { useKeypad } from '@/contexts/KeypadContext';
 import Keypad from '@/components/Keypad';
 
 const RoundPage = () => {
@@ -34,9 +33,10 @@ const RoundPage = () => {
   const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [someoneRewarded, setSomeoneRewarded] = useState(false);
-  const [scoreSheetOpen, setScoreSheetOpen] = useState(false);
+  const [showScoreSheet, setShowScoreSheet] = useState(false);
 
-  const { value: initialValue, isVisible, onCloseKeypad } = useKeypad();
+  const [selectedCardIdx, setSelectedCardIdx] = useState<null | number>(null);
+  const [showKeypad, setShowKeypad] = useState(false);
 
   const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
 
@@ -92,11 +92,25 @@ const RoundPage = () => {
     navigate(AppRoutes.start);
   };
 
+  const handleOpenKeypad = (idx: number) => {
+    setSelectedCardIdx(idx);
+    setShowKeypad(true);
+  };
+
+  const handleCloseKeypad = (value: string) => {
+    if (selectedCardIdx !== null) {
+      setScore(selectedCardIdx, parseInt(value));
+    }
+
+    setSelectedCardIdx(null);
+    setShowKeypad(false);
+  };
+
   return (
     <>
       {isGameFinished ? (
         <FinalScorePage
-          onShowScoreSheet={() => setScoreSheetOpen(true)}
+          onShowScoreSheet={() => setShowScoreSheet(true)}
           onPlayAgain={handlePlayAgain}
           onStartOver={handleStartOver}
         />
@@ -105,7 +119,7 @@ const RoundPage = () => {
           <header className="text-center mb-4 relative">
             <h1 className="text-2xl">{round}</h1>{' '}
             <button
-              onClick={() => setScoreSheetOpen(true)}
+              onClick={() => setShowScoreSheet(true)}
               className="absolute btn btn-sm right-0 top-0"
             >
               sheet
@@ -124,6 +138,7 @@ const RoundPage = () => {
                 disableReward={someoneRewarded}
                 onReward={() => handleReward(idx)}
                 currentRoundScore={roundScores[idx]}
+                onOpenKeypad={() => handleOpenKeypad(idx)}
               />
             ))}
             {/* <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
@@ -152,12 +167,17 @@ const RoundPage = () => {
         </div>
       )}
       <Portal>
-        <Animations.SlideUp show={isVisible}>
-          <Keypad initialValue={initialValue} onClose={onCloseKeypad} />
+        <Animations.SlideUp show={showKeypad}>
+          <Keypad
+            initialValue={
+              selectedCardIdx ? roundScores[selectedCardIdx].toString() : '0'
+            }
+            onClose={handleCloseKeypad}
+          />
         </Animations.SlideUp>
 
-        <Animations.SlideUp show={scoreSheetOpen}>
-          <ScoreSheetPage onClose={() => setScoreSheetOpen(false)} />
+        <Animations.SlideUp show={showScoreSheet}>
+          <ScoreSheetPage onClose={() => setShowScoreSheet(false)} />
         </Animations.SlideUp>
       </Portal>
     </>

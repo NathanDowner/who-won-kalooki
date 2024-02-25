@@ -20,7 +20,7 @@ const ScoreSheetPage = ({ onClose }: Props) => {
   }, [rounds]);
 
   return (
-    <div className="bg-white p-4 rounded-t-sm w-screen max-h-screen">
+    <div className="bg-white p-4 rounded-t-sm w-screen max-h-screen shadow-2xl">
       <header className="flex flex-col">
         <button
           className="btn btn-square btn-outline ml-auto"

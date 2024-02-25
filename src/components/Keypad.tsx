@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { evaluate as ev } from 'mathjs';
 import KeypadKey from './KeypadKey';
 import { removeLeadingZero } from '@/utils';
@@ -41,12 +41,17 @@ const Keypad = ({ initialValue, onClose, onChange }: Props) => {
     }
   };
 
+  const handleClose = () => {
+    onClose(value);
+    setValue('0');
+  };
+
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
   return (
-    <div className="p-4 w-screen bg-white border-black border-4 rounded-2xl shadow-lg">
+    <div className="p-4 w-screen bg-white border-black border-4 border-b-0 rounded-t-2xl shadow-lg">
       {/* Display */}
       <div className="bg-gray-200 mb-4 rounded-lg px-2 py-1 font-mono text-3xl">
         {value}
@@ -76,7 +81,7 @@ const Keypad = ({ initialValue, onClose, onChange }: Props) => {
             <KeypadKey
               css="bg-gray-200 border-gray-200"
               value="Done"
-              onClick={() => onClose(value)}
+              onClick={handleClose}
             />
           )}
         </div>

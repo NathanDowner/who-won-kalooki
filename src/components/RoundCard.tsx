@@ -1,8 +1,6 @@
-import { useKeypad } from '@/contexts/KeypadContext';
 import { Player } from '@/models/player.interface';
 import { formatName } from '@/utils';
 import { PENALTY_AMOUNT } from '@/utils/constants';
-import { useEffect } from 'react';
 
 interface Props {
   currentRoundScore: number;
@@ -12,24 +10,20 @@ interface Props {
   onReward: () => void;
   disableReward: boolean;
   setScore: (score: number) => void;
+  onOpenKeypad: () => void;
 }
 
 const RoundCard = ({
   player,
   currentRoundScore,
   scoreSoFar,
-  isLeading = false,
+  isLeading,
   setScore,
-  // onPenalty,
   onReward,
   disableReward,
+  onOpenKeypad,
 }: Props) => {
   const name = formatName(player.name);
-  const { openKeypad, value } = useKeypad();
-
-  useEffect(() => {
-    setScore(parseInt(value));
-  }, [value]);
 
   const handlePenalty = () => {
     setScore(currentRoundScore + PENALTY_AMOUNT);
@@ -47,7 +41,7 @@ const RoundCard = ({
       <input
         className="text-6xl text-center mb-4 bg-transparent"
         type="text"
-        onFocus={() => openKeypad(currentRoundScore.toString())}
+        onFocus={() => onOpenKeypad()}
         value={currentRoundScore}
       />
 
