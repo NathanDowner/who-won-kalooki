@@ -1,9 +1,8 @@
-import { useAuth } from '@/contexts/AuthContext';
+import Sidebar from '@/components/Sidebar';
 import { useTitle } from '@/contexts/TitleContext';
 import { Outlet } from 'react-router-dom';
 
 const DefaultLayout = () => {
-  const { logout } = useAuth();
   const { title } = useTitle();
 
   return (
@@ -53,14 +52,10 @@ const DefaultLayout = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu p-4 w-80 min-h-full bg-base-200">
+          <div className="menu p-4 w-80 min-h-full bg-base-200">
             {/* Sidebar content here */}
-            <li>
-              <a className="text-xl" onClick={logout}>
-                Logout
-              </a>
-            </li>
-          </ul>
+            <Sidebar />
+          </div>
         </div>
       </div>
     </>
