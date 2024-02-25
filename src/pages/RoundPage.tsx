@@ -170,7 +170,9 @@ const RoundPage = () => {
         <Animations.SlideUp show={showKeypad}>
           <Keypad
             initialValue={
-              selectedCardIdx ? roundScores[selectedCardIdx].toString() : '0'
+              selectedCardIdx !== null
+                ? roundScores[selectedCardIdx].toString()
+                : '0'
             }
             onClose={handleCloseKeypad}
           />
