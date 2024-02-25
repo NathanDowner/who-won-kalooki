@@ -14,7 +14,7 @@ const SlideUp = ({ show, withBackground = false, children }: Props) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="z-20 fixed inset-0 bg-black/20"
+          className="z-30 fixed inset-0 bg-black/20"
         />
       )}
       <motion.div

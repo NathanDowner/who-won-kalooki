@@ -39,8 +39,9 @@ const RoundCard = ({
       <p className="text-xl">Score: {scoreSoFar}</p>
       <p>Current:</p>
       <input
-        className="text-6xl text-center mb-4 bg-transparent"
+        className="text-6xl text-center mb-4 bg-transparent focus:ring-2 ring-gray-300 rounded-md"
         type="text"
+        readOnly
         onFocus={() => onOpenKeypad()}
         value={currentRoundScore}
       />

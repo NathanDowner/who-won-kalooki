@@ -34,7 +34,6 @@ const Keypad = ({ initialValue, onClose, onChange }: Props) => {
 
   const evaluate = () => {
     const answer = ev(value);
-    console.log(answer);
     setValue(String(answer));
     if (onChange) {
       onChange(value);
