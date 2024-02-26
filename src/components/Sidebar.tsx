@@ -1,7 +1,7 @@
-import { useAuth } from '@/contexts/AuthContext';
+// import { useAuth } from '@/contexts/AuthContext';
 
 const Sidebar = () => {
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
   return (
     <>
       {/* Sidebar content here */}

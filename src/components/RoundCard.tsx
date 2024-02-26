@@ -38,13 +38,13 @@ const RoundCard = ({
       <h3 className="text-2xl font-bold">{name}</h3>
       <p className="text-xl">Score: {scoreSoFar}</p>
       <p>Current:</p>
-      <input
+      <div
         className="text-6xl text-center mb-4 bg-transparent focus:ring-2 ring-gray-300 rounded-md"
-        type="text"
-        readOnly
+        tabIndex={0}
         onFocus={() => onOpenKeypad()}
-        value={currentRoundScore}
-      />
+      >
+        {currentRoundScore}
+      </div>
 
       {/* buttons */}
       <div className="flex gap-2 w-full">
