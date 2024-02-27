@@ -39,7 +39,9 @@ const RoundCard = ({
       <p className="text-xl">Score: {scoreSoFar}</p>
       <p>Current:</p>
       <div
-        className="text-6xl text-center mb-4 bg-transparent focus:ring-2 ring-gray-300 rounded-md"
+        className={`${
+          isLeading ? 'ring-yellow-500' : 'ring-gray-300'
+        } text-6xl text-center mb-4 bg-transparent focus:ring-2  rounded-md`}
         tabIndex={0}
         onFocus={() => onOpenKeypad()}
       >
