@@ -21,7 +21,7 @@ const ButtonContainer = ({ children }: PropsWithChildren) => {
   }, []);
 
   return createPortal(
-    <footer className="flex fixed bottom-4 gap-4 px-6 w-screen">
+    <footer className="flex fixed bottom-6 gap-4 px-6 w-screen">
       {children}
     </footer>,
     elRef.current!,

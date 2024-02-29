@@ -42,6 +42,7 @@ const DefaultLayout = () => {
             <div className="w-screen px-4">
               <Outlet />
             </div>
+            {/* Portal */}
             <div id="button-container"></div>
           </div>
         </div>

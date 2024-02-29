@@ -20,7 +20,7 @@ const FinalScorePage = ({
 }: Props) => {
   const players = useAppSelector(selectPlayers);
   const totalsSoFar = useAppSelector(selectTotalsUpToRound('4444', true));
-  useSetPageTitle('Final Score');
+  useSetPageTitle('Final Scores');
 
   useEffect(() => {
     storage.clearData();
