@@ -1,5 +1,6 @@
 import ButtonContainer from '@/components/ButtonContainer';
 import PlayerCard from '@/components/PlayerCard';
+import { useAuth } from '@/contexts/AuthContext';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { Player } from '@/models/player.interface';
 import { AppRoutes } from '@/routes';
@@ -15,12 +16,16 @@ const AddPlayersPage = () => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { user } = useAuth();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
+    if (user && user.displayName && user.photoURL) {
+      setPlayers([{ name: user.displayName, image: user.photoURL }]);
+    }
     inputRef.current?.focus();
   }, []);
 
