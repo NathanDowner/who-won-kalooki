@@ -15,7 +15,14 @@ const Keypad = ({ initialValue, onClose, onChange }: Props) => {
   const [value, setValue] = useState('');
 
   const isEvaluating = useMemo(
-    () => ['+', '-', '*'].some((operator) => value.includes(operator)),
+    () =>
+      ['+', '*', /(?<=\d)-(?=\d)/].some((operator) => {
+        if (typeof operator === 'string') {
+          return value.includes(operator);
+        } else {
+          return operator.test(value);
+        }
+      }),
     [value],
   );
 
