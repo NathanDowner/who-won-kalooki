@@ -1,7 +1,12 @@
 import { auth } from '@/lib/firebase';
-import { User, UserCredential } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  User,
+  UserCredential,
+  signInWithRedirect,
+} from 'firebase/auth';
 import { PropsWithChildren, createContext, useContext } from 'react';
-import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 type AuthContextData = {
   user: User | null | undefined;
@@ -14,7 +19,13 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, loading] = useAuthState(auth);
-  const [signInWithGoogle] = useSignInWithGoogle(auth);
+  // const [signInWithGoogle] = useSignInWithGoogle(auth);
+
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    provider.addScope('email');
+    return await signInWithRedirect(auth, provider);
+  };
 
   const logout = async () => await auth.signOut();
 
