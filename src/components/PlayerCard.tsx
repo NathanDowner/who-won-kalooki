@@ -23,7 +23,7 @@ const PlayerCard = ({ player, score, winner, order }: Props) => {
         </div>
       )}
       <img
-        src={player.image}
+        src={player.imgUrl}
         className={`${
           winner ? 'border-yellow-500' : 'border-gray-700'
         } border-4 rounded-full w-14 h-14`}
