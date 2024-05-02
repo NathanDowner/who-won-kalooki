@@ -21,6 +21,8 @@ export interface Game {
 
 export type CreateGameDto = Omit<Game, 'id' | 'endedAt'>;
 
+export type UpdateGameDto = Partial<Game> & { id: string };
+
 export const gameConverter: FirestoreDataConverter<Game> = {
   toFirestore(game: WithFieldValue<CreateGameDto>): DocumentData {
     return {

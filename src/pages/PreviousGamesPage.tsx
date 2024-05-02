@@ -7,10 +7,10 @@ import { Game } from '@/models/game.interface';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
 import { bulkAddPlayers } from '@/store/playersSlice';
-import { bulkSetRoundScores } from '@/store/scoreSlice';
+import { bulkSetRoundScores, setGameId } from '@/store/scoreSlice';
 import { findLastRoundPlayed } from '@/utils';
 import { storage } from '@/utils/storage';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const PreviousGamesPage = () => {
@@ -29,7 +29,9 @@ const PreviousGamesPage = () => {
   function handleResumeGame() {
     dispatch(bulkSetRoundScores(selectedGame!.scores));
     dispatch(bulkAddPlayers(selectedGame!.players));
+    dispatch(setGameId(selectedGame!.id));
     storage.setPlayers(selectedGame!.players);
+    storage.setGameId(selectedGame!.id);
 
     const lastRoundPlayed = findLastRoundPlayed(selectedGame!.scores);
     navigate(AppRoutes.round(lastRoundPlayed));
@@ -40,7 +42,7 @@ const PreviousGamesPage = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <>
+        <div className="page">
           <p className="text-center text-xl mb-6">
             Select the game you'd like to resume
           </p>
@@ -56,7 +58,7 @@ const PreviousGamesPage = () => {
               />
             ))}
           </div>
-        </>
+        </div>
       )}
       <ButtonContainer>
         <button

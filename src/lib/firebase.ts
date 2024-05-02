@@ -1,5 +1,9 @@
 // Import the functions you need from the SDKs you need
-import { CreateGameDto, gameConverter } from '@/models/game.interface';
+import {
+  CreateGameDto,
+  gameConverter,
+  UpdateGameDto,
+} from '@/models/game.interface';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import {
@@ -7,8 +11,10 @@ import {
   collection,
   getFirestore,
   where,
-  and,
   query,
+  setDoc,
+  doc,
+  orderBy,
 } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -37,15 +43,24 @@ export const saveGame = async (game: CreateGameDto): Promise<string> => {
     collection(db, 'games').withConverter(gameConverter),
     game,
   );
-  console.log('Document written with ID: ', docRef.id);
   return docRef.id;
 };
 
 export const useGetPreviousGames = (userId: string) => {
   const q = query(
     collection(db, 'games'),
-    and(where('creator.id', '==', userId), where('isComplete', '==', false)),
+    where('creator.id', '==', userId),
+    where('isComplete', '==', false),
+    orderBy('endedAt', 'desc'),
   ).withConverter(gameConverter);
 
   return useCollectionData(q, { initialValue: [] });
+};
+
+export const updateGame = async (game: UpdateGameDto) => {
+  console.log({ game });
+  await setDoc(doc(db, 'games', game.id), game, {
+    merge: true,
+  });
+  return game.id;
 };

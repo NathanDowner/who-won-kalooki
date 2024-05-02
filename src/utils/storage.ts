@@ -12,6 +12,10 @@ export const storage = {
     localStorage.setItem(`${STORAGE_PREFIX}players`, JSON.stringify(players));
   },
 
+  setGameId: (gameId: string) => {
+    localStorage.setItem(`${STORAGE_PREFIX}gameId`, gameId);
+  },
+
   getScores: (): Record<string, number[]> => {
     const rounds = localStorage.getItem(`${STORAGE_PREFIX}rounds`);
     if (rounds) {
@@ -30,8 +34,13 @@ export const storage = {
     return [];
   },
 
+  getGameId: (): string | null => {
+    return localStorage.getItem(`${STORAGE_PREFIX}gameId`);
+  },
+
   clearData: () => {
     localStorage.removeItem(`${STORAGE_PREFIX}rounds`);
     localStorage.removeItem(`${STORAGE_PREFIX}players`);
+    localStorage.removeItem(`${STORAGE_PREFIX}gameId`);
   },
 };

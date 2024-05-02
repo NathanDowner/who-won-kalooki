@@ -2,7 +2,7 @@ import ButtonContainer from '@/components/ButtonContainer';
 import PlayerCard from '@/components/PlayerCard';
 import { useAuth } from '@/contexts/AuthContext';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
-import { saveGame } from '@/lib/firebase';
+import { saveGame, updateGame } from '@/lib/firebase';
 import { GameType } from '@/models/gameType.enum';
 import { useAppSelector } from '@/store/hooks';
 import { selectPlayers } from '@/store/playersSlice';
@@ -32,15 +32,25 @@ const FinalScorePage = ({
   useEffect(() => {
     const winningIndex = totalsSoFar.indexOf(lowestScore);
     const winner = players[winningIndex];
+    const gameId = storage.getGameId();
     if (user) {
-      saveGame({
-        type: GameType.Kalooki,
-        players,
-        creator: players.find((player) => player.id === user.uid)!,
-        scores: rounds,
-        winner: winner,
-        isComplete: Math.max(...rounds['4444']) != 0,
-      });
+      if (gameId) {
+        updateGame({
+          id: gameId,
+          scores: rounds,
+          winner: winner,
+          isComplete: Math.max(...rounds['4444']) != 0,
+        });
+      } else {
+        saveGame({
+          type: GameType.Kalooki,
+          players,
+          creator: players.find((player) => player.id === user.uid)!,
+          scores: rounds,
+          winner: winner,
+          isComplete: Math.max(...rounds['4444']) != 0,
+        });
+      }
     }
     storage.clearData();
   }, []);

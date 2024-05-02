@@ -1,6 +1,5 @@
 import { Game } from '@/models/game.interface';
 import { findLastRoundPlayed, formatDate } from '@/utils';
-import React from 'react';
 
 interface PreviousGameCardProps {
   game: Game;
@@ -20,9 +19,7 @@ const PreviousGameCard = ({
         isSelected ? 'border-yellow-500 bg-yellow-100' : 'border-black'
       } border-4 rounded-md p-3 flex flex-col cursor-pointer`}
     >
-      <h2 className="text-xl">
-        Last played on {formatDate(game.endedAt.toDate())}
-      </h2>
+      <h2 className="text-xl">Played on {formatDate(game.endedAt.toDate())}</h2>
 
       {/* Details */}
       <div className="flex justify-between">
