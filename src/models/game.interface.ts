@@ -2,6 +2,7 @@ import {
   DocumentData,
   FirestoreDataConverter,
   serverTimestamp,
+  Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
 import { GameType } from './gameType.enum';
@@ -10,7 +11,7 @@ import { Player } from './player.interface';
 export interface Game {
   type: GameType;
   id: string;
-  endedAt: number;
+  endedAt: Timestamp;
   players: Player[];
   isComplete: boolean;
   winner: Player;

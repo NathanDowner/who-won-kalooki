@@ -2,7 +2,15 @@
 import { CreateGameDto, gameConverter } from '@/models/game.interface';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  where,
+  and,
+  query,
+} from 'firebase/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -31,4 +39,13 @@ export const saveGame = async (game: CreateGameDto): Promise<string> => {
   );
   console.log('Document written with ID: ', docRef.id);
   return docRef.id;
+};
+
+export const useGetPreviousGames = (userId: string) => {
+  const q = query(
+    collection(db, 'games'),
+    and(where('creator.id', '==', userId), where('isComplete', '==', false)),
+  ).withConverter(gameConverter);
+
+  return useCollectionData(q, { initialValue: [] });
 };

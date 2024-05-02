@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
+  findLastRoundPlayed,
   findNextRoundToPlay,
   formatName,
   formatRound,
@@ -247,22 +248,76 @@ describe('findNextRoundToPlay function', () => {
     expect(round).toEqual('444');
   });
 });
+
 describe('removeLeadingZero function', () => {
   it('should remove leading zeros from a number string', () => {
     const num = '00123';
     const result = removeLeadingZero(num);
-    expect(result).toEqual(123);
+    expect(result).toEqual('123');
   });
 
-  it('should return 0 if the number string is empty', () => {
+  it('should return an empty string if the number string is empty', () => {
     const num = '';
     const result = removeLeadingZero(num);
-    expect(result).toEqual(0);
+    expect(result).toEqual('');
   });
 
   it('should return the same number if it does not have leading zeros', () => {
     const num = '123';
     const result = removeLeadingZero(num);
-    expect(result).toEqual(123);
+    expect(result).toEqual('123');
+  });
+});
+
+describe('findLastRoundPlayed function', () => {
+  it('should return 333 if no rounds have been played yet', () => {
+    const rounds = {
+      '333': [0, 0, 0],
+      '334': [0, 0, 0],
+      '344': [0, 0, 0],
+      '444': [0, 0, 0],
+      '3333': [0, 0, 0],
+      '3334': [0, 0, 0],
+      '3344': [0, 0, 0],
+      '3444': [0, 0, 0],
+      '4444': [0, 0, 0],
+    };
+
+    const round = findLastRoundPlayed(rounds);
+    expect(round).toEqual('333');
+  });
+
+  it('should return 4444 if all rounds have been played', () => {
+    const rounds = {
+      '333': [1, 2, 3],
+      '334': [1, 2, 3],
+      '344': [1, 2, 3],
+      '444': [1, 2, 3],
+      '3333': [1, 2, 3],
+      '3334': [1, 2, 3],
+      '3344': [1, 2, 3],
+      '3444': [1, 2, 3],
+      '4444': [1, 2, 3],
+    };
+
+    const round = findLastRoundPlayed(rounds);
+    expect(round).toEqual('4444');
+  });
+
+  it('should return the last round that was played', () => {
+    const rounds = {
+      '333': [1, 2, 3],
+      '334': [1, 2, 3],
+      '344': [1, 2, 3],
+      '444': [0, 0, 0],
+      '3333': [0, 0, 0],
+      '3334': [0, 0, 0],
+      '3344': [0, 0, 0],
+      '3444': [0, 0, 0],
+      '4444': [0, 0, 0],
+    };
+
+    const round = findLastRoundPlayed(rounds);
+    expect(round).toEqual('344');
   });
 });

@@ -41,7 +41,9 @@ const StartPage = () => {
           <img className="w-28 h-28" src={girl2} alt="Random avatar image 3" />
           <img className="w-28 h-28" src={boy2} alt="Random avatar image 4" />
         </div>
-        {user && <h2 className="text-2xl mt-8">Was it {user.displayName}?</h2>}
+        {user && (
+          <h2 className="text-2xl mt-8 mb-4">Was it {user.displayName}?</h2>
+        )}
       </header>
 
       {/* Buttons */}
@@ -58,6 +60,12 @@ const StartPage = () => {
         >
           {user ? 'Start a new game' : 'Play as Guest'}
         </Link>
+
+        {user && (
+          <Link to={AppRoutes.previousGames} className={clsx('btn btn-lg')}>
+            Resume a game
+          </Link>
+        )}
 
         {user && (
           <button className="btn btn-link" onClick={logout}>

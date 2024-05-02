@@ -1,19 +1,8 @@
 import { ROUNDS } from './constants';
+export * from './formatters';
 
 export const createUUID = () => {
   return crypto.randomUUID();
-};
-
-export const formatName = (name: string) => {
-  const nameParts = name.split(' ');
-  if (nameParts.length === 2) {
-    return nameParts[0];
-  }
-  return name;
-};
-
-export const formatRound = (round: string) => {
-  return round.split('').join('-');
 };
 
 export const getNextRound = (round: string, reverseOrder = false) => {
@@ -72,4 +61,17 @@ export const findNextRoundToPlay = (
 
 export const removeLeadingZero = (num: string): string => {
   return num.replace(/^0+/, '');
+};
+
+export const findLastRoundPlayed = (
+  rounds: Record<string, number[]>,
+): string => {
+  const round = Object.keys(rounds)
+    .reverse()
+    .find((round) => {
+      const scores = rounds[round];
+      return scores.some((score) => score !== 0);
+    });
+
+  return round || '333';
 };
