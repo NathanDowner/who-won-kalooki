@@ -53,8 +53,7 @@ const DefaultLayout = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <div className="menu p-4 w-80 min-h-full bg-base-200">
-            {/* Sidebar content here */}
+          <div className="menu p-4 w-80 min-h-full bg-base-200 border-black border-r-4">
             <Sidebar />
           </div>
         </div>

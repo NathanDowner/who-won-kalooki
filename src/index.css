@@ -25,3 +25,7 @@ button {
   user-select: none;
   -webkit-user-select: none;
 }
+
+.card {
+  @apply border-black border-4 rounded-md p-2;
+}
