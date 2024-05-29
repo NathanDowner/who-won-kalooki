@@ -1,9 +1,18 @@
 import Sidebar from '@/components/Sidebar';
 import { useTitle } from '@/contexts/TitleContext';
+import clsx from 'clsx';
 import { Outlet } from 'react-router-dom';
 
 const DefaultLayout = () => {
-  const { title } = useTitle();
+  const { title, showShadow } = useTitle();
+
+  function handleSidebarClose() {
+    const sidebar: HTMLInputElement | null =
+      document.querySelector('.drawer-toggle');
+    if (sidebar) {
+      sidebar.checked = false;
+    }
+  }
 
   return (
     <>
@@ -12,7 +21,12 @@ const DefaultLayout = () => {
         <input type="checkbox" id="side-menu" className="drawer-toggle" />
         <div className="drawer-content h-screen flex flex-col">
           {/* Navbar */}
-          <div className="w-full navbar bg-white sticky top-0 z-50 shadow-md flex-none">
+          <div
+            className={clsx(
+              'w-full navbar bg-white sticky top-0 z-50 flex-none',
+              { 'shadow-md': showShadow },
+            )}
+          >
             <div className="flex-none lg:hidden">
               <label
                 htmlFor="side-menu"
@@ -38,7 +52,7 @@ const DefaultLayout = () => {
           </div>
 
           {/* Content */}
-          <div className="relative pb-4 flex-1 overflow-y-auto w-full">
+          <div className="relative flex-1 overflow-y-auto w-full">
             <div className="w-screen px-4">
               <Outlet />
             </div>
@@ -53,8 +67,8 @@ const DefaultLayout = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <div className="menu p-4 w-80 min-h-full bg-base-200 border-black border-r-4">
-            <Sidebar />
+          <div className="menu px-4 w-80 max-w-[90%] min-h-full bg-white border-black border-r-4">
+            <Sidebar onClose={handleSidebarClose} />
           </div>
         </div>
       </div>

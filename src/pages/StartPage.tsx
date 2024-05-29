@@ -21,11 +21,11 @@ const StartPage = () => {
   }, []);
 
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-between pt-10 pb-32">
+    <div className="flex flex-col items-center justify-between pt-5 pb-32">
       <header className="flex flex-col items-center">
         <h1 className="text-4xl font-bold mb-14">Who Won?</h1>
 
-        <div className="grid gap-4 grid-cols-2 grid-rows-2">
+        <div className="mb-8 grid gap-4 grid-cols-2 grid-rows-2">
           <img
             className="w-28 h-28 rounded-full"
             src={user ? user.photoURL! : girl1}
@@ -41,9 +41,7 @@ const StartPage = () => {
           <img className="w-28 h-28" src={girl2} alt="Random avatar image 3" />
           <img className="w-28 h-28" src={boy2} alt="Random avatar image 4" />
         </div>
-        {user && (
-          <h2 className="text-2xl mt-8 mb-4">Was it {user.displayName}?</h2>
-        )}
+        {user && <h2 className="text-2xl mb-4">Was it {user.displayName}?</h2>}
       </header>
 
       {/* Buttons */}
