@@ -9,18 +9,18 @@ import AuthGuard from './components/AuthGuard';
 export const AppRoutes = {
   root: '/',
   start: '/start',
-  addPlayers: '/play/add-players',
-  previousGames: '/play/previous-games',
-  round: (round: string) => `/play/round/${round}`,
+  addPlayers: '/add-players',
+  previousGames: '/previous-games',
+  round: (round: string) => `/round/${round}`,
 };
 
 export const router = createBrowserRouter([
-  { path: '/', element: <Navigate to={AppRoutes.start} /> },
-  { path: '/start', element: <StartPage /> },
   {
-    path: '/play/',
+    path: '',
     element: <DefaultLayout />,
     children: [
+      { path: '/', element: <Navigate to={AppRoutes.start} /> },
+      { path: '/start', element: <StartPage /> },
       {
         path: 'previous-games',
         element: <AuthGuard component={<PreviousGamesPage />} />,
