@@ -1,4 +1,3 @@
-import ButtonContainer from '@/components/ButtonContainer';
 import PreviousGameCard from '@/components/PreviousGameCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTitle } from '@/contexts/TitleContext';
@@ -27,7 +26,7 @@ const PreviousGamesPage = () => {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [activeTab, setActiveTab] = useState(
     searchParams.get('filter') || 'complete',
-  ); // TODO: use query params
+  );
 
   useEffect(() => {
     setTitle('Previous Games');
@@ -43,9 +42,21 @@ const PreviousGamesPage = () => {
     navigate(AppRoutes.round(lastRoundPlayed));
   }
 
+  function handleDeleteGame() {}
+
+  function handleViewGame() {}
+
   function handleSelectTab(tab: string) {
     setActiveTab(tab);
     setSearchParams({ filter: tab });
+  }
+
+  function filterGames(game: Game) {
+    if (activeTab.toLowerCase() === 'complete') {
+      return game.isComplete;
+    }
+
+    return !game.isComplete;
   }
 
   return (
@@ -73,23 +84,28 @@ const PreviousGamesPage = () => {
       ) : (
         <div>
           <p className="text-center text-xl mb-6">
-            Select the game you'd like to resume
+            Select the game for more option!
           </p>
           {error && <p>Error: {error.message}</p>}
           {games?.length === 0 && <p>No games found</p>}
           <div className="space-y-4">
-            {games?.map((game) => (
-              <PreviousGameCard
-                onSelectGame={() => setSelectedGame(game)}
-                isSelected={selectedGame?.id === game.id}
-                key={game.id}
-                game={game}
-              />
-            ))}
+            {games
+              ?.filter(filterGames)
+              .map((game) => (
+                <PreviousGameCard
+                  onSelectGame={() => setSelectedGame(game)}
+                  onResumeGame={handleResumeGame}
+                  onDeleteGame={() => {}}
+                  onViewGame={() => {}}
+                  isSelected={selectedGame?.id === game.id}
+                  key={game.id}
+                  game={game}
+                />
+              ))}
           </div>
         </div>
       )}
-      <ButtonContainer>
+      {/* <ButtonContainer>
         <button
           disabled={selectedGame === null}
           onClick={handleResumeGame}
@@ -97,7 +113,7 @@ const PreviousGamesPage = () => {
         >
           Resume Game
         </button>
-      </ButtonContainer>
+      </ButtonContainer> */}
     </div>
   );
 };

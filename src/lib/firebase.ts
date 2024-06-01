@@ -5,7 +5,7 @@ import {
   UpdateGameDto,
 } from '@/models/game.interface';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import {
   addDoc,
   collection,
@@ -13,8 +13,10 @@ import {
   where,
   query,
   setDoc,
+  deleteDoc,
   doc,
   orderBy,
+  connectFirestoreEmulator,
 } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -38,6 +40,11 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
+// if (location.hostname === 'localhost') {
+//   connectFirestoreEmulator(db, 'localhost', 8080);
+//   connectAuthEmulator(auth, 'http://localhost:9099');
+// }
+
 export const saveGame = async (game: CreateGameDto): Promise<string> => {
   const docRef = await addDoc(
     collection(db, 'games').withConverter(gameConverter),
@@ -50,7 +57,6 @@ export const useGetPreviousGames = (userId: string) => {
   const q = query(
     collection(db, 'games'),
     where('creator.id', '==', userId),
-    where('isComplete', '==', false),
     orderBy('endedAt', 'desc'),
   ).withConverter(gameConverter);
 
@@ -63,4 +69,8 @@ export const updateGame = async (game: UpdateGameDto) => {
     merge: true,
   });
   return game.id;
+};
+
+export const deleteGame = async (gameId: string) => {
+  await deleteDoc(doc(db, 'games', gameId));
 };

@@ -75,3 +75,21 @@ export const findLastRoundPlayed = (
 
   return round || '333';
 };
+
+export function splitList<T>(list: T[]): T[][] {
+  let firstList: T[] = [];
+  let secondList: T[] = [];
+  if (list.length == 0) return [firstList, secondList];
+
+  const splitIndex = list.length / 2;
+
+  if (list.length % 2 == 0) {
+    firstList = list.slice(0, splitIndex);
+    secondList = list.slice(splitIndex);
+  } else {
+    firstList = list.slice(0, splitIndex + 1);
+    secondList = list.slice(splitIndex + 1);
+  }
+
+  return [firstList, secondList];
+}

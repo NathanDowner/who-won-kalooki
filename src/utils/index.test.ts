@@ -7,6 +7,7 @@ import {
   getNextRound,
   getOrdinalSuffix,
   removeLeadingZero,
+  splitList,
 } from '.';
 import { INITIAL_SCORES } from './constants';
 
@@ -319,5 +320,48 @@ describe('findLastRoundPlayed function', () => {
 
     const round = findLastRoundPlayed(rounds);
     expect(round).toEqual('344');
+  });
+});
+
+describe('splitList function', () => {
+  it('should return two empty arrays if the list is empty', () => {
+    const list: string[] = [];
+
+    const [list1, list2] = splitList(list);
+
+    expect(list1.length).toBe(0);
+    expect(list2.length).toBe(0);
+  });
+
+  it('should return only one array having a value if the list has one item', () => {
+    const list: string[] = ['test 1'];
+
+    const [list1, list2] = splitList(list);
+
+    expect(list1.length).toBe(1);
+    expect(list1[0]).toBe('test 1');
+    expect(list2.length).toBe(0);
+  });
+
+  it('should evenly divide an even list', () => {
+    const list: string[] = ['Mary', 'Martha', 'Matthew', 'Mark'];
+
+    const [list1, list2] = splitList(list);
+
+    expect(list1.length).toBe(2);
+    expect(list2.length).toBe(2);
+    expect(list1).toEqual(['Mary', 'Martha']);
+    expect(list2).toEqual(['Matthew', 'Mark']);
+  });
+
+  it('should put the extra item in the first array for uneven lists', () => {
+    const list: string[] = ['Mary', 'Martha', 'Matthew', 'Mark', 'Luke'];
+
+    const [list1, list2] = splitList(list);
+
+    expect(list1.length).toBe(3);
+    expect(list2.length).toBe(2);
+    expect(list1).toEqual(['Mary', 'Martha', 'Matthew']);
+    expect(list2).toEqual(['Mark', 'Luke']);
   });
 });
