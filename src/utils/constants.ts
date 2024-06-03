@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { GameType } from '@/models/gameType.enum';
 import { Timestamp } from 'firebase/firestore';
 
@@ -27,7 +28,7 @@ export const INITIAL_SCORES: Record<string, number[]> = {
 
 export const PENALTY_AMOUNT = 50;
 
-const sampleGame = {
+export const sampleGame = {
   type: GameType.Kalooki,
   id: '1WV6PkIkde0ihrMQzmrT',
   isComplete: false,

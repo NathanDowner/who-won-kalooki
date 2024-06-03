@@ -5,7 +5,7 @@ import {
   UpdateGameDto,
 } from '@/models/game.interface';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
-import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import {
   addDoc,
   collection,
@@ -16,7 +16,6 @@ import {
   deleteDoc,
   doc,
   orderBy,
-  connectFirestoreEmulator,
 } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
