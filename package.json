@@ -11,7 +11,7 @@
     "test": "vitest",
     "firebase:preview": "firebase hosting:channel:deploy preview",
     "save-emulators": "firebase emulators:export test-data",
-    "emulators": "firebase emulators:start",
+    "start-emulators": "firebase emulators:start --import test-data",
     "deploy": "firebase deploy"
   },
   "dependencies": {
