@@ -4,9 +4,14 @@
 
 @layer components {
   .page {
-    @apply mb-20 pt-4 overflow-y-auto;
+    @apply mb-24 pt-4 overflow-y-auto;
+  }
+
+  .card {
+    @apply border-black border-4 rounded-md p-2;
   }
 }
+
 /* @media (display-mode: standalone) {
   body {
     margin: env(safe-area-inset-top) env(safe-area-inset-right)
@@ -24,4 +29,8 @@
 button {
   user-select: none;
   -webkit-user-select: none;
+}
+
+.menu {
+  padding: 0;
 }

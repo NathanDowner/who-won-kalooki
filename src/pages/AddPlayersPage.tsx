@@ -24,7 +24,9 @@ const AddPlayersPage = () => {
 
   useEffect(() => {
     if (user && user.displayName && user.photoURL) {
-      setPlayers([{ name: user.displayName, image: user.photoURL }]);
+      setPlayers([
+        { name: user.displayName, imgUrl: user.photoURL, id: user.uid },
+      ]);
     }
     inputRef.current?.focus();
   }, []);
@@ -40,7 +42,7 @@ const AddPlayersPage = () => {
     e.preventDefault();
     const newPlayer: Player = {
       name: newPlayerName,
-      image: `https://avatar.iran.liara.run/public/boy?username=Player${newPlayerName}`,
+      imgUrl: `https://avatar.iran.liara.run/public/boy?username=Player${newPlayerName}`,
     };
 
     setPlayers((prev) => [...prev, newPlayer]);

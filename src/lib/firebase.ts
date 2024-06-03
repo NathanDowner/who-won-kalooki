@@ -1,34 +1,36 @@
 // Import the functions you need from the SDKs you need
+import {
+  CreateGameDto,
+  gameConverter,
+  UpdateGameDto,
+} from '@/models/game.interface';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  where,
+  query,
+  setDoc,
+  deleteDoc,
+  doc,
+  orderBy,
+} from 'firebase/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig: FirebaseOptions = {
-  apiKey:
-    import.meta.env.VITE_FIREBASE_API_KEY ||
-    '${{ secrets.VITE_FIREBASE_API_KEY }}',
-  authDomain:
-    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ||
-    '${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}',
-  projectId:
-    import.meta.env.VITE_FIREBASE_PROJECT_ID ||
-    '${{ secrets.VITE_FIREBASE_PROJECT_ID }}',
-  storageBucket:
-    import.meta.env.VITE_FIREBASE_STORAGE_BUCKET ||
-    '${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}',
-  messagingSenderId:
-    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID ||
-    '${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}',
-  appId:
-    import.meta.env.VITE_FIREBASE_APP_ID ||
-    '${{ secrets.VITE_FIREBASE_APP_ID }}',
-  measurementId:
-    import.meta.env.VITE_FIREBASE_MEASUREMENT_ID ||
-    '${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -36,3 +38,37 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// if (location.hostname === 'localhost') {
+//   connectFirestoreEmulator(db, 'localhost', 8080);
+//   connectAuthEmulator(auth, 'http://localhost:9099');
+// }
+
+export const saveGame = async (game: CreateGameDto): Promise<string> => {
+  const docRef = await addDoc(
+    collection(db, 'games').withConverter(gameConverter),
+    game,
+  );
+  return docRef.id;
+};
+
+export const useGetPreviousGames = (userId: string) => {
+  const q = query(
+    collection(db, 'games'),
+    where('creator.id', '==', userId),
+    orderBy('endedAt', 'desc'),
+  ).withConverter(gameConverter);
+
+  return useCollectionData(q, { initialValue: [] });
+};
+
+export const updateGame = async (game: UpdateGameDto) => {
+  await setDoc(doc(db, 'games', game.id), game, {
+    merge: true,
+  });
+  return game.id;
+};
+
+export const deleteGame = async (gameId: string) => {
+  await deleteDoc(doc(db, 'games', gameId));
+};
