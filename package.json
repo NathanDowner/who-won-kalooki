@@ -10,9 +10,12 @@
     "preview": "vite preview",
     "test": "vitest",
     "firebase:preview": "firebase hosting:channel:deploy preview",
+    "save-emulators": "firebase emulators:export test-data",
+    "emulators": "firebase emulators:start",
     "deploy": "firebase deploy"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.3",
     "@reduxjs/toolkit": "^1.9.7",
     "@types/react-beautiful-dnd": "^13.1.5",
     "clsx": "^2.1.0",

@@ -58,7 +58,7 @@ const PreviousGameCard = ({
       {isSelected && (
         <>
           <h3 className="font-semibold text-lg">Players:</h3>
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 pb-1">
             <ul className="">
               {leftPlayerList.map((player) => (
                 <li className=" list-inside" key={player.name}>
@@ -83,7 +83,7 @@ const PreviousGameCard = ({
           <button
             onClick={onDeleteGame}
             disabled={game.isComplete}
-            className="btn btn-sm bg-red-500 disabled:bg-red-200"
+            className="hidden btn btn-sm bg-red-500 disabled:bg-red-200"
           >
             <TrashIcon className="h-4 text-white" />
           </button>

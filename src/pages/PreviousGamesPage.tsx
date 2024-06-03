@@ -1,3 +1,4 @@
+import { Animations } from '@/components/animations';
 import PreviousGameCard from '@/components/PreviousGameCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTitle } from '@/contexts/TitleContext';
@@ -5,13 +6,18 @@ import { useGetPreviousGames } from '@/lib/firebase';
 import { Game } from '@/models/game.interface';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
-import { bulkAddPlayers } from '@/store/playersSlice';
-import { bulkSetRoundScores } from '@/store/scoreSlice';
+import { bulkAddPlayers, clearPlayers } from '@/store/playersSlice';
+import {
+  bulkSetRoundScores,
+  resetScores as clearScores,
+} from '@/store/scoreSlice';
 import { findLastRoundPlayed } from '@/utils';
 import { storage } from '@/utils/storage';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import ScoreSheetPage from './ScoreSheetPage';
+import Portal from '@/components/Portal';
 
 const FILTER_TABS = ['Complete', 'Incomplete'];
 
@@ -24,6 +30,7 @@ const PreviousGamesPage = () => {
   const [games, loading, error] = useGetPreviousGames(user!.uid);
 
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [showScoreSheet, setShowScoreSheet] = useState(false);
   const [activeTab, setActiveTab] = useState(
     searchParams.get('filter') || 'complete',
   );
@@ -32,9 +39,18 @@ const PreviousGamesPage = () => {
     setTitle('Previous Games');
   }, []);
 
+  function setStores(game: Game) {
+    dispatch(bulkSetRoundScores(game.scores));
+    dispatch(bulkAddPlayers(game.players));
+  }
+
+  function resetStores() {
+    dispatch(clearPlayers());
+    dispatch(clearScores());
+  }
+
   function handleResumeGame() {
-    dispatch(bulkSetRoundScores(selectedGame!.scores));
-    dispatch(bulkAddPlayers(selectedGame!.players));
+    setStores(selectedGame!);
     storage.setPlayers(selectedGame!.players);
     storage.setGameId(selectedGame!.id);
 
@@ -44,7 +60,15 @@ const PreviousGamesPage = () => {
 
   function handleDeleteGame() {}
 
-  function handleViewGame() {}
+  function handleViewGame() {
+    setStores(selectedGame!);
+    setShowScoreSheet(true);
+  }
+
+  function handleCloseScoreSheet() {
+    setShowScoreSheet(false);
+    resetStores();
+  }
 
   function handleSelectTab(tab: string) {
     setActiveTab(tab);
@@ -84,7 +108,7 @@ const PreviousGamesPage = () => {
       ) : (
         <div>
           <p className="text-center text-xl mb-6">
-            Select the game for more option!
+            Select the game for more options!
           </p>
           {error && <p>Error: {error.message}</p>}
           {games?.length === 0 && <p>No games found</p>}
@@ -95,8 +119,8 @@ const PreviousGamesPage = () => {
                 <PreviousGameCard
                   onSelectGame={() => setSelectedGame(game)}
                   onResumeGame={handleResumeGame}
-                  onDeleteGame={() => {}}
-                  onViewGame={() => {}}
+                  onDeleteGame={handleDeleteGame}
+                  onViewGame={handleViewGame}
                   isSelected={selectedGame?.id === game.id}
                   key={game.id}
                   game={game}
@@ -105,15 +129,11 @@ const PreviousGamesPage = () => {
           </div>
         </div>
       )}
-      {/* <ButtonContainer>
-        <button
-          disabled={selectedGame === null}
-          onClick={handleResumeGame}
-          className="btn btn-lg w-full"
-        >
-          Resume Game
-        </button>
-      </ButtonContainer> */}
+      <Portal>
+        <Animations.SlideUp show={showScoreSheet}>
+          <ScoreSheetPage onClose={handleCloseScoreSheet} />
+        </Animations.SlideUp>
+      </Portal>
     </div>
   );
 };
