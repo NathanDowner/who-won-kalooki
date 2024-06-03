@@ -64,7 +64,6 @@ export const useGetPreviousGames = (userId: string) => {
 };
 
 export const updateGame = async (game: UpdateGameDto) => {
-  console.log({ game });
   await setDoc(doc(db, 'games', game.id), game, {
     merge: true,
   });
