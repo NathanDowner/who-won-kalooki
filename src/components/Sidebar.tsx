@@ -11,20 +11,25 @@ type SideBarLink = {
 
 const NAV_LINKS: SideBarLink[] = [
   {
-    label: 'Profile',
+    label: 'Home',
     link: '/',
     requiresAuth: true,
   },
+  // {
+  //   label: 'Profile',
+  //   link: '/profile',
+  //   requiresAuth: true,
+  // },
   {
     label: 'Previous Games',
     link: '/previous-games',
     requiresAuth: true,
   },
-  {
-    label: 'Give Feedback!',
-    handler: () => {},
-    requiresAuth: false,
-  },
+  // {
+  //   label: 'Give Feedback!',
+  //   handler: () => {},
+  //   requiresAuth: false,
+  // },
 ];
 
 type SideBarProps = {
