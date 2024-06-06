@@ -1,5 +1,5 @@
+import AddPlayerCard from '@/components/AddPlayerCard';
 import ButtonContainer from '@/components/ButtonContainer';
-import PlayerCard from '@/components/PlayerCard';
 import { useAuth } from '@/contexts/AuthContext';
 import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { Player } from '@/models/player.interface';
@@ -38,8 +38,14 @@ const AddPlayersPage = () => {
     navigate(AppRoutes.round('333'));
   };
 
+  function updatePlayer(index: number, player: Player) {
+    setPlayers((prev) => prev.map((p, idx) => (index == idx ? player : p)));
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!newPlayerName) return;
+
     const newPlayer: Player = {
       name: newPlayerName,
       imgUrl: `https://avatar.iran.liara.run/public/boy?username=Player${newPlayerName}`,
@@ -66,22 +72,26 @@ const AddPlayersPage = () => {
   return (
     <div className="page">
       <div className="space-y-4 mx-2 mb-20 ">
-        {players.map((player) => (
-          <PlayerCard key={player.name} player={player} />
+        {players.map((player, idx) => (
+          <AddPlayerCard
+            key={player.name}
+            player={player}
+            onChange={(player) => updatePlayer(idx, player)}
+          />
         ))}
 
         <form
           onSubmit={handleSubmit}
           className={`flex gap-4 items-center border-4 text-xl border-gray-700 p-3 rounded-md`}
         >
-          <div className="border-4 border-gray-700 rounded-full w-14 h-14" />
+          <div className="border-4 border-gray-700 rounded-full w-14 h-14 shrink-0" />
           <input
             ref={inputRef}
             type="text"
             name="name"
             value={newPlayerName}
             onChange={(e) => setNewPlayerName(e.target.value)}
-            placeholder="Player name"
+            placeholder="Enter player name"
             className="input input-ghost -ml-1 pl-0 flex-1 text-xl"
           />
         </form>
