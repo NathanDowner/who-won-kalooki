@@ -8,7 +8,9 @@ import { useAppSelector } from '@/store/hooks';
 import { selectPlayers } from '@/store/playersSlice';
 import { selectRounds, selectTotalsUpToRound } from '@/store/scoreSlice';
 import { storage } from '@/utils/storage';
-import { useEffect } from 'react';
+import { FirebaseError } from 'firebase/app';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface Props {
   onPlayAgain: () => void;
@@ -21,6 +23,7 @@ const FinalScorePage = ({
   onStartOver,
   onShowScoreSheet,
 }: Props) => {
+  const [gameId] = useState(storage.getGameId());
   const { user } = useAuth();
   const players = useAppSelector(selectPlayers);
   const rounds = useAppSelector(selectRounds);
@@ -29,29 +32,57 @@ const FinalScorePage = ({
 
   const lowestScore = Math.min(...totalsSoFar);
 
-  useEffect(() => {
+  function saveToFirebase() {
     const winningIndex = totalsSoFar.indexOf(lowestScore);
     const winner = players[winningIndex];
-    const gameId = storage.getGameId();
+
     if (user) {
       if (gameId) {
-        updateGame({
-          id: gameId,
-          scores: rounds,
-          winner: winner,
-          isComplete: Math.max(...rounds['4444']) != 0,
-        });
+        try {
+          toast.promise(
+            updateGame({
+              id: gameId,
+              scores: rounds,
+              winner: winner,
+              isComplete: Math.max(...rounds['4444']) != 0,
+            }),
+            {
+              loading: 'Saving game...',
+              success: 'Game saved!',
+              error: 'Failed to save game',
+            },
+          );
+        } catch (error) {
+          console.log(error);
+          toast.error((error as FirebaseError).message);
+        }
       } else {
-        saveGame({
-          type: GameType.Kalooki,
-          players,
-          creator: players.find((player) => player.id === user.uid)!,
-          scores: rounds,
-          winner: winner,
-          isComplete: Math.max(...rounds['4444']) != 0,
-        });
+        try {
+          toast.promise(
+            saveGame({
+              type: GameType.Kalooki,
+              players,
+              creator: players.find((player) => player.id === user.uid)!,
+              scores: rounds,
+              winner: winner,
+              isComplete: Math.max(...rounds['4444']) != 0,
+            }),
+            {
+              loading: 'Saving game...',
+              success: 'Game saved!',
+              error: 'Failed to save game',
+            },
+          );
+        } catch (error) {
+          console.log(error);
+          toast.error((error as FirebaseError).message);
+        }
       }
     }
+  }
+
+  useEffect(() => {
+    saveToFirebase();
     storage.clearData();
   }, []);
 
