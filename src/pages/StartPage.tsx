@@ -12,9 +12,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { clsx } from 'clsx';
 import Logo from '@/components/Logo';
 import { useTitle } from '@/contexts/TitleContext';
+import Loader from '@/components/Loader';
 
 const StartPage = () => {
-  const { user, signInWithGoogle, logout } = useAuth();
+  const { user, signInWithGoogle, logout, loading: authLoading } = useAuth();
   const dispatch = useAppDispatch();
   const { setTitle, setShowShadow } = useTitle();
 
@@ -27,6 +28,7 @@ const StartPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-between pb-32 -mt-6">
+      <Loader isLoading={authLoading} />
       <header className="flex flex-col items-center">
         <Logo className="h-24" />
         <h1 className="text-4xl font-bold mb-14">Who Won?</h1>
