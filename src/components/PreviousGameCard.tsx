@@ -83,7 +83,7 @@ const PreviousGameCard = ({
           <button
             onClick={onDeleteGame}
             disabled={game.isComplete}
-            className="hidden btn btn-sm bg-red-500 disabled:bg-red-200"
+            className="btn btn-sm bg-red-500 disabled:bg-red-200"
           >
             <TrashIcon className="h-4 text-white" />
           </button>

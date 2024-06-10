@@ -2,7 +2,7 @@ import { Animations } from '@/components/animations';
 import PreviousGameCard from '@/components/PreviousGameCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTitle } from '@/contexts/TitleContext';
-import { useGetPreviousGames } from '@/lib/firebase';
+import { deleteGame, useGetPreviousGames } from '@/lib/firebase';
 import { Game } from '@/models/game.interface';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
@@ -18,6 +18,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
+import ConfirmationModal from '@/components/ConfirmationModal';
+import toast from 'react-hot-toast';
 
 const FILTER_TABS = ['Complete', 'Incomplete'];
 
@@ -31,6 +33,7 @@ const PreviousGamesPage = () => {
 
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [showScoreSheet, setShowScoreSheet] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [activeTab, setActiveTab] = useState(
     searchParams.get('filter') || 'complete',
   );
@@ -58,7 +61,17 @@ const PreviousGamesPage = () => {
     navigate(AppRoutes.round(lastRoundPlayed));
   }
 
-  function handleDeleteGame() {}
+  function onDeleteGame() {
+    setShowDeleteConfirmation(true);
+  }
+
+  function confirmDeleteGame() {
+    toast.promise(deleteGame(selectedGame!.id), {
+      loading: 'Deleting game...',
+      success: 'Game deleted',
+      error: 'Failed to delete game',
+    });
+  }
 
   function handleViewGame() {
     setStores(selectedGame!);
@@ -119,7 +132,7 @@ const PreviousGamesPage = () => {
                 <PreviousGameCard
                   onSelectGame={() => setSelectedGame(game)}
                   onResumeGame={handleResumeGame}
-                  onDeleteGame={handleDeleteGame}
+                  onDeleteGame={onDeleteGame}
                   onViewGame={handleViewGame}
                   isSelected={selectedGame?.id === game.id}
                   key={game.id}
@@ -134,6 +147,17 @@ const PreviousGamesPage = () => {
           <ScoreSheetPage onClose={handleCloseScoreSheet} />
         </Animations.SlideUp>
       </Portal>
+      <ConfirmationModal
+        title="Delete game?"
+        isOpen={showDeleteConfirmation}
+        onClose={() => setShowDeleteConfirmation(false)}
+        onConfirm={confirmDeleteGame}
+        cancelBtnText="No"
+        confirmBtnText="Yes, delete"
+        confirmBtnClassName="bg-red-500 text-white hover:bg-red-600"
+      >
+        Are you sure you want to delete this game?
+      </ConfirmationModal>
     </div>
   );
 };

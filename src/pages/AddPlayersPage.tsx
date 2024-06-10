@@ -34,6 +34,7 @@ const AddPlayersPage = () => {
   const handleStartRound = () => {
     dispatch(bulkAddPlayers(players));
     dispatch(setInitialScores(players.length));
+    storage.clearData(); // TODO: Remove when back btn is added
     storage.setPlayers(players);
     navigate(AppRoutes.round('333'));
   };
