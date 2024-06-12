@@ -20,6 +20,8 @@ import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import toast from 'react-hot-toast';
+import AppHeader from '@/components/AppHeader';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 const FILTER_TABS = ['Complete', 'Incomplete'];
 
@@ -98,6 +100,16 @@ const PreviousGamesPage = () => {
 
   return (
     <div className="page">
+      <AppHeader
+        title="Previous Games"
+        showShadow
+        leftActionBtn={{
+          label: 'back button',
+          icon: ArrowLeftIcon,
+          type: 'link',
+          link: AppRoutes.start,
+        }}
+      />
       <div
         className="tabs flex tabs-boxed w-4/5 mb-4 md:w-1/2 mx-auto"
         role="tablist"

@@ -1,7 +1,7 @@
 import AddPlayerCard from '@/components/AddPlayerCard';
+import AppHeader from '@/components/AppHeader';
 import ButtonContainer from '@/components/ButtonContainer';
 import { useAuth } from '@/contexts/AuthContext';
-import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { Player } from '@/models/player.interface';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
@@ -12,8 +12,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AddPlayersPage = () => {
-  useSetPageTitle('Add Players');
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAuth();
@@ -72,6 +70,7 @@ const AddPlayersPage = () => {
 
   return (
     <div className="page">
+      <AppHeader title="Add Players" showShadow />
       <div className="space-y-4 mx-2 mb-20 ">
         {players.map((player, idx) => (
           <AddPlayerCard

@@ -19,6 +19,8 @@ import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
 import { Animations } from '@/components/animations';
 import Keypad from '@/components/Keypad';
+import AppHeader from '@/components/AppHeader';
+import { ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
 
 const RoundPage = () => {
   const { round } = useParams();
@@ -116,15 +118,15 @@ const RoundPage = () => {
         />
       ) : (
         <div className="page">
-          <header className="text-center mb-4 relative">
-            <h1 className="text-2xl">{round}</h1>{' '}
-            <button
-              onClick={() => setShowScoreSheet(true)}
-              className="absolute btn btn-sm right-0 top-0"
-            >
-              sheet
-            </button>
-          </header>
+          <AppHeader
+            title={`Round ${formatRound(round!)}`}
+            rightActionBtn={{
+              label: 'sheet button',
+              icon: ClipboardDocumentListIcon,
+              type: 'button',
+              onClick: () => setShowScoreSheet(true),
+            }}
+          />
 
           {/* Cards */}
           <div className="grid grid-cols-2 gap-6">
