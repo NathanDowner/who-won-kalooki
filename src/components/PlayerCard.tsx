@@ -28,7 +28,7 @@ const PlayerCard = ({ player, score, winner, order }: Props) => {
           winner ? 'border-yellow-500' : 'border-gray-700'
         } border-4 rounded-full w-14 h-14`}
       />
-      {player.name}
+      <span className="truncate-text">{player.name}</span>
       {score !== undefined && (
         <div className="ml-auto text-3xl font-bold">{score}</div>
       )}

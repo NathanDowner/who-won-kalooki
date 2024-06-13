@@ -35,7 +35,7 @@ const RoundCard = ({
         isLeading ? 'border-yellow-500 bg-yellow-400' : 'border-black'
       } border-4 rounded-md p-2 flex flex-col`}
     >
-      <h3 className="text-2xl font-bold">{name}</h3>
+      <h3 className="text-2xl font-bold truncate-text">{name}</h3>
       <p className="text-xl">Score: {scoreSoFar}</p>
       <p>Current:</p>
       <div

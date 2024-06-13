@@ -12,6 +12,12 @@
   }
 }
 
+@layer utilities {
+  .truncate-text {
+    @apply overflow-hidden whitespace-nowrap text-ellipsis;
+  }
+}
+
 /* @media (display-mode: standalone) {
   body {
     margin: env(safe-area-inset-top) env(safe-area-inset-right)
