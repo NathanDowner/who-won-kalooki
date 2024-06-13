@@ -28,7 +28,7 @@ const NavButton = ({ actionBtn }: NavBtnWrapperProps) => {
       {actionBtn.type === 'link' ? (
         <Link
           to={actionBtn.link}
-          className={clsx('btn rounded-md bg-white', {
+          className={clsx('btn px-2  rounded-md bg-white', {
             'border-2 border-black': !actionBtn.noBorder,
           })}
         >
@@ -37,7 +37,7 @@ const NavButton = ({ actionBtn }: NavBtnWrapperProps) => {
       ) : (
         <button
           onClick={actionBtn.onClick}
-          className={clsx('btn rounded-md bg-white', {
+          className={clsx('btn px-2  rounded-md bg-white', {
             'border-2 border-black': !actionBtn.noBorder,
           })}
         >

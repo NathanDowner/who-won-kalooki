@@ -1,7 +1,6 @@
 import { Animations } from '@/components/animations';
 import PreviousGameCard from '@/components/PreviousGameCard';
 import { useAuth } from '@/contexts/AuthContext';
-import { useTitle } from '@/contexts/TitleContext';
 import { deleteGame, useGetPreviousGames } from '@/lib/firebase';
 import { Game } from '@/models/game.interface';
 import { AppRoutes } from '@/routes';
@@ -14,7 +13,7 @@ import {
 import { findLastRoundPlayed } from '@/utils';
 import { storage } from '@/utils/storage';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
@@ -27,7 +26,6 @@ const FILTER_TABS = ['Complete', 'Incomplete'];
 
 const PreviousGamesPage = () => {
   const { user } = useAuth();
-  const { setTitle } = useTitle();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
@@ -39,10 +37,6 @@ const PreviousGamesPage = () => {
   const [activeTab, setActiveTab] = useState(
     searchParams.get('filter') || 'complete',
   );
-
-  useEffect(() => {
-    setTitle('Previous Games');
-  }, []);
 
   function setStores(game: Game) {
     dispatch(bulkSetRoundScores(game.scores));

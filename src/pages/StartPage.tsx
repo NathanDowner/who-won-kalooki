@@ -11,23 +11,19 @@ import boy2 from '../assets/boy_2.png';
 import { useAuth } from '@/contexts/AuthContext';
 import { clsx } from 'clsx';
 import Logo from '@/components/Logo';
-import { useTitle } from '@/contexts/TitleContext';
 import Loader from '@/components/Loader';
 
 const StartPage = () => {
   const { user, signInWithGoogle, logout, loading: authLoading } = useAuth();
   const dispatch = useAppDispatch();
-  const { setTitle, setShowShadow } = useTitle();
 
   useEffect(() => {
-    setTitle('');
-    setShowShadow(false);
     dispatch(clearPlayers());
     dispatch(resetScores());
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-between pb-32 -mt-6">
+    <div className="flex flex-col items-center justify-between  -mt-6">
       <Loader isLoading={authLoading} />
       <header className="flex flex-col items-center">
         <Logo className="h-24" />

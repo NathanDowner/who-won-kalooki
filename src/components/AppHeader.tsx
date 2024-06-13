@@ -1,13 +1,6 @@
-import { AppRoutes } from '@/routes';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import NavButton, { NavActionBtn } from './NavBtnWrapper';
 import clsx from 'clsx';
-
-// interface NavActionBtn {
-//   icon: React.ComponentType<{ className?: string }>;
-
-//   label: string;
-// }
 
 interface AppHeaderProps {
   title?: string;
@@ -33,9 +26,12 @@ const AppHeader = ({
 }: AppHeaderProps) => {
   return (
     <header
-      className={clsx('h-16 bg-white z-50 flex items-center -mx-4 px-4 mb-4', {
-        'shadow-md': showShadow,
-      })}
+      className={clsx(
+        'min-h-16 bg-white z-50 sticky top-0 flex items-center -mx-4 p-4 mb-4',
+        {
+          'shadow-md': showShadow,
+        },
+      )}
     >
       <NavButton actionBtn={leftActionBtn} />
       <h1 className="ml-4 text-xl">{title}</h1>

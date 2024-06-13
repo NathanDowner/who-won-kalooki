@@ -1,11 +1,7 @@
 import Sidebar from '@/components/Sidebar';
-import { useTitle } from '@/contexts/TitleContext';
-import clsx from 'clsx';
 import { Outlet } from 'react-router-dom';
 
 const SidebarLayout = () => {
-  const { title, showShadow } = useTitle();
-
   function handleSidebarClose() {
     const sidebar: HTMLInputElement | null =
       document.querySelector('.drawer-toggle');
@@ -21,7 +17,7 @@ const SidebarLayout = () => {
         <input type="checkbox" id="side-menu" className="drawer-toggle" />
         <div className="drawer-content h-screen flex flex-col">
           {/* Navbar */}
-          <div className="!p-0 -mx-2 w-full navbar bg-white sticky top-0 z-50 flex-none">
+          <div className="!p-0 -mx-2 w-full navbar bg-none sticky top-0 z-50 flex-none">
             <div className="flex-none pl-4">
               <label
                 htmlFor="side-menu"
@@ -43,7 +39,6 @@ const SidebarLayout = () => {
                 </svg>
               </label>
             </div>
-            <div className="flex-1 px-2 mx-2">{title}</div>
           </div>
 
           {/* Content */}
