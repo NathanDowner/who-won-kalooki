@@ -1,34 +1,40 @@
+import { Animations } from '@/components/animations';
 import ButtonContainer from '@/components/ButtonContainer';
 import PlayerCard from '@/components/PlayerCard';
+import Portal from '@/components/Portal';
 import { useAuth } from '@/contexts/AuthContext';
-import useSetPageTitle from '@/hooks/useSetPageTitle';
 import { saveGame, updateGame } from '@/lib/firebase';
 import { GameType } from '@/models/gameType.enum';
-import { useAppSelector } from '@/store/hooks';
+import { AppRoutes } from '@/routes';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectPlayers } from '@/store/playersSlice';
-import { selectRounds, selectTotalsUpToRound } from '@/store/scoreSlice';
+import {
+  selectRounds,
+  selectTotalsUpToRound,
+  setInitialScores,
+} from '@/store/scoreSlice';
 import { storage } from '@/utils/storage';
 import { FirebaseError } from 'firebase/app';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import ScoreSheetPage from './ScoreSheetPage';
+import AppHeader from '@/components/AppHeader';
+import {
+  ClipboardDocumentListIcon,
+  HomeIcon,
+} from '@heroicons/react/24/outline';
 
-interface Props {
-  onPlayAgain: () => void;
-  onStartOver: () => void;
-  onShowScoreSheet: () => void;
-}
-
-const FinalScorePage = ({
-  onPlayAgain,
-  onStartOver,
-  onShowScoreSheet,
-}: Props) => {
+const FinalScorePage = () => {
   const [gameId] = useState(storage.getGameId());
   const { user } = useAuth();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [showScoreSheet, setShowScoreSheet] = useState(false);
   const players = useAppSelector(selectPlayers);
   const rounds = useAppSelector(selectRounds);
   const totalsSoFar = useAppSelector(selectTotalsUpToRound('4444', true));
-  useSetPageTitle('Final Scores');
 
   const lowestScore = Math.min(...totalsSoFar);
 
@@ -81,6 +87,15 @@ const FinalScorePage = ({
     }
   }
 
+  function onPlayAgain() {
+    dispatch(setInitialScores(players.length));
+    navigate(AppRoutes.round('333'));
+  }
+
+  function onStartOver() {
+    navigate(AppRoutes.start);
+  }
+
   useEffect(() => {
     saveToFirebase();
     storage.clearData();
@@ -88,9 +103,23 @@ const FinalScorePage = ({
 
   return (
     <div className="page">
-      <button onClick={onShowScoreSheet} className="btn btn-sm mb-4">
-        View score sheet
-      </button>
+      <AppHeader
+        title="Final Score"
+        showShadow
+        leftActionBtn={{
+          label: 'home button',
+          icon: HomeIcon,
+          type: 'link',
+          link: AppRoutes.start,
+        }}
+        rightActionBtn={{
+          label: 'sheet button',
+          icon: ClipboardDocumentListIcon,
+          type: 'button',
+          onClick: () => setShowScoreSheet(true),
+        }}
+      />
+
       <div className="space-y-4">
         {players
           .map((player, idx) => ({ ...player, score: totalsSoFar[idx] }))
@@ -105,6 +134,11 @@ const FinalScorePage = ({
             />
           ))}
       </div>
+      <Portal>
+        <Animations.SlideUp show={showScoreSheet}>
+          <ScoreSheetPage onClose={() => setShowScoreSheet(false)} />
+        </Animations.SlideUp>
+      </Portal>
       <ButtonContainer>
         <button className="btn btn-lg flex-1" onClick={onPlayAgain}>
           Play Again

@@ -1,6 +1,5 @@
 import ButtonContainer from '@/components/ButtonContainer';
 import RoundCard from '@/components/RoundCard';
-import { useTitle } from '@/contexts/TitleContext';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectPlayers } from '@/store/playersSlice';
@@ -8,12 +7,10 @@ import {
   selectRoundScores,
   selectTotalsUpToRound,
   setRoundScores as saveRoundScores,
-  setInitialScores,
 } from '@/store/scoreSlice';
 import { formatRound, getNextRound } from '@/utils';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import FinalScorePage from './FinalScorePage';
 import { PENALTY_AMOUNT } from '@/utils/constants';
 import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
@@ -24,7 +21,6 @@ import { ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
 
 const RoundPage = () => {
   const { round } = useParams();
-  const { setTitle } = useTitle();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -33,7 +29,6 @@ const RoundPage = () => {
   const totalsSoFar = useAppSelector(selectTotalsUpToRound(round!));
 
   const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
-  const [isGameFinished, setIsGameFinished] = useState(false);
   const [someoneRewarded, setSomeoneRewarded] = useState(false);
   const [showScoreSheet, setShowScoreSheet] = useState(false);
 
@@ -41,10 +36,6 @@ const RoundPage = () => {
   const [showKeypad, setShowKeypad] = useState(false);
 
   const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
-
-  useEffect(() => {
-    setTitle(`Round ${formatRound(round!)}`);
-  }, [round]);
 
   useEffect(() => {
     setRoundScores(currentRoundScores);
@@ -81,17 +72,7 @@ const RoundPage = () => {
 
   const handleEndGame = () => {
     submitRound();
-    setIsGameFinished(true);
-  };
-
-  const handlePlayAgain = () => {
-    dispatch(setInitialScores(players.length));
-    setIsGameFinished(false);
-    navigate(AppRoutes.round('333'));
-  };
-
-  const handleStartOver = () => {
-    navigate(AppRoutes.start);
+    navigate(AppRoutes.finalScore);
   };
 
   const handleOpenKeypad = (idx: number) => {
@@ -110,64 +91,56 @@ const RoundPage = () => {
 
   return (
     <>
-      {isGameFinished ? (
-        <FinalScorePage
-          onShowScoreSheet={() => setShowScoreSheet(true)}
-          onPlayAgain={handlePlayAgain}
-          onStartOver={handleStartOver}
+      <div className="page">
+        <AppHeader
+          title={`Round ${formatRound(round!)}`}
+          rightActionBtn={{
+            label: 'sheet button',
+            icon: ClipboardDocumentListIcon,
+            type: 'button',
+            onClick: () => setShowScoreSheet(true),
+          }}
         />
-      ) : (
-        <div className="page">
-          <AppHeader
-            title={`Round ${formatRound(round!)}`}
-            rightActionBtn={{
-              label: 'sheet button',
-              icon: ClipboardDocumentListIcon,
-              type: 'button',
-              onClick: () => setShowScoreSheet(true),
-            }}
-          />
 
-          {/* Cards */}
-          <div className="grid grid-cols-2 gap-6">
-            {players.map((player, idx) => (
-              <RoundCard
-                key={idx}
-                isLeading={round !== '333' && totalsSoFar[idx] === lowestScore}
-                player={player}
-                setScore={(score: number) => setScore(idx, score)}
-                scoreSoFar={totalsSoFar[idx]}
-                disableReward={someoneRewarded}
-                onReward={() => handleReward(idx)}
-                currentRoundScore={roundScores[idx]}
-                onOpenKeypad={() => handleOpenKeypad(idx)}
-              />
-            ))}
-            {/* <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
+        {/* Cards */}
+        <div className="grid grid-cols-2 gap-6">
+          {players.map((player, idx) => (
+            <RoundCard
+              key={idx}
+              isLeading={round !== '333' && totalsSoFar[idx] === lowestScore}
+              player={player}
+              setScore={(score: number) => setScore(idx, score)}
+              scoreSoFar={totalsSoFar[idx]}
+              disableReward={someoneRewarded}
+              onReward={() => handleReward(idx)}
+              currentRoundScore={roundScores[idx]}
+              onOpenKeypad={() => handleOpenKeypad(idx)}
+            />
+          ))}
+          {/* <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
               <div className="text-4xl">+</div> <div>Add Player</div>
             </div> */}
-          </div>
-          <ButtonContainer>
-            <button
-              disabled={round! === '333'}
-              onClick={handlePrevRound}
-              className="btn btn-lg flex-[2]"
-            >
-              Prev
-            </button>
-            <button onClick={handleEndGame} className="btn btn-lg flex-1">
-              End Game
-            </button>
-            <button
-              disabled={round! === '4444'}
-              onClick={handleNextRound}
-              className="btn btn-lg flex-[2]"
-            >
-              Next Round
-            </button>
-          </ButtonContainer>
         </div>
-      )}
+        <ButtonContainer>
+          <button
+            disabled={round! === '333'}
+            onClick={handlePrevRound}
+            className="btn btn-lg flex-[2]"
+          >
+            Prev
+          </button>
+          <button onClick={handleEndGame} className="btn btn-lg flex-1">
+            End Game
+          </button>
+          <button
+            disabled={round! === '4444'}
+            onClick={handleNextRound}
+            className="btn btn-lg flex-[2]"
+          >
+            Next Round
+          </button>
+        </ButtonContainer>
+      </div>
       <Portal>
         <Animations.SlideUp show={showKeypad}>
           <Keypad

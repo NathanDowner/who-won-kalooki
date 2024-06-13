@@ -14,6 +14,7 @@ export const AppRoutes = {
   addPlayers: '/add-players',
   previousGames: '/previous-games',
   round: (round: string) => `/round/${round}`,
+  finalScore: '/end',
 };
 
 export const router = createBrowserRouter([
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
       },
       { path: 'add-players', element: <AddPlayersPage /> },
       { path: 'round/:round', element: <RoundPage /> },
+      { path: 'end', element: <FinalScorePage /> },
       { path: '*', element: <Navigate to={AppRoutes.start} /> },
     ],
   },
