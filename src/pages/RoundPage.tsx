@@ -10,14 +10,18 @@ import {
 } from '@/store/scoreSlice';
 import { formatRound, getNextRound } from '@/utils';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useBlocker, useNavigate, useParams } from 'react-router-dom';
 import { PENALTY_AMOUNT } from '@/utils/constants';
 import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
 import { Animations } from '@/components/animations';
 import Keypad from '@/components/Keypad';
 import AppHeader from '@/components/AppHeader';
-import { ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
+import {
+  ClipboardDocumentListIcon,
+  HomeIcon,
+} from '@heroicons/react/24/outline';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 const RoundPage = () => {
   const { round } = useParams();
@@ -48,6 +52,11 @@ const RoundPage = () => {
       return newScores;
     });
   };
+
+  const navigationBlocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      nextLocation.pathname !== currentLocation.pathname,
+  );
 
   const handleReward = (idx: number) => {
     if (someoneRewarded) return;
@@ -94,6 +103,12 @@ const RoundPage = () => {
       <div className="page">
         <AppHeader
           title={`Round ${formatRound(round!)}`}
+          leftActionBtn={{
+            label: 'home button',
+            icon: HomeIcon,
+            type: 'link',
+            link: AppRoutes.start,
+          }}
           rightActionBtn={{
             label: 'sheet button',
             icon: ClipboardDocumentListIcon,
@@ -157,6 +172,21 @@ const RoundPage = () => {
           <ScoreSheetPage onClose={() => setShowScoreSheet(false)} />
         </Animations.SlideUp>
       </Portal>
+
+      {navigationBlocker.state === 'blocked' && (
+        <ConfirmationModal
+          title="Abandon Game?"
+          isOpen
+          onClose={() => {}}
+          cancelBtnText="Stay"
+          confirmBtnText="Abandon game"
+          onCancel={navigationBlocker.reset}
+          onConfirm={navigationBlocker.proceed}
+        >
+          Are you sure you want to abandon this game? Your progress will not be
+          saved.
+        </ConfirmationModal>
+      )}
     </>
   );
 };
