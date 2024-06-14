@@ -97,6 +97,10 @@ const FinalScorePage = () => {
   }
 
   useEffect(() => {
+    if (!players.length) {
+      navigate(AppRoutes.start);
+    }
+
     saveToFirebase();
     storage.clearData();
   }, []);
