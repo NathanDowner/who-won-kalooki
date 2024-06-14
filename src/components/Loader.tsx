@@ -4,9 +4,10 @@ import { useDebouncedValue } from '@mantine/hooks';
 
 interface LoaderProps {
   isLoading: boolean;
+  text?: string;
 }
 
-const Loader = ({ isLoading }: LoaderProps) => {
+const Loader = ({ isLoading, text = 'Loading' }: LoaderProps) => {
   const [debouncedLoading] = useDebouncedValue(isLoading, 500);
 
   return (
@@ -34,7 +35,7 @@ const Loader = ({ isLoading }: LoaderProps) => {
             <Logo className="h-32" />
           </motion.div>
           <h1 className="flex text-xl gap-1 -mt-8">
-            Loading{' '}
+            {text}{' '}
             <span className="loading loading-dots loading-xs relative -bottom-1"></span>
           </h1>
         </motion.div>

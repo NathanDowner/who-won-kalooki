@@ -35,7 +35,7 @@ const PreviousGamesPage = () => {
   const [showScoreSheet, setShowScoreSheet] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [activeTab, setActiveTab] = useState(
-    searchParams.get('filter') || 'complete',
+    searchParams.get('filter') || 'incomplete',
   );
 
   function setStores(game: Game) {

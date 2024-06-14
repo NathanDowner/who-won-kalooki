@@ -24,7 +24,7 @@ const StartPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-between  -mt-6">
-      <Loader isLoading={authLoading} />
+      <Loader isLoading={authLoading} text="Loading account" />
       <header className="flex flex-col items-center">
         <Logo className="h-24" />
         <h1 className="text-4xl font-bold mb-14">Who Won?</h1>
