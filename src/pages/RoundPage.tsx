@@ -54,8 +54,9 @@ const RoundPage = () => {
   };
 
   const navigationBlocker = useBlocker(
-    ({ currentLocation, nextLocation }) =>
-      nextLocation.pathname !== currentLocation.pathname,
+    ({ nextLocation }) =>
+      !nextLocation.pathname.startsWith('/round') &&
+      nextLocation.pathname !== AppRoutes.finalScore,
   );
 
   const handleReward = (idx: number) => {
@@ -173,20 +174,18 @@ const RoundPage = () => {
         </Animations.SlideUp>
       </Portal>
 
-      {navigationBlocker.state === 'blocked' && (
-        <ConfirmationModal
-          title="Abandon Game?"
-          isOpen
-          onClose={() => {}}
-          cancelBtnText="Stay"
-          confirmBtnText="Abandon game"
-          onCancel={navigationBlocker.reset}
-          onConfirm={navigationBlocker.proceed}
-        >
-          Are you sure you want to abandon this game? Your progress will not be
-          saved.
-        </ConfirmationModal>
-      )}
+      <ConfirmationModal
+        title="Abandon Game?"
+        isOpen={navigationBlocker.state === 'blocked'}
+        onClose={() => {}}
+        cancelBtnText="Stay"
+        confirmBtnText="Abandon game"
+        onCancel={navigationBlocker.reset!}
+        onConfirm={navigationBlocker.proceed!}
+      >
+        Are you sure you want to abandon this game? Your progress will not be
+        saved.
+      </ConfirmationModal>
     </>
   );
 };

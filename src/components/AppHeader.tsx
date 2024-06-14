@@ -12,7 +12,6 @@ interface AppHeaderProps {
 
 const AppHeader = ({
   title = '',
-  autoHide = false,
   showShadow = false,
   leftActionBtn = {
     label: 'back button',
