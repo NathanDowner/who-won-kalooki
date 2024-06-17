@@ -13,9 +13,17 @@ export interface ModalProps extends PropsWithChildren {
   onClose: () => void;
   title: string;
   className?: React.HTMLAttributes<HTMLImageElement>['className'];
+  closeOnBackdropClick?: boolean;
 }
 
-const Modal = ({ isOpen, onClose, title, className, children }: ModalProps) => {
+const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  className,
+  closeOnBackdropClick = true,
+  children,
+}: ModalProps) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -25,7 +33,7 @@ const Modal = ({ isOpen, onClose, title, className, children }: ModalProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={closeOnBackdropClick ? onClose : undefined}
             className="fixed inset-0 z-[90] flex w-screen items-center justify-center p-4 bg-gray-600/80"
           >
             <motion.div

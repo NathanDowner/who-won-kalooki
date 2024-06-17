@@ -8,6 +8,7 @@ interface ConfirmationModalProps extends ModalProps {
   cancelBtnText: string;
   confirmBtnClassName?: React.HTMLAttributes<HTMLImageElement>['className'];
   cancelBtnClassName?: React.HTMLAttributes<HTMLImageElement>['className'];
+  closeOnBackdropClick?: boolean;
 }
 
 const ConfirmationModal = ({
@@ -22,6 +23,7 @@ const ConfirmationModal = ({
   children,
   confirmBtnClassName = '',
   cancelBtnClassName = '',
+  closeOnBackdropClick = true,
 }: ConfirmationModalProps) => {
   function handleClick(handler?: () => void) {
     if (handler) handler();
@@ -33,6 +35,7 @@ const ConfirmationModal = ({
       title={title}
       onClose={onClose}
       className={className}
+      closeOnBackdropClick={closeOnBackdropClick}
     >
       <div className="mb-4">{children}</div>
       <div className="flex justify-end gap-4">
