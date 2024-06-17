@@ -3,7 +3,7 @@ import {
   GoogleAuthProvider,
   User,
   UserCredential,
-  signInWithRedirect,
+  signInWithPopup,
 } from 'firebase/auth';
 import { PropsWithChildren, createContext, useContext } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     provider.addScope('email');
-    return await signInWithRedirect(auth, provider);
+    return await signInWithPopup(auth, provider);
   };
 
   const logout = async () => await auth.signOut();
