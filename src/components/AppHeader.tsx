@@ -26,7 +26,7 @@ const AppHeader = ({
   return (
     <header
       className={clsx(
-        'min-h-16 bg-white z-50 sticky top-0 flex items-center -mx-4 p-4 mb-4',
+        'h-16 bg-white z-50 sticky top-0 flex items-center -mx-4 px-4 py-4 mb-4',
         {
           'shadow-md': showShadow,
         },

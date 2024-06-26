@@ -4,7 +4,7 @@
 
 @layer components {
   .page {
-    @apply mb-24 px-4 overflow-y-auto;
+    @apply mb-24 px-4;
   }
 
   .card {
