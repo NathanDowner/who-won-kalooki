@@ -1,15 +1,20 @@
+// import { useGetUserProfile } from '@/api/user.api';
 import { auth } from '@/lib/firebase';
+import { UserProfile } from '@/models/user.model';
 import {
   GoogleAuthProvider,
   User,
   UserCredential,
   signInWithPopup,
 } from 'firebase/auth';
-import { PropsWithChildren, createContext, useContext } from 'react';
+import { PropsWithChildren, createContext, useContext, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 type AuthContextData = {
   user: User | null | undefined;
+  userProfile: UserProfile | undefined;
+  setUserProfile: (profile: UserProfile) => void;
+  setProfileLoading: (loading: boolean) => void;
   loading: boolean;
   signInWithGoogle: () => Promise<UserCredential | undefined>;
   logout: () => Promise<void>;
@@ -19,6 +24,8 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, loading] = useAuthState(auth);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
   // const [signInWithGoogle] = useSignInWithGoogle(auth);
 
   const signInWithGoogle = async () => {
@@ -27,11 +34,17 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     return await signInWithPopup(auth, provider);
   };
 
-  const logout = async () => await auth.signOut();
+  const logout = async () => {
+    await auth.signOut();
+    setUserProfile(undefined);
+  };
 
   const value = {
     user,
-    loading,
+    userProfile,
+    setUserProfile,
+    loading: loading || profileLoading,
+    setProfileLoading,
     signInWithGoogle,
     logout,
   };

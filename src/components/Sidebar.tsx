@@ -37,7 +37,7 @@ type SideBarProps = {
 };
 
 const Sidebar = ({ onClose }: SideBarProps) => {
-  const { logout, user, signInWithGoogle } = useAuth();
+  const { logout, user, userProfile, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   function handleItemClick(link: SideBarLink | (() => void)) {
@@ -71,7 +71,7 @@ const Sidebar = ({ onClose }: SideBarProps) => {
                 <h3 className="text-xl font-semibold tracking-widest">
                   {user?.displayName}
                 </h3>
-                <h4>@user-name</h4>
+                {userProfile && <h4>@{userProfile?.userName}</h4>}
               </div>
             </div>
           ) : (

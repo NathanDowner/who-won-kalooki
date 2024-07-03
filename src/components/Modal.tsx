@@ -27,7 +27,7 @@ const Modal = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <Dialog open={isOpen} onClose={onClose} className={clsx(className)}>
+        <Dialog open={isOpen} onClose={onClose}>
           <motion.div
             key="modal-backdrop"
             initial={{ opacity: 0 }}
@@ -42,7 +42,9 @@ const Modal = ({
               animate={{ rotate: 0, scale: 1, opacity: 1 }}
               exit={{ rotate: -40, scale: 0.5, opacity: 0 }}
             >
-              <DialogPanel className="bg-white p-4 rounded-md">
+              <DialogPanel
+                className={clsx('bg-white p-4 rounded-md', className)}
+              >
                 <DialogTitle className="font-semibold text-xl">
                   {title}
                 </DialogTitle>

@@ -2,7 +2,7 @@ import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
 import { clearPlayers } from '@/store/playersSlice';
 import { resetScores } from '@/store/scoreSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import girl1 from '../assets/girl_1.png';
 import girl2 from '../assets/girl_2.png';
@@ -12,15 +12,50 @@ import { useAuth } from '@/contexts/AuthContext';
 import { clsx } from 'clsx';
 import Logo from '@/components/Logo';
 import Loader from '@/components/Loader';
+import { storage } from '@/utils/storage';
+import Modal from '@/components/Modal';
+import UserProfileForm from '@/components/UserProfileForm';
+import { getUserProfile } from '@/api/user.api';
+import { UserProfile } from '@/models/user.model';
 
 const StartPage = () => {
-  const { user, signInWithGoogle, logout, loading: authLoading } = useAuth();
+  const {
+    user,
+    userProfile,
+    signInWithGoogle,
+    logout,
+    loading: authLoading,
+    setProfileLoading,
+    setUserProfile,
+  } = useAuth();
   const dispatch = useAppDispatch();
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   useEffect(() => {
     dispatch(clearPlayers());
     dispatch(resetScores());
+    storage.clearData();
   }, []);
+
+  useEffect(() => {
+    if (user && !userProfile) {
+      // attempt to get the user profile
+      setProfileLoading(true);
+      getUserProfile(user.uid).then((profile) => {
+        setProfileLoading(false);
+        if (!profile) {
+          return setShowProfileModal(true);
+        }
+
+        setUserProfile(profile);
+      });
+    }
+  }, [user]);
+
+  function handleSaveProfile(profile: UserProfile) {
+    setUserProfile(profile);
+    setShowProfileModal(false);
+  }
 
   return (
     <div className="flex flex-col items-center justify-between  -mt-6">
@@ -78,6 +113,16 @@ const StartPage = () => {
           </button>
         )}
       </div>
+      {user && (
+        <Modal
+          isOpen={showProfileModal}
+          onClose={() => setShowProfileModal(false)}
+          title="Create Profile"
+          className="max-w-xs h-1/2"
+        >
+          <UserProfileForm user={user} onSuccess={handleSaveProfile} />
+        </Modal>
+      )}
     </div>
   );
 };
