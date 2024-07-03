@@ -5,7 +5,7 @@ import {
   UpdateGameDto,
 } from '@/models/game.interface';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import {
   addDoc,
   collection,
@@ -16,6 +16,7 @@ import {
   deleteDoc,
   doc,
   orderBy,
+  connectFirestoreEmulator,
 } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -39,10 +40,10 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// if (location.hostname === 'localhost') {
-//   connectFirestoreEmulator(db, 'localhost', 8080);
-//   connectAuthEmulator(auth, 'http://localhost:9099');
-// }
+if (location.hostname === 'localhost') {
+  connectFirestoreEmulator(db, 'localhost', 8080);
+  connectAuthEmulator(auth, 'http://localhost:9100');
+}
 
 export const saveGame = async (game: CreateGameDto): Promise<string> => {
   const docRef = await addDoc(

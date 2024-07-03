@@ -27,5 +27,10 @@ service cloud.firestore {
     	allow update: if isCreator(); // || request.auth.uid in resource.data.playerIds add for players later
       allow delete: if isCreator() && resource.data.isComplete == false;
     }
+
+    match /users/{userId} {
+      allow read;
+      allow create: if isAuthenticated();
+    }
   }
 }
