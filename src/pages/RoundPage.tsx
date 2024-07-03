@@ -104,6 +104,7 @@ const RoundPage = () => {
       <div className="page">
         <AppHeader
           title={`Round ${formatRound(round!)}`}
+          showShadow
           leftActionBtn={{
             label: 'home button',
             icon: HomeIcon,
