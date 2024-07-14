@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 
 interface InputProps {
-  label: string;
-  type?: 'text' | 'email';
+  label?: string;
+  type?: 'text' | 'email' | 'search';
   name?: string;
   value: string;
   placeholder?: string;
@@ -29,9 +29,11 @@ const Input = ({
 }: InputProps) => {
   return (
     <label className="form-control w-full max-w-xs">
-      <div className="label">
-        <span className="label-text">{label}</span>
-      </div>
+      {label && (
+        <div className="label">
+          <span className="label-text">{label}</span>
+        </div>
+      )}
       <input
         type={type}
         placeholder={placeholder}
