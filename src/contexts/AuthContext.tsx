@@ -1,4 +1,5 @@
 // import { useGetUserProfile } from '@/api/user.api';
+import { getUserProfile } from '@/api/user.api';
 import { auth } from '@/lib/firebase';
 import { UserProfile } from '@/models/user.model';
 import {
@@ -7,7 +8,13 @@ import {
   UserCredential,
   signInWithPopup,
 } from 'firebase/auth';
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 type AuthContextData = {
@@ -15,6 +22,8 @@ type AuthContextData = {
   userProfile: UserProfile | undefined;
   setUserProfile: (profile: UserProfile) => void;
   setProfileLoading: (loading: boolean) => void;
+  showProfileModal: boolean;
+  setShowProfileModal: (show: boolean) => void;
   loading: boolean;
   signInWithGoogle: () => Promise<UserCredential | undefined>;
   logout: () => Promise<void>;
@@ -24,8 +33,9 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, loading] = useAuthState(auth);
-  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
+  const [showProfileModal, setShowProfileModal] = useState(false);
   // const [signInWithGoogle] = useSignInWithGoogle(auth);
 
   const signInWithGoogle = async () => {
@@ -33,6 +43,22 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     provider.addScope('email');
     return await signInWithPopup(auth, provider);
   };
+
+  useEffect(() => {
+    if (user && !userProfile) {
+      console.log('attempt to get the user profile');
+
+      setProfileLoading(true);
+      getUserProfile(user.uid).then((profile) => {
+        if (profile) {
+          setUserProfile(profile);
+        } else {
+          setShowProfileModal(true);
+        }
+        setProfileLoading(false);
+      });
+    }
+  }, [user, userProfile]);
 
   const logout = async () => {
     await auth.signOut();
@@ -45,6 +71,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setUserProfile,
     loading: loading || profileLoading,
     setProfileLoading,
+    showProfileModal,
+    setShowProfileModal,
     signInWithGoogle,
     logout,
   };
