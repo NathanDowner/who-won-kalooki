@@ -13,6 +13,7 @@ export interface Game {
   id: string;
   endedAt: Timestamp;
   players: Player[];
+  playerUserNames: string[];
   isComplete: boolean;
   winner: Player;
   creator: Player;
@@ -33,6 +34,7 @@ export const gameConverter: FirestoreDataConverter<Game> = {
       winner: game.winner,
       creator: game.creator,
       scores: game.scores,
+      playerUserNames: game.playerUserNames,
     };
   },
   fromFirestore(snapshot, options): Game {
@@ -46,6 +48,7 @@ export const gameConverter: FirestoreDataConverter<Game> = {
       winner: data.winner,
       creator: data.creator,
       scores: data.scores,
+      playerUserNames: data.playerUserNames,
     };
   },
 };

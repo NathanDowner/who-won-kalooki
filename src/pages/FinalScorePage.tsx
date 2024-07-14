@@ -24,6 +24,11 @@ import {
   ClipboardDocumentListIcon,
   HomeIcon,
 } from '@heroicons/react/24/outline';
+import { Player } from '@/models/player.interface';
+
+function hasUserName(player: Player): boolean {
+  return player.userName !== undefined;
+}
 
 const FinalScorePage = () => {
   const [gameId] = useState(storage.getGameId());
@@ -72,6 +77,9 @@ const FinalScorePage = () => {
               scores: rounds,
               winner: winner,
               isComplete: Math.max(...rounds['4444']) != 0,
+              playerUserNames: players
+                .filter(hasUserName)
+                .map((p) => p.userName!),
             }),
             {
               loading: 'Saving game...',

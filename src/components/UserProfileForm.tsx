@@ -20,15 +20,14 @@ const UserProfileForm = ({ onSuccess, user }: UserProfileFormProps) => {
     useFormik<UserProfile>({
       initialValues: {
         id: user.uid,
-        firstName: user.displayName?.split(' ')[0] || '',
-        lastName: user.displayName?.split(' ')[1] || '',
-        email: user.email || '',
+        fullName: user.displayName!,
+        email: user.email!,
         userName: '',
+        imgUrl: user.photoURL || undefined,
       },
       validationSchema: Yup.object().shape({
-        firstName: Yup.string().required('This is a required field'),
-        lastName: Yup.string().required('This is a required field'),
         email: Yup.string().email().required('This is a required field'),
+        fullName: Yup.string().required('This is a required field'),
         userName: Yup.string()
           .required('This is a required field')
           .min(4)
@@ -62,26 +61,14 @@ const UserProfileForm = ({ onSuccess, user }: UserProfileFormProps) => {
         and you're good to go!
       </p>
       <Input
-        label="First Name"
-        value={values.firstName}
-        name="firstName"
+        label="Name"
+        value={values.fullName}
+        name="fullName"
         onChange={handleChange}
         onBlur={handleBlur}
         disabled
-        hasError={touched.firstName && Boolean(errors.firstName)}
-        smallText={
-          touched.firstName && errors.firstName ? errors.firstName : ''
-        }
-      />
-      <Input
-        label="Last Name"
-        value={values.lastName}
-        name="lastName"
-        onChange={handleChange}
-        onBlur={handleBlur}
-        disabled
-        hasError={touched.lastName && Boolean(errors.lastName)}
-        smallText={touched.lastName && errors.lastName ? errors.lastName : ''}
+        hasError={touched.fullName && Boolean(errors.fullName)}
+        smallText={touched.fullName && errors.fullName ? errors.fullName : ''}
       />
       <Input
         label="Email"
@@ -100,6 +87,7 @@ const UserProfileForm = ({ onSuccess, user }: UserProfileFormProps) => {
         hasError={touched.userName && Boolean(errors.userName)}
         smallText={touched.userName && errors.userName ? errors.userName : ''}
       />
+      {/* TODO: Validate userName to ensure it doesn't exist */}
 
       <button type="submit" className="btn btn-primary">
         {loading && <span className="loading loading-spinner" />}

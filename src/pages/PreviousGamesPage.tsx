@@ -25,11 +25,11 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 const FILTER_TABS = ['Complete', 'Incomplete'];
 
 const PreviousGamesPage = () => {
-  const { user } = useAuth();
+  const { userProfile } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const [games, loading, error] = useGetPreviousGames(user!.uid);
+  const [games, loading, error] = useGetPreviousGames(userProfile!.userName);
 
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [showScoreSheet, setShowScoreSheet] = useState(false);

@@ -42,7 +42,7 @@ export const db = getFirestore(app);
 
 if (location.hostname === 'localhost') {
   connectFirestoreEmulator(db, 'localhost', 8080);
-  connectAuthEmulator(auth, 'http://localhost:9100');
+  connectAuthEmulator(auth, 'http://localhost:9099');
 }
 
 export const saveGame = async (game: CreateGameDto): Promise<string> => {
@@ -53,10 +53,10 @@ export const saveGame = async (game: CreateGameDto): Promise<string> => {
   return docRef.id;
 };
 
-export const useGetPreviousGames = (userId: string) => {
+export const useGetPreviousGames = (userName: string) => {
   const q = query(
     collection(db, 'games'),
-    where('creator.id', '==', userId),
+    where('playerUserNames', 'array-contains', userName),
     orderBy('endedAt', 'desc'),
   ).withConverter(gameConverter);
 
