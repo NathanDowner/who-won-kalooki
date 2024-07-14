@@ -25,15 +25,21 @@ const AddPlayerCard = ({ player, onChange }: Props) => {
         src={player.imgUrl}
         className="border-gray-700 border-4 rounded-full w-14 h-14"
       />
-      <input
-        ref={inputRef}
-        type="text"
-        name="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Player name"
-        className="input input-ghost -ml-1 pl-0 flex-1 text-xl"
-      />
+      <div className="flex flex-col items-start">
+        <input
+          ref={inputRef}
+          type="text"
+          name="name"
+          disabled={player.userName !== undefined}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Player name"
+          className="input input-ghost -ml-1 pl-0 flex-1 text-xl disabled:border-none disabled:bg-transparent"
+        />
+        {player.userName && (
+          <small className="text-gray-400 italic">@{player.userName}</small>
+        )}
+      </div>
     </form>
   );
 };

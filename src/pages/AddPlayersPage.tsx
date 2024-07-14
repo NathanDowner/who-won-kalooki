@@ -1,8 +1,10 @@
 import AddPlayerCard from '@/components/AddPlayerCard';
 import AppHeader from '@/components/AppHeader';
 import ButtonContainer from '@/components/ButtonContainer';
+import PlayerSearchbar from '@/components/PlayerSearchbar';
 import { useAuth } from '@/contexts/AuthContext';
 import { Player } from '@/models/player.interface';
+import { UserProfile } from '@/models/user.model';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
 import { bulkAddPlayers } from '@/store/playersSlice';
@@ -14,16 +16,21 @@ import { useNavigate } from 'react-router-dom';
 const AddPlayersPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
-    if (user && user.displayName && user.photoURL) {
+    if (user && user.displayName && user.photoURL && userProfile) {
       setPlayers([
-        { name: user.displayName, imgUrl: user.photoURL, id: user.uid },
+        {
+          id: userProfile.id,
+          name: user.displayName,
+          imgUrl: user.photoURL,
+          userName: userProfile.userName,
+        },
       ]);
     }
     inputRef.current?.focus();
@@ -41,15 +48,7 @@ const AddPlayersPage = () => {
     setPlayers((prev) => prev.map((p, idx) => (index == idx ? player : p)));
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!newPlayerName) return;
-
-    const newPlayer: Player = {
-      name: newPlayerName,
-      imgUrl: `https://avatar.iran.liara.run/public/boy?username=Player${newPlayerName}`,
-    };
-
+  function addPlayer(newPlayer: Player) {
     setPlayers((prev) => [...prev, newPlayer]);
     setNewPlayerName('');
 
@@ -66,12 +65,36 @@ const AddPlayersPage = () => {
     scrollPromise.then(() => {
       inputRef.current?.focus();
     });
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!newPlayerName) return;
+
+    const newPlayer: Player = {
+      name: newPlayerName,
+      imgUrl: `https://avatar.iran.liara.run/public/boy?username=Player${newPlayerName}`,
+    };
+
+    addPlayer(newPlayer);
   };
+
+  function addPlayerFromSearch(player: UserProfile) {
+    addPlayer({
+      id: player.id,
+      name: player.fullName,
+      imgUrl: player.imgUrl,
+      userName: player.userName,
+    });
+  }
 
   return (
     <div className="page">
       <AppHeader title="Add Players" showShadow />
-      <div className="space-y-4 mx-2 mb-20 ">
+      <label htmlFor="player-search">Find users in Who Won!</label>
+      <PlayerSearchbar onSelectPlayer={addPlayerFromSearch} />
+
+      <div className="space-y-4 mx-2 mb-20 mt-4 ">
         {players.map((player, idx) => (
           <AddPlayerCard
             key={player.name}

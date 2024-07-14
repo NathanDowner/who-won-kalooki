@@ -36,7 +36,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [profileLoading, setProfileLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
   const [showProfileModal, setShowProfileModal] = useState(false);
-  // const [signInWithGoogle] = useSignInWithGoogle(auth);
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
@@ -46,8 +45,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (user && !userProfile) {
-      console.log('attempt to get the user profile');
-
       setProfileLoading(true);
       getUserProfile(user.uid).then((profile) => {
         if (profile) {
