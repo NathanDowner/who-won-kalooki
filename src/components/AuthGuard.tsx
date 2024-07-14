@@ -7,11 +7,11 @@ interface AuthGuardProps {
 }
 
 const AuthGuard = ({ component }: AuthGuardProps) => {
-  const { user, loading } = useAuth();
+  const { user, userProfile, loading } = useAuth();
 
   if (loading) return <div>Loading...</div>;
 
-  if (!user) return <Navigate to={AppRoutes.start} />;
+  if (!user || !userProfile) return <Navigate to={AppRoutes.start} />;
   return <>{component}</>;
 };
 
