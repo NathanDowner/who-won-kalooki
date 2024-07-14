@@ -17,7 +17,6 @@ interface PlayerSearchbarProps {
 const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState<UserProfile[]>([]);
-  const [selectedUser, setSelectedUser] = useState<UserProfile | undefined>();
   const [debouncedValue] = useDebouncedValue(searchTerm, 750);
 
   useEffect(() => {
@@ -47,7 +46,6 @@ const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
       <Combobox
         onChange={(value: UserProfile) => {
           if (value) {
-            setSelectedUser(value);
             onSelectPlayer(value);
           }
         }}
