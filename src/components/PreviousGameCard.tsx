@@ -1,3 +1,4 @@
+import { useAuth } from '@/contexts/AuthContext';
 import { Game } from '@/models/game.interface';
 import { findLastRoundPlayed, formatDate, splitList } from '@/utils';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
@@ -21,6 +22,7 @@ const PreviousGameCard = ({
   onDeleteGame,
 }: PreviousGameCardProps) => {
   const [leftPlayerList, rightPlayerList] = splitList(game.players);
+  const { userProfile } = useAuth();
   return (
     <div
       onClick={onSelectGame}
@@ -82,7 +84,9 @@ const PreviousGameCard = ({
         <footer className=" border-t-4 -mx-3 p-2 flex gap-2 border-black">
           <button
             onClick={onDeleteGame}
-            disabled={game.isComplete}
+            disabled={
+              game.isComplete || game.creator.userName !== userProfile?.userName
+            }
             className="btn btn-sm bg-red-500 disabled:bg-red-200"
           >
             <TrashIcon className="h-4 text-white" />
@@ -97,6 +101,7 @@ const PreviousGameCard = ({
             <button
               onClick={onResumeGame}
               className="btn btn-sm btn-outline ml-auto"
+              disabled={game.creator.userName !== userProfile?.userName}
             >
               Resume
             </button>
