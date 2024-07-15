@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         setProfileLoading(false);
       });
     }
+    setProfileLoading(false);
   }, [user, userProfile]);
 
   const logout = async () => {
