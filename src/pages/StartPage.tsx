@@ -16,6 +16,7 @@ import { storage } from '@/utils/storage';
 import Modal from '@/components/Modal';
 import UserProfileForm from '@/components/UserProfileForm';
 import { UserProfile } from '@/models/user.model';
+import toast from 'react-hot-toast';
 
 const StartPage = () => {
   const {
@@ -38,11 +39,12 @@ const StartPage = () => {
   function handleSaveProfile(profile: UserProfile) {
     setUserProfile(profile);
     setShowProfileModal(false);
+    toast.success('Profile created successfully');
   }
 
   return (
     <div className="flex flex-col items-center justify-between  -mt-6">
-      <Loader isLoading={authLoading} text="Loading account" />
+      <Loader isLoading={authLoading} text="Loading" />
       <header className="flex flex-col items-center">
         <Logo className="h-24" />
         <h1 className="text-4xl font-bold mb-14">Who Won?</h1>
@@ -100,6 +102,7 @@ const StartPage = () => {
         <Modal
           isOpen={showProfileModal}
           onClose={() => setShowProfileModal(false)}
+          closeOnBackdropClick={false}
           title="Create Profile"
           className="max-w-xs h-1/2"
         >

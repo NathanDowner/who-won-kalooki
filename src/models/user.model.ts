@@ -12,6 +12,11 @@ export type UserProfile = {
   imgUrl?: string;
 };
 
+export type CreateProfileDto = Omit<UserProfile, 'fullName'> & {
+  firstName: string;
+  lastName: string;
+};
+
 export const profileConverter: FirestoreDataConverter<UserProfile> = {
   toFirestore(profile: WithFieldValue<UserProfile>): DocumentData {
     return {

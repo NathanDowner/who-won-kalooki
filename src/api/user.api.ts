@@ -46,3 +46,16 @@ export async function findUsers(searchTerm: string): Promise<UserProfile[]> {
   const usersCollection = await getDocs(userQuery);
   return usersCollection.docs.map((doc) => doc.data());
 }
+
+export async function getUserByUserName(
+  userName: string,
+): Promise<UserProfile | null> {
+  const usersRef = collection(db, 'users').withConverter(profileConverter);
+  const userQuery = query(usersRef, where('userName', '==', userName));
+  const userCollection = await getDocs(userQuery);
+  if (userCollection.empty) {
+    return null;
+  }
+
+  return userCollection.docs[0].data();
+}
