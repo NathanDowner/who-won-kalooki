@@ -91,8 +91,12 @@ const AddPlayersPage = () => {
   return (
     <div className="page">
       <AppHeader title="Add Players" showShadow />
-      <label htmlFor="player-search">Find users in Who Won!</label>
-      <PlayerSearchbar onSelectPlayer={addPlayerFromSearch} />
+      {user && userProfile && (
+        <>
+          <label htmlFor="player-search">Find users in Who Won!</label>
+          <PlayerSearchbar onSelectPlayer={addPlayerFromSearch} />
+        </>
+      )}
 
       <div className="space-y-4 mx-2 mb-20 mt-4 ">
         {players.map((player, idx) => (
