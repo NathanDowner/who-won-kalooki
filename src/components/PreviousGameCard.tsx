@@ -1,7 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { Game } from '@/models/game.interface';
 import { findLastRoundPlayed, formatDate, splitList } from '@/utils';
-import { UserCircleIcon } from '@heroicons/react/24/outline';
+import defaultUserImg from '@/assets/default-user.svg';
 import { EyeIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 interface PreviousGameCardProps {
@@ -23,6 +23,13 @@ const PreviousGameCard = ({
 }: PreviousGameCardProps) => {
   const [leftPlayerList, rightPlayerList] = splitList(game.players);
   const { userProfile } = useAuth();
+
+  const playerImgUrls = game.players
+    .filter((p) => p.imgUrl)
+    .map((player) => player.imgUrl);
+
+  const numPlayersWithoutImg = game.players.length - playerImgUrls.length;
+
   return (
     <div
       onClick={onSelectGame}
@@ -36,22 +43,30 @@ const PreviousGameCard = ({
         {game.winner && (
           <div>
             {game.isComplete ? 'Winner' : 'Leading'}:{' '}
-            {game.winner.imgUrl && (
-              <img
-                src={game.winner.imgUrl}
-                alt="Winner's profile photo"
-                className="h-6 w-6 rounded-full inline-block"
-              />
-            )}{' '}
+            <img
+              src={game.winner.imgUrl ?? defaultUserImg}
+              alt="Winner's profile photo"
+              className="h-6 w-6 rounded-full inline-block border-2 border-black"
+            />{' '}
             {game.winner.name.split(' ')[0]}{' '}
-            {/* TODO:  get name from user profile*/}
           </div>
         )}
 
         {!isSelected && (
-          <div className="flex items-center gap-1">
-            <UserCircleIcon className="h-5" />
-            <span>{game.players.length}</span>
+          <div className="flex items-center -space-x-2">
+            {playerImgUrls.map((imgUrl, idx) => (
+              <img
+                key={idx}
+                src={imgUrl}
+                alt={`Player ${game.players[idx].name}'s profile picture`}
+                className="h-6 w-6 rounded-full inline-block border-2 border-black"
+              />
+            ))}
+            {numPlayersWithoutImg > 0 && (
+              <div className="h-6 w-6 bg-white rounded-full border-2 border-black flex items-center justify-center">
+                <span> +{numPlayersWithoutImg}</span>
+              </div>
+            )}
           </div>
         )}
       </div>

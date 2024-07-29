@@ -73,7 +73,6 @@ const AddPlayersPage = () => {
 
     const newPlayer: Player = {
       name: newPlayerName,
-      imgUrl: `https://avatar.iran.liara.run/public/boy?username=Player${newPlayerName}`,
     };
 
     addPlayer(newPlayer);
