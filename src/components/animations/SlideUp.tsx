@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { motion } from 'framer-motion';
+import { ANIMATION_DURATION } from '@/utils/constants';
 
 interface Props extends PropsWithChildren {
   withBackground?: boolean;
@@ -21,7 +22,7 @@ const SlideUp = ({ show, withBackground = false, children }: Props) => {
         className="z-30 fixed bottom-0"
         transition={{
           type: 'tween',
-          duration: 0.2,
+          duration: ANIMATION_DURATION,
         }}
         animate={{ y: show ? 0 : '100%' }}
       >

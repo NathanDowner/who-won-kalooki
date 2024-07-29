@@ -17,6 +17,7 @@ import Modal from '@/components/Modal';
 import UserProfileForm from '@/components/UserProfileForm';
 import { UserProfile } from '@/models/user.model';
 import toast from 'react-hot-toast';
+import { Animations } from '@/components/animations';
 
 const StartPage = () => {
   const {
@@ -104,9 +105,11 @@ const StartPage = () => {
           onClose={() => setShowProfileModal(false)}
           closeOnBackdropClick={false}
           title="Create Profile"
-          className="max-w-xs h-1/2"
+          className="w-[calc(100vw-4rem)] max-w-md"
         >
-          <UserProfileForm user={user} onSuccess={handleSaveProfile} />
+          <Animations.AnimateChangeInHeight>
+            <UserProfileForm user={user} onSuccess={handleSaveProfile} />
+          </Animations.AnimateChangeInHeight>
         </Modal>
       )}
     </div>
