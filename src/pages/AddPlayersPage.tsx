@@ -92,7 +92,9 @@ const AddPlayersPage = () => {
       <AppHeader title="Add Players" showShadow />
       {user && userProfile && (
         <>
-          <label htmlFor="player-search">Find users in Who Won!</label>
+          <label htmlFor="player-search">
+            Find users in Who Won by name or username!
+          </label>
           <PlayerSearchbar onSelectPlayer={addPlayerFromSearch} />
         </>
       )}

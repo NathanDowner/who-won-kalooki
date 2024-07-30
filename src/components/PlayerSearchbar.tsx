@@ -36,13 +36,6 @@ const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
 
   return (
     <div>
-      {/* <input
-        type="search"
-        placeholder="Search for a player"
-        className="border-4 border-gray-700 p-3 rounded-md w-full"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      /> */}
       <Combobox
         onChange={(value: UserProfile) => {
           if (value) {
@@ -56,10 +49,10 @@ const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
           id="player-search"
           type="search"
           className="border-4 border-gray-700 p-3 rounded-md w-full"
-          placeholder="e.g. John Doe"
+          placeholder="e.g. John Doe or j_Doe"
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <small>Search is case-sensitive</small>
+        <small className="italic">*Searches is case-sensitive</small>
         <ComboboxOptions
           anchor="bottom"
           className={clsx(

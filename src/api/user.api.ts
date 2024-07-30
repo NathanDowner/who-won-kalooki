@@ -1,10 +1,12 @@
 import { db } from '@/lib/firebase';
 import { profileConverter, UserProfile } from '@/models/user.model';
 import {
+  and,
   collection,
   doc,
   getDoc,
   getDocs,
+  or,
   query,
   setDoc,
   where,
@@ -40,8 +42,16 @@ export async function findUsers(searchTerm: string): Promise<UserProfile[]> {
   const usersRef = collection(db, 'users').withConverter(profileConverter);
   const userQuery = query(
     usersRef,
-    where('fullName', '>=', searchTerm),
-    where('fullName', '<=', searchTerm + '\uf8ff'),
+    or(
+      and(
+        where('fullName', '>=', searchTerm),
+        where('fullName', '<=', searchTerm + '\uf8ff'),
+      ),
+      and(
+        where('userName', '>=', searchTerm),
+        where('userName', '<=', searchTerm + '\uf8ff'),
+      ),
+    ),
   );
   const usersCollection = await getDocs(userQuery);
   return usersCollection.docs.map((doc) => doc.data());
