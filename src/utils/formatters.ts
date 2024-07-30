@@ -15,3 +15,8 @@ export const formatDate = (date: Date) =>
     dateStyle: 'full',
     timeStyle: 'short',
   }).format(date);
+
+// write me a function that converts a string to sentence case
+export const toSentenceCase = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};

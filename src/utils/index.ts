@@ -1,4 +1,6 @@
+import toast from 'react-hot-toast';
 import { ROUNDS } from './constants';
+import { FirebaseError } from 'firebase/app';
 export * from './formatters';
 
 export const createUUID = () => {
@@ -93,3 +95,16 @@ export function splitList<T>(list: T[]): T[][] {
 
   return [firstList, secondList];
 }
+
+export const withAsyncHandling = async <T = unknown>(
+  promise: Promise<T>,
+  successMessage: string = 'Success!',
+): Promise<T | void> => {
+  try {
+    const resp: T = await promise;
+    toast.success(successMessage || 'Success');
+    return resp;
+  } catch (error) {
+    toast.error((error as FirebaseError).message);
+  }
+};

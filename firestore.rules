@@ -19,7 +19,6 @@ service cloud.firestore {
     function isAuthenticated() {
     	return request.auth.uid != null;
     }
-  
     
     match /games/{gameId} {  
     	allow read;
@@ -31,6 +30,10 @@ service cloud.firestore {
     match /users/{userId} {
       allow read;
       allow create: if isAuthenticated();
+    }
+
+    match /feedback/{feedbackId} {
+      allow create;
     }
   }
 }

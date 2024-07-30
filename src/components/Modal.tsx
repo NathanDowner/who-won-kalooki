@@ -43,7 +43,10 @@ const Modal = ({
               exit={{ rotate: -40, scale: 0.5, opacity: 0 }}
             >
               <DialogPanel
-                className={clsx('bg-white p-4 rounded-md', className)}
+                className={clsx(
+                  'bg-white p-4 rounded-md w-[calc(100vw-4rem)] max-w-md',
+                  className,
+                )}
               >
                 <DialogTitle className="font-semibold text-xl">
                   {title}

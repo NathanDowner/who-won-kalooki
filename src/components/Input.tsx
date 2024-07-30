@@ -2,19 +2,25 @@ import clsx from 'clsx';
 import React from 'react';
 
 interface InputProps {
+  type?: 'text' | 'email' | 'search' | 'textarea';
+  rows?: number;
+  cols?: number;
   label?: string;
-  type?: 'text' | 'email' | 'search' | 'text' | 'textarea';
   name?: string;
   value: string;
   placeholder?: string;
+  hasError?: boolean;
+  smallText?: string;
   onChange: (
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  hasError?: boolean;
-  smallText?: string;
+  onBlur?: (
+    e:
+      | React.FocusEvent<HTMLInputElement>
+      | React.FocusEvent<HTMLTextAreaElement>,
+  ) => void;
   leftIcon?: React.ComponentType<{ className?: string }>;
   rightIcon?: React.ComponentType<{ className?: string }>;
   disabled?: boolean;
@@ -30,6 +36,8 @@ const Input = ({
   smallText,
   hasError = false,
   disabled = false,
+  onBlur,
+  ...props
 }: InputProps) => {
   return (
     <label className="form-control w-full">
@@ -41,10 +49,12 @@ const Input = ({
       {type === 'textarea' ? (
         <textarea
           onChange={onChange}
+          onBlur={onBlur}
+          rows={props.rows}
           name={name}
           value={value}
           placeholder={placeholder}
-          className={clsx('input input-bordered w-full max-w-xs', {
+          className={clsx('textarea textarea-bordered', {
             'input-error': hasError,
           })}
           disabled={disabled}
@@ -54,6 +64,7 @@ const Input = ({
           type={type}
           placeholder={placeholder}
           onChange={onChange}
+          onBlur={onBlur}
           name={name}
           value={value}
           className={clsx('input input-bordered w-full', {

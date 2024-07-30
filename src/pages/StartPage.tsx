@@ -105,7 +105,6 @@ const StartPage = () => {
           onClose={() => setShowProfileModal(false)}
           closeOnBackdropClick={false}
           title="Create Profile"
-          className="w-[calc(100vw-4rem)] max-w-md"
         >
           <Animations.AnimateChangeInHeight>
             <UserProfileForm user={user} onSuccess={handleSaveProfile} />

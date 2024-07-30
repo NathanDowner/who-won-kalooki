@@ -1,6 +1,9 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
 import Logo from './Logo';
+import Modal from './Modal';
+import FeedbackForm from './FeedbackForm';
 
 type SideBarLink = {
   label: string;
@@ -9,36 +12,40 @@ type SideBarLink = {
   requiresAuth: boolean;
 };
 
-const NAV_LINKS: SideBarLink[] = [
-  {
-    label: 'Home',
-    link: '/',
-    requiresAuth: true,
-  },
-  // {
-  //   label: 'Profile',
-  //   link: '/profile',
-  //   requiresAuth: true,
-  // },
-  {
-    label: 'Previous Games',
-    link: '/previous-games',
-    requiresAuth: true,
-  },
-  // {
-  //   label: 'Give Feedback!',
-  //   handler: () => {},
-  //   requiresAuth: false,
-  // },
-];
-
 type SideBarProps = {
   onClose: () => void;
 };
 
 const Sidebar = ({ onClose }: SideBarProps) => {
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const { logout, user, userProfile, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
+
+  const NAV_LINKS: SideBarLink[] = useMemo(
+    () => [
+      {
+        label: 'Home',
+        link: '/',
+        requiresAuth: true,
+      },
+      // {
+      //   label: 'Profile',
+      //   link: '/profile',
+      //   requiresAuth: true,
+      // },
+      {
+        label: 'Previous Games',
+        link: '/previous-games',
+        requiresAuth: true,
+      },
+      {
+        label: 'Give Feedback!',
+        handler: () => setShowFeedbackModal(true),
+        requiresAuth: false,
+      },
+    ],
+    [],
+  );
 
   function handleItemClick(link: SideBarLink | (() => void)) {
     onClose();
@@ -112,6 +119,15 @@ const Sidebar = ({ onClose }: SideBarProps) => {
           </button>
         )}
       </div>
+
+      {/* Feedback Modal  */}
+      <Modal
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        title="Feedback!"
+      >
+        <FeedbackForm onSuccess={() => setShowFeedbackModal(false)} />
+      </Modal>
     </>
   );
 };

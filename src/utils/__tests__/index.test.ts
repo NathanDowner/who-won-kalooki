@@ -2,37 +2,12 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import {
   findLastRoundPlayed,
   findNextRoundToPlay,
-  formatName,
-  formatRound,
   getNextRound,
   getOrdinalSuffix,
   removeLeadingZero,
   splitList,
-} from '.';
-import { INITIAL_SCORES } from './constants';
-
-describe('formatName function', () => {
-  it('should return the name if it is not more than one word', () => {
-    const name = 'John';
-    const formattedName = formatName(name);
-    expect(formattedName).toEqual(name);
-  });
-
-  it('should return the first word of the name if it is more than one word', () => {
-    const name = 'John Doe';
-    const formattedName = formatName(name);
-    expect(formattedName).toEqual('John');
-  });
-});
-
-describe('formatRound function', () => {
-  it('should split separate the charaters in the round by a dash', () => {
-    const round = '333';
-    const formattedRound = formatRound(round);
-
-    expect(formattedRound).toEqual('3-3-3');
-  });
-});
+} from '..';
+import { INITIAL_SCORES } from '../constants';
 
 describe('getNextRound function', () => {
   it('should return 334 after 333', () => {
