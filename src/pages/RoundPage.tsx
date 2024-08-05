@@ -41,6 +41,19 @@ const RoundPage = () => {
 
   const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
 
+  const stopMovementToNextRound = useMemo(() => {
+    let zeroCount = 0;
+    for (const score of roundScores) {
+      if (score === 0) {
+        zeroCount++;
+        if (zeroCount > 1) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }, [roundScores]);
+
   useEffect(() => {
     setRoundScores(currentRoundScores);
   }, [currentRoundScores]);
@@ -150,7 +163,7 @@ const RoundPage = () => {
             End Game
           </button>
           <button
-            disabled={round! === '4444'}
+            disabled={round! === '4444' || stopMovementToNextRound}
             onClick={handleNextRound}
             className="btn btn-lg flex-[2]"
           >
