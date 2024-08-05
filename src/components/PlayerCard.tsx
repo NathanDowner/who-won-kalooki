@@ -1,5 +1,6 @@
 import { Player } from '@/models/player.interface';
 import { getOrdinalSuffix } from '@/utils';
+import defaultUserImg from '@/assets/default-user.svg';
 
 interface Props {
   player: Player;
@@ -23,7 +24,7 @@ const PlayerCard = ({ player, score, winner, order }: Props) => {
         </div>
       )}
       <img
-        src={player.imgUrl}
+        src={player.imgUrl ?? defaultUserImg}
         className={`${
           winner ? 'border-yellow-500' : 'border-gray-700'
         } border-4 rounded-full w-14 h-14`}
