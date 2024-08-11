@@ -54,7 +54,7 @@ const FinalScorePage = () => {
             updateGame({
               id: gameId,
               scores: rounds,
-              winner: winner,
+              winner: { ...winner },
               isComplete: Math.max(...rounds['4444']) != 0,
             }),
             {

@@ -65,7 +65,7 @@ export const useGetPreviousGames = (userName: string) => {
 
 export const updateGame = async (game: UpdateGameDto) => {
   await setDoc(doc(db, 'games', game.id), game, {
-    merge: true,
+    mergeFields: ['scores', 'winner', 'isComplete'],
   });
   return game.id;
 };
