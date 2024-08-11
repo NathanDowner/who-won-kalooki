@@ -5,17 +5,18 @@ import PlayerSearchbar from '@/components/PlayerSearchbar';
 import { useAuth } from '@/contexts/AuthContext';
 import { Player } from '@/models/player.interface';
 import { UserProfile } from '@/models/user.model';
-import { AppRoutes } from '@/routes';
-import { useAppDispatch } from '@/store/hooks';
-import { bulkAddPlayers } from '@/store/playersSlice';
-import { setInitialScores } from '@/store/scoreSlice';
-import { storage } from '@/utils/storage';
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const AddPlayersPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+import { useEffect, useRef, useState } from 'react';
+
+interface AddPlayersPageProps {
+  onStartGame: (players: Player[]) => void;
+  startGameBtnText?: string;
+}
+
+const AddPlayersPage = ({
+  onStartGame,
+  startGameBtnText = 'Start Game',
+}: AddPlayersPageProps) => {
   const { user, userProfile } = useAuth();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -36,21 +37,19 @@ const AddPlayersPage = () => {
     inputRef.current?.focus();
   }, []);
 
-  const handleStartRound = () => {
-    dispatch(bulkAddPlayers(players));
-    dispatch(setInitialScores(players.length));
-    storage.clearData(); // TODO: Remove when back btn is added
-    storage.setPlayers(players);
-    navigate(AppRoutes.round('333'));
-  };
+  function handleStartGame() {
+    onStartGame(players);
+  }
 
   function updatePlayer(index: number, player: Player) {
     setPlayers((prev) => prev.map((p, idx) => (index == idx ? player : p)));
   }
 
-  function addPlayer(newPlayer: Player) {
+  function addPlayer(newPlayer: Player, focusInput = true) {
     setPlayers((prev) => [...prev, newPlayer]);
     setNewPlayerName('');
+
+    if (!focusInput) return;
 
     const scrollPromise = new Promise((resolve) => {
       setTimeout(() => {
@@ -79,12 +78,15 @@ const AddPlayersPage = () => {
   };
 
   function addPlayerFromSearch(player: UserProfile) {
-    addPlayer({
-      id: player.id,
-      name: player.fullName,
-      imgUrl: player.imgUrl,
-      userName: player.userName,
-    });
+    addPlayer(
+      {
+        id: player.id,
+        name: player.fullName,
+        imgUrl: player.imgUrl,
+        userName: player.userName,
+      },
+      false,
+    );
   }
 
   return (
@@ -133,10 +135,10 @@ const AddPlayersPage = () => {
       <ButtonContainer>
         <button
           disabled={players.length < 2}
-          onClick={handleStartRound}
+          onClick={handleStartGame}
           className="btn btn-lg w-full"
         >
-          Start Round
+          {startGameBtnText}
         </button>
       </ButtonContainer>
     </div>
