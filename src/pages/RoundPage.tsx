@@ -9,7 +9,7 @@ import {
   setRoundScores as saveRoundScores,
 } from '@/store/scoreSlice';
 import { formatRound, getNextRound } from '@/utils';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useBlocker, useNavigate, useParams } from 'react-router-dom';
 import { PENALTY_AMOUNT } from '@/utils/constants';
 import ScoreSheetPage from './ScoreSheetPage';
@@ -22,6 +22,7 @@ import {
   HomeIcon,
 } from '@heroicons/react/24/outline';
 import ConfirmationModal from '@/components/ConfirmationModal';
+import clsx from 'clsx';
 
 const RoundPage = () => {
   const { round } = useParams();
@@ -35,6 +36,7 @@ const RoundPage = () => {
   const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
   const [someoneRewarded, setSomeoneRewarded] = useState(false);
   const [showScoreSheet, setShowScoreSheet] = useState(false);
+  const roundCardRefs = useRef<HTMLDivElement[]>([]);
 
   const [selectedCardIdx, setSelectedCardIdx] = useState<null | number>(null);
   const [showKeypad, setShowKeypad] = useState(false);
@@ -112,6 +114,31 @@ const RoundPage = () => {
     setShowKeypad(false);
   };
 
+  const scrollToRoundCard = (index: number, offset: number = -50) => {
+    if (roundCardRefs.current[index]) {
+      setTimeout(() => {
+        const element = roundCardRefs.current[index];
+        const container = element.parentElement; // Assuming the container is the parent element
+
+        if (container) {
+          const elementTop = element.offsetTop;
+          const containerTop = container.offsetTop;
+          const scrollPosition = elementTop - containerTop + offset;
+
+          window.scrollTo({
+            top: scrollPosition,
+            behavior: 'smooth',
+          });
+        }
+      }, 0);
+    }
+  };
+
+  const handleFocusRoundCard = (index: number) => {
+    scrollToRoundCard(index);
+    handleOpenKeypad(index);
+  };
+
   return (
     <>
       <div className="page">
@@ -133,10 +160,11 @@ const RoundPage = () => {
         />
 
         {/* Cards */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className={clsx('grid grid-cols-2 gap-6', showKeypad && 'pb-80')}>
           {players.map((player, idx) => (
             <RoundCard
               key={idx}
+              ref={(el) => (roundCardRefs.current[idx] = el!)}
               isLeading={round !== '333' && totalsSoFar[idx] === lowestScore}
               player={player}
               setScore={(score: number) => setScore(idx, score)}
@@ -144,7 +172,7 @@ const RoundPage = () => {
               disableReward={someoneRewarded}
               onReward={() => handleReward(idx)}
               currentRoundScore={roundScores[idx]}
-              onOpenKeypad={() => handleOpenKeypad(idx)}
+              onOpenKeypad={() => handleFocusRoundCard(idx)}
             />
           ))}
           {/* <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
