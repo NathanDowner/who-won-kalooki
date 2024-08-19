@@ -28,3 +28,4 @@ dist-ssr
 # Firebase
 test-data
 .firebase/*.cache
+.github/workflows/firebase-*
