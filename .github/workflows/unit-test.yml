@@ -18,7 +18,8 @@ jobs:
         with:
           node-version: 20
           cache: 'yarn'
-      - run: yarn install --frozen-lockfile
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile #npm ci
       - run: yarn test
 
   build:
@@ -32,5 +33,21 @@ jobs:
         with:
           node-version: 20
           cache: 'yarn'
-      - run: yarn install --frozen-lockfile
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
       - run: yarn run build
+
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - run: yarn run format:check
