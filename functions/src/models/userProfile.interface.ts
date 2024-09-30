@@ -2,41 +2,22 @@ import {
   DocumentData,
   FirestoreDataConverter,
   WithFieldValue,
-} from 'firebase/firestore';
-import { GameType } from './gameType.enum';
+} from 'firebase-admin/firestore';
+import { GameType } from './game.interface';
 
-export type UserProfile = {
+export interface UserProfile {
   id: string;
   fullName: string;
   email: string;
   userName: string;
   imgUrl?: string;
   games?: Partial<Record<GameType, WinLoss>>; // {[key in GameType]: WinLoss}
-};
+}
 
-type WinLoss = {
+interface WinLoss {
   wins: number;
   losses: number;
-};
-
-// const userProfile: UserProfile = {
-//   id: '1',
-//   fullName: 'nathan downer',
-//   email: 'nathan@gmail.com',
-//   userName: 'nnawdr',
-//   games: {
-//     Kalooki: {
-//       wins: 0,
-//       losses: 0
-//     }
-
-//   }
-// };
-
-export type CreateProfileDto = Omit<UserProfile, 'fullName'> & {
-  firstName: string;
-  lastName: string;
-};
+}
 
 export const profileConverter: FirestoreDataConverter<UserProfile> = {
   toFirestore(profile: WithFieldValue<UserProfile>): DocumentData {
@@ -47,8 +28,8 @@ export const profileConverter: FirestoreDataConverter<UserProfile> = {
       imgUrl: profile.imgUrl,
     };
   },
-  fromFirestore(snapshot, options): UserProfile {
-    const data = snapshot.data(options)!;
+  fromFirestore(snapshot): UserProfile {
+    const data = snapshot.data();
     return {
       id: snapshot.id,
       fullName: data.fullName,
