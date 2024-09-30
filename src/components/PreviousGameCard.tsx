@@ -59,7 +59,7 @@ const PreviousGameCard = ({
                 key={idx}
                 src={imgUrl}
                 alt={`Player ${game.players[idx].name}'s profile picture`}
-                className="h-6 w-6 rounded-full inline-block border-2 border-black"
+                className="h-6 w-6 rounded-full inline-block border-2 border-black bg-white"
               />
             ))}
             {numPlayersWithoutImg > 0 && (
