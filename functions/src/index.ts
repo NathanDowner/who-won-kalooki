@@ -10,7 +10,7 @@
 import { onRequest } from 'firebase-functions/v2/https';
 import * as logger from 'firebase-functions/logger';
 import { onDocumentWritten } from 'firebase-functions/v2/firestore';
-import { getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, WriteResult } from 'firebase-admin/firestore';
 import { Game } from './models/game.interface';
 import { initializeApp } from 'firebase-admin/app';
 
@@ -28,6 +28,7 @@ export const updateWinLossCount = onDocumentWritten(
   'games/{gameId}',
   async (event) => {
     const snapshot = event.data?.after;
+    const promises: Promise<WriteResult>[] = [];
 
     if (!snapshot) {
       logger.info('No data associated with the event');
@@ -62,17 +63,43 @@ export const updateWinLossCount = onDocumentWritten(
 
       gameWinsLosses.wins += 1;
 
-      return winnerRef.set(
-        {
-          games: {
-            [type]: gameWinsLosses,
+      promises.push(
+        winnerRef.set(
+          {
+            games: {
+              [type]: gameWinsLosses,
+            },
           },
-        },
-        { merge: true },
+          { merge: true },
+        ),
       );
     }
-    // TODO: handle losers
 
-    return;
+    // Handle Losers
+    loserIds.forEach(async (loserId) => {
+      const loserRef = await db.doc(`users/${loserId}`);
+      const loserData = (await loserRef.get()).data();
+
+      const gameWinsLosses = loserData?.games?.[type] ?? {
+        wins: 0,
+        losses: 0,
+      };
+      logger.debug('Loser profile', loserData);
+
+      gameWinsLosses.losses += 1;
+
+      promises.push(
+        loserRef.set(
+          {
+            games: {
+              [type]: gameWinsLosses,
+            },
+          },
+          { merge: true },
+        ),
+      );
+    });
+
+    return Promise.all(promises);
   },
 );
