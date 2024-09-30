@@ -45,6 +45,7 @@ export const profileConverter: FirestoreDataConverter<UserProfile> = {
       email: profile.email,
       userName: profile.userName,
       imgUrl: profile.imgUrl,
+      games: profile.games,
     };
   },
   fromFirestore(snapshot, options): UserProfile {
