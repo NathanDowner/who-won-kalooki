@@ -1,5 +1,12 @@
 {
   "projects": {
     "default": "who-won-4e665"
-  }
+  },
+  "targets": {},
+  "etags": {
+    "who-won-4e665": {
+      "extensionInstances": {}
+    }
+  },
+  "dataconnectEmulatorConfig": {}
 }
