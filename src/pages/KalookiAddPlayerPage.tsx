@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import AddPlayersPage from './AddPlayersPage';
 import { Player } from '@/models/player.interface';
 
-export const KalookiAddPlayerPage = () => {
+const KalookiAddPlayerPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -26,3 +26,5 @@ export const KalookiAddPlayerPage = () => {
     />
   );
 };
+
+export default KalookiAddPlayerPage;

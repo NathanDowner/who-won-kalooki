@@ -108,3 +108,7 @@ export const withAsyncHandling = async <T = unknown>(
     toast.error((error as FirebaseError).message);
   }
 };
+
+export const getPercentage = (num: number, total: number): number => {
+  return (num / total) * 100;
+};

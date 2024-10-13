@@ -4,6 +4,8 @@ import { useMemo, useState } from 'react';
 import Logo from './Logo';
 import Modal from './Modal';
 import FeedbackForm from './FeedbackForm';
+import { AppRoutes } from '@/routes';
+import ProfileHeader from './ProfileHeader';
 
 type SideBarLink = {
   label: string;
@@ -25,17 +27,17 @@ const Sidebar = ({ onClose }: SideBarProps) => {
     () => [
       {
         label: 'Home',
-        link: '/',
+        link: AppRoutes.root,
         requiresAuth: true,
       },
-      // {
-      //   label: 'Profile',
-      //   link: '/profile',
-      //   requiresAuth: true,
-      // },
+      {
+        label: 'Profile',
+        link: AppRoutes.profile,
+        requiresAuth: true,
+      },
       {
         label: 'Previous Games',
-        link: '/previous-games',
+        link: AppRoutes.previousGames,
         requiresAuth: true,
       },
       {
@@ -65,22 +67,7 @@ const Sidebar = ({ onClose }: SideBarProps) => {
       <div className="h-screen p-4 flex flex-col justify-between">
         <header>
           {user ? (
-            <div className="flex flex-col items-center mt-20">
-              <div className="-mb-5 z-10 relative">
-                <Logo className="h-24 absolute -top-[4.12rem] -left-1 -rotate-6" />
-                <img
-                  src={user?.photoURL || ''}
-                  className="rounded-full h-[85px] w-[85px] border-4 border-black bg-white"
-                  alt="Display picture"
-                />
-              </div>
-              <div className="border-black border-4 p-2 text-center rounded-md pt-3 w-full">
-                <h3 className="text-xl font-semibold tracking-widest">
-                  {user?.displayName}
-                </h3>
-                {userProfile && <h4>@{userProfile?.userName}</h4>}
-              </div>
-            </div>
+            <ProfileHeader userProfile={userProfile!} />
           ) : (
             <div>
               <Logo className="h-52 mx-auto" withText />

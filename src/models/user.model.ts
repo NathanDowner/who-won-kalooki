@@ -11,27 +11,13 @@ export type UserProfile = {
   email: string;
   userName: string;
   imgUrl?: string;
-  games?: Partial<Record<GameType, WinLoss>>; // {[key in GameType]: WinLoss}
+  games?: { [key in GameType]: WinLoss }; // Partial<Record<GameType, WinLoss>>; this results in an error in ProfilePage.tsx
 };
 
 type WinLoss = {
   wins: number;
   losses: number;
 };
-
-// const userProfile: UserProfile = {
-//   id: '1',
-//   fullName: 'nathan downer',
-//   email: 'nathan@gmail.com',
-//   userName: 'nnawdr',
-//   games: {
-//     Kalooki: {
-//       wins: 0,
-//       losses: 0
-//     }
-
-//   }
-// };
 
 export type CreateProfileDto = Omit<UserProfile, 'fullName'> & {
   firstName: string;

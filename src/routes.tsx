@@ -6,7 +6,8 @@ import PreviousGamesPage from './pages/PreviousGamesPage';
 import AuthGuard from './components/AuthGuard';
 import DefaultLayout from './layouts/DefaultLayout';
 import FinalScorePage from './pages/FinalScorePage';
-import { KalookiAddPlayerPage } from './pages/KalookiAddPlayerPage';
+import KalookiAddPlayerPage from './pages/KalookiAddPlayerPage';
+import ProfilePage from './pages/ProfilePage';
 
 export const AppRoutes = {
   root: '/',
@@ -15,6 +16,7 @@ export const AppRoutes = {
   previousGames: '/previous-games',
   round: (round: string) => `/round/${round}`,
   finalScore: '/end',
+  profile: '/profile',
 };
 
 export const router = createBrowserRouter([
@@ -34,6 +36,7 @@ export const router = createBrowserRouter([
       },
       { path: 'add-players', element: <KalookiAddPlayerPage /> },
       { path: 'round/:round', element: <RoundPage /> },
+      { path: 'profile', element: <ProfilePage /> },
       { path: 'end', element: <FinalScorePage /> },
       { path: '*', element: <Navigate to={AppRoutes.start} /> },
     ],
