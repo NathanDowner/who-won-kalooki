@@ -1,18 +1,18 @@
-import { Player } from '@/models/player.interface';
 import { getOrdinalSuffix } from '@/utils';
 import defaultUserImg from '@/assets/default-user.svg';
 
 interface Props {
-  player: Player;
+  playerName: string;
+  imgUrl?: string;
   score?: number;
   winner?: boolean;
   order?: number;
 }
 
-const PlayerCard = ({ player, score, winner, order }: Props) => {
+const PlayerCard = ({ playerName, imgUrl, score, winner, order }: Props) => {
   return (
     <div
-      key={player.name}
+      key={playerName}
       className={`${
         winner ? 'bg-yellow-400 border-yellow-500' : 'border-gray-700'
       } flex gap-4 items-center border-4 text-xl  p-3 rounded-md`}
@@ -24,12 +24,12 @@ const PlayerCard = ({ player, score, winner, order }: Props) => {
         </div>
       )}
       <img
-        src={player.imgUrl ?? defaultUserImg}
+        src={imgUrl ?? defaultUserImg}
         className={`${
           winner ? 'border-yellow-500' : 'border-gray-700'
         } border-4 rounded-full w-14 h-14`}
       />
-      <span className="truncate-text">{player.name}</span>
+      <span className="truncate-text">{playerName}</span>
       {score !== undefined && (
         <div className="ml-auto text-3xl font-bold">{score}</div>
       )}

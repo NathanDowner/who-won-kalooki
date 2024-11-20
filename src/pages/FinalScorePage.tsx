@@ -139,7 +139,8 @@ const FinalScorePage = () => {
           .map((player, idx) => (
             <PlayerCard
               key={idx}
-              player={player}
+              playerName={player.name}
+              imgUrl={player.imgUrl}
               score={player.score}
               order={idx + 1}
               winner={player.score === lowestScore}
