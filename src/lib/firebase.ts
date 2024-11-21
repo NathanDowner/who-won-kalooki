@@ -17,6 +17,7 @@ import {
   doc,
   orderBy,
   connectFirestoreEmulator,
+  initializeFirestore,
 } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -36,6 +37,7 @@ const firebaseConfig: FirebaseOptions = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+initializeFirestore(app, { ignoreUndefinedProperties: true });
 // const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
