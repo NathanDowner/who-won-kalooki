@@ -36,6 +36,11 @@ const Sidebar = ({ onClose }: SideBarProps) => {
         requiresAuth: true,
       },
       {
+        label: 'Friends',
+        link: AppRoutes.friends,
+        requiresAuth: true,
+      },
+      {
         label: 'Previous Games',
         link: AppRoutes.previousGames,
         requiresAuth: true,

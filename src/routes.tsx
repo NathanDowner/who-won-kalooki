@@ -8,6 +8,7 @@ import DefaultLayout from './layouts/DefaultLayout';
 import FinalScorePage from './pages/FinalScorePage';
 import KalookiAddPlayerPage from './pages/KalookiAddPlayerPage';
 import ProfilePage from './pages/ProfilePage';
+import { FriendsPage } from './features/friends/';
 
 export const AppRoutes = {
   root: '/',
@@ -17,6 +18,7 @@ export const AppRoutes = {
   round: (round: string) => `/round/${round}`,
   finalScore: '/end',
   profile: '/profile',
+  friends: '/friends',
 };
 
 export const router = createBrowserRouter([
@@ -36,7 +38,8 @@ export const router = createBrowserRouter([
       },
       { path: 'add-players', element: <KalookiAddPlayerPage /> },
       { path: 'round/:round', element: <RoundPage /> },
-      { path: 'profile', element: <ProfilePage /> },
+      { path: 'profile', element: <AuthGuard component={<ProfilePage />} /> },
+      { path: 'friends', element: <AuthGuard component={<FriendsPage />} /> },
       { path: 'end', element: <FinalScorePage /> },
       { path: '*', element: <Navigate to={AppRoutes.start} /> },
     ],
