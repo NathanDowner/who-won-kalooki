@@ -200,7 +200,7 @@ const RoundPage = () => {
         </ButtonContainer>
       </div>
       <Portal>
-        <Animations.SlideUp show={showKeypad}>
+        <Animations.SlideUp withBackground={false} show={showKeypad}>
           <Keypad
             initialValue={
               selectedCardIdx !== null
