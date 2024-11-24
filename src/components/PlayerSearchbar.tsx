@@ -1,4 +1,4 @@
-import { findUsers } from '@/api/user.api';
+import { useUserSearch } from '@/features/user';
 import { UserProfile } from '@/models/user.model';
 import {
   Combobox,
@@ -16,23 +16,14 @@ interface PlayerSearchbarProps {
 
 const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [users, setUsers] = useState<UserProfile[]>([]);
   const [debouncedValue] = useDebouncedValue(searchTerm, 750);
+  const { data: users, updateDocument: searchUsers } = useUserSearch();
 
   useEffect(() => {
     if (debouncedValue) {
       searchUsers(debouncedValue);
     }
   }, [debouncedValue]);
-
-  async function searchUsers(searchTerm: string) {
-    try {
-      const users = await findUsers(searchTerm);
-      setUsers(users);
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   return (
     <div>
@@ -56,7 +47,7 @@ const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
         <ComboboxOptions
           anchor="bottom"
           className={clsx(
-            'w-[var(--input-width)] rounded-md border-2 border-gray-700 bg-white p-1 [--anchor-gap:var(--spacing-1)] empty:invisible',
+            'w-[var(--input-width)] z-[100] rounded-md border-2 border-gray-700 bg-white p-1 [--anchor-gap:var(--spacing-1)] empty:invisible',
             'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0',
           )}
         >
