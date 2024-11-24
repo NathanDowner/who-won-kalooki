@@ -10,16 +10,17 @@ type UseUpdateDocumentOptions<TResponse> = {
 
 export function useUpdateDocument<TData, TResponse>(
   updateFn: (data: TData) => Promise<TResponse>,
+  initialData: TResponse,
   options: UseUpdateDocumentOptions<TResponse> = { showErrorToast: true },
 ): {
   error: FirebaseError | null;
   isLoading: boolean;
-  data: TResponse | null;
+  data: TResponse;
   updateDocument: (data: TData) => Promise<void>;
 } {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<FirebaseError | null>(null);
-  const [responseData, setResponseData] = useState<TResponse | null>(null);
+  const [responseData, setResponseData] = useState<TResponse>(initialData);
 
   const updateDocument = useCallback(
     async (data: TData) => {
@@ -40,7 +41,6 @@ export function useUpdateDocument<TData, TResponse>(
         console.log(err);
         setError(err as FirebaseError);
         const { showErrorToast } = options;
-
         if (showErrorToast) {
           toast.error(error!.message);
         }
