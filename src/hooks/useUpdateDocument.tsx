@@ -16,13 +16,13 @@ export function useUpdateDocument<TData, TResponse>(
   error: FirebaseError | null;
   isLoading: boolean;
   data: TResponse;
-  updateDocument: (data: TData) => Promise<void>;
+  execute: (data: TData) => Promise<void>;
 } {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<FirebaseError | null>(null);
   const [responseData, setResponseData] = useState<TResponse>(initialData);
 
-  const updateDocument = useCallback(
+  const execute = useCallback(
     async (data: TData) => {
       setIsLoading(true);
       setError(null);
@@ -51,5 +51,5 @@ export function useUpdateDocument<TData, TResponse>(
     [updateFn, options],
   );
 
-  return { isLoading, error, updateDocument, data: responseData };
+  return { isLoading, error, execute, data: responseData };
 }

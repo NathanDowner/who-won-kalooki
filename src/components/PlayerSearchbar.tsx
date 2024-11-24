@@ -17,7 +17,7 @@ interface PlayerSearchbarProps {
 const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedValue] = useDebouncedValue(searchTerm, 750);
-  const { data: users, updateDocument: searchUsers } = useUserSearch();
+  const { data: users, execute: searchUsers } = useUserSearch();
 
   useEffect(() => {
     if (debouncedValue) {
