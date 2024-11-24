@@ -16,6 +16,14 @@ export interface Friendship {
   friendInfo: Record<ID, FriendInfo>;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  id: ID;
+}
+
+export interface SimplifiedFriendshipInfo {
+  isInitiator: boolean;
+  status: FriendshipStatus;
+  friendShipId: ID;
+  otherUserId: ID;
 }
 
 export type FriendInfo = Pick<
@@ -49,6 +57,7 @@ export const friendshipConverter: FirestoreDataConverter<Friendship> = {
       friendInfo: data.friendInfo,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
+      id: snapshot.id,
     };
   },
 };

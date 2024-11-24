@@ -2,6 +2,7 @@ import {
   FriendInfo,
   Friendship,
   FriendshipStatus,
+  SimplifiedFriendshipInfo,
 } from './types/friend.interface';
 
 export const getPendingFriendRequests = (friendship: Friendship) =>
@@ -18,3 +19,18 @@ export const toFriendInfo =
 
     return friendProfile;
   };
+
+export const toSimplifiedFriendship = (
+  friendship: Friendship,
+  userId: string,
+): SimplifiedFriendshipInfo => {
+  const isInitiator = friendship.initiator === userId;
+  const otherUserId = friendship.ids.find((id) => id !== userId)!;
+
+  return {
+    isInitiator,
+    status: friendship.status,
+    friendShipId: friendship.id,
+    otherUserId,
+  };
+};

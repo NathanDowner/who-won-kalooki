@@ -3,7 +3,10 @@ import { collection, doc, setDoc } from 'firebase/firestore';
 import { Friendship, friendshipConverter } from '../types/friend.interface';
 import { useUpdateDocument } from '@/hooks/useUpdateDocument';
 
-export type CreateFriendshipDto = Omit<Friendship, 'createdAt' | 'updatedAt'>;
+export type CreateFriendshipDto = Omit<
+  Friendship,
+  'createdAt' | 'updatedAt' | 'id'
+>;
 
 const sendFriendRequest = async (data: CreateFriendshipDto) => {
   console.log('calling sendFriendRequest');
@@ -13,9 +16,13 @@ const sendFriendRequest = async (data: CreateFriendshipDto) => {
   );
 };
 
-export const useSendFriendRequest = (onSuccess: () => void) => {
-  return useUpdateDocument<CreateFriendshipDto, void>(sendFriendRequest, {
-    successNotificationText: 'Friend request sent!',
-    onSuccess,
-  });
+export const useSendFriendRequest = (onSuccess?: () => void) => {
+  return useUpdateDocument<CreateFriendshipDto, void>(
+    sendFriendRequest,
+    undefined,
+    {
+      successNotificationText: 'Friend request sent!',
+      onSuccess,
+    },
+  );
 };
