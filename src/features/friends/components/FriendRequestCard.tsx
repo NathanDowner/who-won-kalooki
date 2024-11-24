@@ -11,27 +11,30 @@ import {
   useSendFriendRequest,
 } from '../api/sendFriendRequest';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRespondToFriendRequest } from '../api/respondToFriendRequest';
+import { useCancelFriendRequest } from '../api/cancelFriendRequest';
 
 type FriendRequestCardProps = {
   user: UserProfile;
-  onAccept: (friendshipId: string) => void;
-  onDecline: (friendshipId: string) => void;
   onCancel: (friendshipId: string) => void;
   friendship?: SimplifiedFriendshipInfo; // or maybe they access the friendships from the store
 };
 
 export const FriendRequestCard = ({
   user,
-  onAccept,
-  onDecline,
   onCancel,
   friendship,
 }: FriendRequestCardProps) => {
   const { userProfile } = useAuth();
-  const { isLoading: sendRequestLoading, execute: sendRequest } =
-    useSendFriendRequest();
+  const { isLoading: isSending, execute: sendRequest } = useSendFriendRequest();
 
-  async function handleSendRequest(selectedPlayer: UserProfile) {
+  const { isLoading: isUpdating, execute: updateFriendRequest } =
+    useRespondToFriendRequest();
+
+  const { isLoading: isCancelling, execute: cancelFriendRequest } =
+    useCancelFriendRequest();
+
+  function handleSendRequest(selectedPlayer: UserProfile) {
     const friendRequest: CreateFriendshipDto = {
       status: FriendshipStatus.Pending,
       initiator: userProfile!.id,
@@ -42,8 +45,17 @@ export const FriendRequestCard = ({
       },
     };
 
-    await sendRequest(friendRequest);
+    sendRequest(friendRequest);
   }
+
+  function handleUpdateRequest(newStatus: FriendshipStatus) {
+    updateFriendRequest({
+      friendshipId: friendship!.friendShipId,
+      status: newStatus,
+    });
+  }
+
+  const isFriend = friendship?.status === FriendshipStatus.Accepted;
 
   const canRespondToRequest =
     friendship &&
@@ -73,7 +85,12 @@ export const FriendRequestCard = ({
         {/* Actions */}
         <div className="mt-auto">
           {canCancelRequest && (
-            <Button size="sm" expanded>
+            <Button
+              size="sm"
+              expanded
+              loading={isCancelling}
+              onClick={() => cancelFriendRequest(friendship.friendShipId)}
+            >
               Cancel
             </Button>
           )}
@@ -82,19 +99,35 @@ export const FriendRequestCard = ({
             <Button
               size="sm"
               expanded
-              loading={sendRequestLoading}
+              loading={isSending}
               onClick={() => handleSendRequest(user)}
             >
               + Add Friend
             </Button>
           )}
 
+          {isFriend && (
+            <Button size="sm" expanded disabled>
+              Already Friends
+            </Button>
+          )}
+
           {canRespondToRequest && (
             <div className="flex gap-2 [&>*]:flex-shrink">
-              <Button size="sm" expanded>
+              <Button
+                size="sm"
+                expanded
+                loading={isUpdating}
+                onClick={() => handleUpdateRequest(FriendshipStatus.Accepted)}
+              >
                 Accept
               </Button>
-              <Button size="sm" expanded>
+              <Button
+                size="sm"
+                expanded
+                loading={isUpdating}
+                onClick={() => handleUpdateRequest(FriendshipStatus.Declined)}
+              >
                 Reject
               </Button>
             </div>
