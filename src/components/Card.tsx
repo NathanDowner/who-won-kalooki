@@ -11,7 +11,7 @@ const Card = ({ onClick, className, children }: CardProps) => {
     <div
       onClick={onClick}
       className={clsx(
-        'border-black border-4 rounded-md p-3 flex flex-col cursor-pointer',
+        'border-black border-4 rounded-md p-3 cursor-pointer',
         className,
       )}
     >

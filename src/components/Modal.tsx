@@ -12,7 +12,7 @@ export interface ModalProps extends PropsWithChildren {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  className?: React.HTMLAttributes<HTMLImageElement>['className'];
+  className?: React.HTMLAttributes<HTMLDivElement>['className'];
   closeOnBackdropClick?: boolean;
 }
 

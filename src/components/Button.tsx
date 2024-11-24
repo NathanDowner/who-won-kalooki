@@ -3,11 +3,13 @@ import { PropsWithChildren } from 'react';
 
 interface ButtonProps extends PropsWithChildren {
   type?: 'button' | 'submit';
+  expanded?: boolean;
   btnStyle?: keyof typeof BUTTON_STYLES;
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   onClick?: () => void;
   disabled?: boolean;
+  className?: React.HTMLAttributes<HTMLDivElement>['className'];
 }
 
 const BUTTON_STYLES = {
@@ -27,10 +29,12 @@ const Button = ({
   children,
   loading = false,
   disabled = false,
+  expanded = false,
   onClick,
   btnStyle = 'primary',
   size = 'md',
   type = 'button',
+  className,
 }: ButtonProps) => {
   return (
     <button
@@ -40,6 +44,8 @@ const Button = ({
         'btn border-2 border-black',
         BUTTON_STYLES[btnStyle],
         BUTTON_SIZES[size],
+        expanded && 'w-full',
+        className,
       )}
       disabled={disabled || loading}
     >
