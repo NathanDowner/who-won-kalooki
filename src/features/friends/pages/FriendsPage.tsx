@@ -5,11 +5,11 @@ import { BellIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { useGetFriends } from '../api/useGetFriends';
 import { useAuth } from '@/contexts/AuthContext';
 import PlayerCard from '@/components/PlayerCard';
-import Modal from '@/components/Modal';
 import AddFriendModal from '../components/AddFriendModal';
 import { useMemo, useState } from 'react';
 import { FriendInfo } from '../types/friend.interface';
 import { getFriends, getPendingFriendRequests, toFriendInfo } from '../util';
+import { FullScreenModal } from '@/components/FullScreenModal';
 
 const FriendsPage = () => {
   const { user } = useAuth();
@@ -95,7 +95,7 @@ const FriendsPage = () => {
         />
       ))}
 
-      <Modal
+      <FullScreenModal
         title="Add Friend"
         isOpen={showAddFriendModal}
         onClose={() => setShowAddFriendModal(false)}
