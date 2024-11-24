@@ -9,7 +9,7 @@ import Button from '@/components/Button';
 import {
   CreateFriendshipDto,
   useSendFriendRequest,
-} from '../api/useSendFriendRequest';
+} from '../api/sendFriendRequest';
 import { useAuth } from '@/contexts/AuthContext';
 
 type FriendRequestCardProps = {

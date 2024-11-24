@@ -2,7 +2,7 @@ import AppHeader from '@/components/AppHeader';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
 import { BellIcon, UserPlusIcon } from '@heroicons/react/24/outline';
-import { useGetFriends } from '../api/useGetFriends';
+import { useGetFriends } from '../api/getFriends';
 import { useAuth } from '@/contexts/AuthContext';
 import PlayerCard from '@/components/PlayerCard';
 import AddFriendModal from '../components/AddFriendModal';
