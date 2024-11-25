@@ -27,8 +27,9 @@ async function findUsers(searchTerm: string): Promise<UserProfile[]> {
 }
 
 export const useUserSearch = (onSuccess?: (data: UserProfile[]) => void) => {
-  return useUpdateDocument<string, UserProfile[]>(findUsers, [], {
+  return useUpdateDocument<string, UserProfile[]>(findUsers, {
     onSuccess,
     showErrorToast: true,
+    initialData: [],
   });
 };

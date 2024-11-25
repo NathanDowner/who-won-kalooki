@@ -23,11 +23,7 @@ const updateFriendRequest = async (data: UpdateFriendRequestDto) => {
 };
 
 export const useRespondToFriendRequest = (onSuccess?: () => void) => {
-  return useUpdateDocument<UpdateFriendRequestDto, void>(
-    updateFriendRequest,
-    undefined,
-    {
-      onSuccess,
-    },
-  );
+  return useUpdateDocument<UpdateFriendRequestDto, void>(updateFriendRequest, {
+    onSuccess,
+  });
 };

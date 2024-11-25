@@ -17,12 +17,8 @@ const sendFriendRequest = async (data: CreateFriendshipDto) => {
 };
 
 export const useSendFriendRequest = (onSuccess?: () => void) => {
-  return useUpdateDocument<CreateFriendshipDto, void>(
-    sendFriendRequest,
-    undefined,
-    {
-      successNotificationText: 'Friend request sent!',
-      onSuccess,
-    },
-  );
+  return useUpdateDocument<CreateFriendshipDto, void>(sendFriendRequest, {
+    successNotificationText: 'Friend request sent!',
+    onSuccess,
+  });
 };

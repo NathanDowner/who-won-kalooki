@@ -51,7 +51,7 @@ const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
             'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0',
           )}
         >
-          {users.map((user) => (
+          {users!.map((user) => (
             <ComboboxOption
               className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-gray-200 hover:cursor-pointer"
               key={user.id}
@@ -69,7 +69,7 @@ const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
               </div>
             </ComboboxOption>
           ))}
-          {debouncedValue && !users.length && (
+          {debouncedValue && !users!.length && (
             <div>No users match search term.</div>
           )}
         </ComboboxOptions>

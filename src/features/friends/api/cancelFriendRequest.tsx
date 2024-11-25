@@ -7,7 +7,7 @@ const cancelFriendRequest = async (friendshipId: string) => {
 };
 
 export const useCancelFriendRequest = (onSuccess?: () => void) => {
-  return useUpdateDocument<string, void>(cancelFriendRequest, undefined, {
+  return useUpdateDocument<string, void>(cancelFriendRequest, {
     successNotificationText: 'Request cancelled!',
     onSuccess,
   });

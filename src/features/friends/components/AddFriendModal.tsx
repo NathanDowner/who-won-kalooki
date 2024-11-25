@@ -55,7 +55,7 @@ const AddFriendModal = ({ friendships }: AddFriendModalProps) => {
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Search for friends "
       />
-      {!usersLoading && !users.length && !searchTerm && (
+      {!usersLoading && !users!.length && !searchTerm && (
         <div className="text-center mt-12">
           <MagnifyingGlassCircleIcon className="h-24 mx-auto mb-4" />
           <h3 className="font-bold">Find Friends</h3>
@@ -67,9 +67,8 @@ const AddFriendModal = ({ friendships }: AddFriendModalProps) => {
       )}
 
       <div className="space-y-2">
-        {users.map((user) => (
+        {users!.map((user) => (
           <div key={user.id}>
-            {/* <PlayerCard playerName={user.fullName} imgUrl={user.imgUrl} /> */}
             <FriendRequestCard
               user={user}
               friendship={findFriendshipById(user.id)}

@@ -6,21 +6,23 @@ type UseUpdateDocumentOptions<TResponse> = {
   onSuccess?: (data: TResponse) => void;
   successNotificationText?: string;
   showErrorToast?: boolean;
+  initialData?: TResponse;
 };
 
 export function useUpdateDocument<TData, TResponse>(
   updateFn: (data: TData) => Promise<TResponse>,
-  initialData: TResponse,
   options: UseUpdateDocumentOptions<TResponse> = { showErrorToast: true },
 ): {
   error: FirebaseError | null;
   isLoading: boolean;
-  data: TResponse;
+  data: TResponse | null;
   execute: (data: TData) => Promise<void>;
 } {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<FirebaseError | null>(null);
-  const [responseData, setResponseData] = useState<TResponse>(initialData);
+  const [responseData, setResponseData] = useState<TResponse | null>(
+    options.initialData ?? null,
+  );
 
   const execute = useCallback(
     async (data: TData) => {
@@ -29,11 +31,13 @@ export function useUpdateDocument<TData, TResponse>(
       try {
         const { onSuccess, successNotificationText } = options;
         const resp = await updateFn(data);
-        setResponseData(resp);
 
         if (onSuccess) {
           onSuccess(resp);
+        } else {
+          setResponseData(resp);
         }
+
         if (successNotificationText) {
           toast.success(successNotificationText);
         }
