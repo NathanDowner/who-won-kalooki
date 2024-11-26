@@ -53,7 +53,7 @@ const FriendsPage = () => {
 
       {/* Pending requests */}
       {pendingFriendRequests.length > 0 && (
-        <div className=" pt-6 mb-4">
+        <div className=" pt-6 mb-4 space-y-2">
           <h2 className="text-lg font-semibold">Pending Requests</h2>
           {pendingFriendRequests.map((friend) => (
             <FriendRequestCard friendship={friend} />

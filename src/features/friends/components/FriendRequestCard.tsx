@@ -14,6 +14,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRespondToFriendRequest } from '../api/respondToFriendRequest';
 import { useCancelFriendRequest } from '../api/cancelFriendRequest';
 import { useEffect } from 'react';
+import useConfirmationModal from '@/hooks/useConfirmationModal';
 
 type FriendRequestCardProps = {
   user?: SimpleUserProfile;
@@ -32,6 +33,14 @@ export const FriendRequestCard = ({
 
   const { isLoading: isCancelling, execute: cancelFriendRequest } =
     useCancelFriendRequest();
+
+  const { onConfirm, ConfirmationModal } = useConfirmationModal(
+    handleCancelRequest,
+    {
+      title: 'Cancel Friend Request',
+      subtitleText: 'Are you sure you want to cancel this friend request?',
+    },
+  );
 
   useEffect(() => {
     if (!user && !friendship) {
@@ -74,6 +83,10 @@ export const FriendRequestCard = ({
 
   const canAddFriend = !friendship;
 
+  function handleCancelRequest() {
+    cancelFriendRequest(friendship!.friendShipId);
+  }
+
   return (
     <Card className="flex gap-4">
       <img
@@ -98,7 +111,7 @@ export const FriendRequestCard = ({
               size="sm"
               expanded
               loading={isCancelling}
-              onClick={() => cancelFriendRequest(friendship.friendShipId)}
+              onClick={onConfirm}
             >
               Cancel
             </Button>
@@ -143,6 +156,7 @@ export const FriendRequestCard = ({
           )}
         </div>
       </div>
+      <ConfirmationModal />
     </Card>
   );
 };
