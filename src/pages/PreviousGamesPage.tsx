@@ -17,10 +17,10 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ScoreSheetPage from './ScoreSheetPage';
 import Portal from '@/components/Portal';
-import ConfirmationModal from '@/components/ConfirmationModal';
 import toast from 'react-hot-toast';
 import AppHeader from '@/components/AppHeader';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import useConfirmationModal from '@/hooks/useConfirmationModal';
 
 const FILTER_TABS = ['Complete', 'Incomplete'];
 
@@ -33,7 +33,15 @@ const PreviousGamesPage = () => {
 
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [showScoreSheet, setShowScoreSheet] = useState(false);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const { onConfirm, ConfirmationModal } = useConfirmationModal(
+    confirmDeleteGame,
+    {
+      title: 'Delete game?',
+      subtitleText: 'Are you sure you want to delete this game?',
+      confirmBtnText: 'Yes, delete',
+      cancelBtnText: 'No',
+    },
+  );
   const [activeTab, setActiveTab] = useState(
     searchParams.get('filter') || 'incomplete',
   );
@@ -55,10 +63,6 @@ const PreviousGamesPage = () => {
 
     const lastRoundPlayed = findLastRoundPlayed(selectedGame!.scores);
     navigate(AppRoutes.round(lastRoundPlayed));
-  }
-
-  function onDeleteGame() {
-    setShowDeleteConfirmation(true);
   }
 
   function confirmDeleteGame() {
@@ -138,7 +142,7 @@ const PreviousGamesPage = () => {
                 <PreviousGameCard
                   onSelectGame={() => setSelectedGame(game)}
                   onResumeGame={handleResumeGame}
-                  onDeleteGame={onDeleteGame}
+                  onDeleteGame={onConfirm}
                   onViewGame={handleViewGame}
                   isSelected={selectedGame?.id === game.id}
                   key={game.id}
@@ -153,17 +157,7 @@ const PreviousGamesPage = () => {
           <ScoreSheetPage onClose={handleCloseScoreSheet} />
         </Animations.SlideUp>
       </Portal>
-      <ConfirmationModal
-        title="Delete game?"
-        isOpen={showDeleteConfirmation}
-        onClose={() => setShowDeleteConfirmation(false)}
-        onConfirm={confirmDeleteGame}
-        cancelBtnText="No"
-        confirmBtnText="Yes, delete"
-        confirmBtnClassName="bg-red-500 text-white hover:bg-red-600"
-      >
-        Are you sure you want to delete this game?
-      </ConfirmationModal>
+      <ConfirmationModal />
     </div>
   );
 };
