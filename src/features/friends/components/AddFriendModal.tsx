@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   Friendship,
@@ -23,6 +23,7 @@ const AddFriendModal = ({ friendships }: AddFriendModalProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedValue] = useDebouncedValue(searchTerm, 750);
   const [users, setUsers] = useState<UserProfile[]>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { isLoading: usersLoading, execute: searchUsers } = useUserSearch(
     (data) => setUsers(processUsers(data)),
@@ -35,6 +36,12 @@ const AddFriendModal = ({ friendships }: AddFriendModalProps) => {
       setUsers([]);
     }
   }, [debouncedValue]);
+
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
 
   function processUsers(users: UserProfile[]): UserProfile[] {
     return users.filter((user) => user.id !== userProfile!.id);
@@ -55,6 +62,7 @@ const AddFriendModal = ({ friendships }: AddFriendModalProps) => {
   return (
     <div className="">
       <Input
+        ref={searchInputRef}
         type="search"
         name="search"
         value={searchTerm}
