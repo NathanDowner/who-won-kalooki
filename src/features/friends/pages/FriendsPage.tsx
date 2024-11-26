@@ -7,9 +7,18 @@ import { useAuth } from '@/contexts/AuthContext';
 import PlayerCard from '@/components/PlayerCard';
 import AddFriendModal from '../components/AddFriendModal';
 import { useMemo, useState } from 'react';
-import { FriendInfo } from '../types/friend.interface';
-import { getFriends, getPendingFriendRequests, toFriendInfo } from '../util';
+import {
+  FriendInfo,
+  SimplifiedFriendshipInfo,
+} from '../types/friend.interface';
+import {
+  getFriends,
+  getPendingFriendRequests,
+  toFriendInfo,
+  toSimplifiedFriendshipCurried,
+} from '../util';
 import { FullScreenModal } from '@/components/FullScreenModal';
+import { FriendRequestCard } from '../components/FriendRequestCard';
 
 const FriendsPage = () => {
   const { user } = useAuth();
@@ -22,12 +31,12 @@ const FriendsPage = () => {
     return friendships.filter(getFriends).map(toFriendInfo(user!.uid));
   }, [friendships, user]);
 
-  const pendingFriendRequests: FriendInfo[] = useMemo(() => {
+  const pendingFriendRequests: SimplifiedFriendshipInfo[] = useMemo(() => {
     if (!friendships) return [];
 
     return friendships
       .filter(getPendingFriendRequests(user!.uid))
-      .map(toFriendInfo(user!.uid));
+      .map(toSimplifiedFriendshipCurried(user!.uid));
   }, [friendships, user]);
 
   return (
@@ -47,11 +56,7 @@ const FriendsPage = () => {
         <div className=" pt-6 mb-4">
           <h2 className="text-lg font-semibold">Pending Requests</h2>
           {pendingFriendRequests.map((friend) => (
-            <PlayerCard
-              key={friend.id}
-              playerName={friend.fullName}
-              imgUrl={friend.imgUrl}
-            />
+            <FriendRequestCard friendship={friend} />
           ))}
         </div>
       )}

@@ -25,14 +25,21 @@ export const toFriendInfo =
 export const toSimplifiedFriendship = (
   friendship: Friendship,
   userId: string,
-): SimplifiedFriendshipInfo => {
-  const isInitiator = friendship.initiator === userId;
-  const otherUserId = friendship.ids.find((id) => id !== userId)!;
+): SimplifiedFriendshipInfo =>
+  toSimplifiedFriendshipCurried(userId)(friendship);
 
-  return {
-    isInitiator,
-    status: friendship.status,
-    friendShipId: friendship.id,
-    otherUserId,
+export const toSimplifiedFriendshipCurried =
+  (userId: string) =>
+  (friendship: Friendship): SimplifiedFriendshipInfo => {
+    const isInitiator = friendship.initiator === userId;
+    const otherUserId = friendship.ids.find((id) => id !== userId)!;
+    const profile = friendship.friendInfo[otherUserId];
+
+    return {
+      isInitiator,
+      status: friendship.status,
+      friendShipId: friendship.id,
+      otherUserId,
+      profile,
+    };
   };
-};

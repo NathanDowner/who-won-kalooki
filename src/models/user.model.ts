@@ -5,14 +5,17 @@ import {
 } from 'firebase/firestore';
 import { GameType } from './gameType.enum';
 
-export type UserProfile = {
+export interface SimpleUserProfile {
   id: string;
   fullName: string;
   email: string;
   userName: string;
   imgUrl?: string;
+}
+
+export interface UserProfile extends SimpleUserProfile {
   games?: { [key in GameType]: WinLoss }; // Partial<Record<GameType, WinLoss>>; this results in an error in ProfilePage.tsx
-};
+}
 
 type WinLoss = {
   wins: number;

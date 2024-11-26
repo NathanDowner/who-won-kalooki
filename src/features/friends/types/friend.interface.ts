@@ -5,7 +5,7 @@ import {
   Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
-import { UserProfile } from '../../../models/user.model';
+import { SimpleUserProfile } from '../../../models/user.model';
 
 type ID = string;
 
@@ -13,7 +13,7 @@ export interface Friendship {
   status: FriendshipStatus;
   initiator: ID; // userId
   ids: ID[];
-  friendInfo: Record<ID, FriendInfo>;
+  friendInfo: Record<ID, SimpleUserProfile>;
   createdAt: Timestamp;
   updatedAt: Timestamp;
   id: ID;
@@ -24,12 +24,10 @@ export interface SimplifiedFriendshipInfo {
   status: FriendshipStatus;
   friendShipId: ID;
   otherUserId: ID;
+  profile: SimpleUserProfile;
 }
 
-export type FriendInfo = Pick<
-  UserProfile,
-  'id' | 'userName' | 'imgUrl' | 'fullName'
->;
+export type FriendInfo = SimpleUserProfile;
 
 export enum FriendshipStatus {
   Pending = 'pending',

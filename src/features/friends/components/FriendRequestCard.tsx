@@ -1,4 +1,4 @@
-import { UserProfile } from '@/models/user.model';
+import { SimpleUserProfile, UserProfile } from '@/models/user.model';
 import {
   FriendshipStatus,
   SimplifiedFriendshipInfo,
@@ -13,16 +13,15 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { useRespondToFriendRequest } from '../api/respondToFriendRequest';
 import { useCancelFriendRequest } from '../api/cancelFriendRequest';
+import { useEffect } from 'react';
 
 type FriendRequestCardProps = {
-  user: UserProfile;
-  onCancel: (friendshipId: string) => void;
+  user?: SimpleUserProfile;
   friendship?: SimplifiedFriendshipInfo; // or maybe they access the friendships from the store
 };
 
 export const FriendRequestCard = ({
   user,
-  onCancel,
   friendship,
 }: FriendRequestCardProps) => {
   const { userProfile } = useAuth();
@@ -33,6 +32,12 @@ export const FriendRequestCard = ({
 
   const { isLoading: isCancelling, execute: cancelFriendRequest } =
     useCancelFriendRequest();
+
+  useEffect(() => {
+    if (!user && !friendship) {
+      throw new Error('Either user or friendship must be provided');
+    }
+  }, [user, friendship]);
 
   function handleSendRequest(selectedPlayer: UserProfile) {
     const friendRequest: CreateFriendshipDto = {
@@ -72,14 +77,18 @@ export const FriendRequestCard = ({
   return (
     <Card className="flex gap-4">
       <img
-        src={user.imgUrl ?? defaultUserImg}
-        className={`border-gray-700 border-4 rounded-full w-24 h-24`}
+        src={user?.imgUrl || friendship?.profile.imgUrl || defaultUserImg}
+        className={`border-black border-4 rounded-full w-24 h-24`}
       />
       <div className="flex-grow flex flex-col">
         {/* Info */}
         <div>
-          <h2 className="truncate-text text-xl">{user.fullName}</h2>
-          <p className="italic text-lg">@{user.userName}</p>
+          <h2 className="truncate-text text-xl">
+            {user?.fullName || friendship?.profile.fullName}
+          </h2>
+          <p className="italic text-lg">
+            @{user?.userName || friendship?.profile.userName}
+          </p>
         </div>
 
         {/* Actions */}
@@ -100,7 +109,7 @@ export const FriendRequestCard = ({
               size="sm"
               expanded
               loading={isSending}
-              onClick={() => handleSendRequest(user)}
+              onClick={() => handleSendRequest(user!)}
             >
               + Add Friend
             </Button>
