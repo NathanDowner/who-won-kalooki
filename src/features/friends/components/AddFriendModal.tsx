@@ -10,6 +10,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/outline';
 import { FriendRequestCard } from './FriendRequestCard';
 import { toSimplifiedFriendship } from '../util';
+import { UserProfile } from '@/models/user.model';
 
 interface AddFriendModalProps {
   onClose: () => void;
@@ -21,18 +22,23 @@ const AddFriendModal = ({ friendships }: AddFriendModalProps) => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedValue] = useDebouncedValue(searchTerm, 750);
+  const [users, setUsers] = useState<UserProfile[]>([]);
 
-  const {
-    isLoading: usersLoading,
-    data: users,
-    execute: searchUsers,
-  } = useUserSearch();
+  const { isLoading: usersLoading, execute: searchUsers } = useUserSearch(
+    (data) => setUsers(processUsers(data)),
+  );
 
   useEffect(() => {
     if (debouncedValue) {
       searchUsers(debouncedValue);
+    } else {
+      setUsers([]);
     }
   }, [debouncedValue]);
+
+  function processUsers(users: UserProfile[]): UserProfile[] {
+    return users.filter((user) => user.id !== userProfile!.id);
+  }
 
   function findFriendshipById(
     userId: string,
@@ -77,36 +83,6 @@ const AddFriendModal = ({ friendships }: AddFriendModalProps) => {
         ))}
       </div>
     </div>
-    // <div className="text-center">
-    //   <p>Find by full name or user name!</p>
-    //   {selectedPlayer ? (
-    //     <>
-    //       <div className="flex flex-col justify-center my-6">
-    //         <PlayerCard
-    //           playerName={selectedPlayer.fullName}
-    //           imgUrl={selectedPlayer.imgUrl}
-    //         />
-    //         <ArrowsRightLeftIcon className="h-6" />
-    //         <PlayerCard
-    //           playerName={userProfile!.fullName}
-    //           imgUrl={userProfile!.imgUrl}
-    //         />
-    //       </div>
-    //       <Button onClick={handleRemovePlayer} btnStyle="error">
-    //         x
-    //       </Button>
-    //       <Button loading={sendRequestLoading} onClick={() => handleSendRequest()}>
-    //         Send Friend Request
-    //       </Button>
-    //     </>
-    //   ) : (
-    //     <PlayerSearchbar onSelectPlayer={setSelectedPlayer} />
-    //   )}
-
-    //   <h2>OR</h2>
-
-    //   <Button>Share Invite</Button>
-    // </div>
   );
 };
 

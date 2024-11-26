@@ -26,7 +26,7 @@ const FriendsPage = () => {
     if (!friendships) return [];
 
     return friendships
-      .filter(getPendingFriendRequests)
+      .filter(getPendingFriendRequests(user!.uid))
       .map(toFriendInfo(user!.uid));
   }, [friendships, user]);
 

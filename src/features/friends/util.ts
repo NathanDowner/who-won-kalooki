@@ -5,8 +5,10 @@ import {
   SimplifiedFriendshipInfo,
 } from './types/friend.interface';
 
-export const getPendingFriendRequests = (friendship: Friendship) =>
-  friendship.status === FriendshipStatus.Pending;
+export const getPendingFriendRequests =
+  (userId: string) => (friendship: Friendship) =>
+    friendship.status === FriendshipStatus.Pending &&
+    friendship.initiator !== userId;
 
 export const getFriends = (friendship: Friendship) =>
   friendship.status === FriendshipStatus.Accepted;
