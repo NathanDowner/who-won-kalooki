@@ -43,7 +43,7 @@ const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
           placeholder="e.g. John Doe or j_Doe"
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <small className="italic">*Searches is case-sensitive</small>
+        <small className="italic">*Searches are case-sensitive</small>
         <ComboboxOptions
           anchor="bottom"
           className={clsx(
