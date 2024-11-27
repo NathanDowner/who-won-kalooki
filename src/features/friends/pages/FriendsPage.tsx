@@ -92,13 +92,15 @@ const FriendsPage = () => {
         </Card>
       )}
 
-      {friends.map((friend) => (
-        <PlayerCard
-          key={friend.id}
-          playerName={friend.fullName}
-          imgUrl={friend.imgUrl}
-        />
-      ))}
+      <div className="space-y-2">
+        {friends.map((friend) => (
+          <PlayerCard
+            key={friend.id}
+            playerName={friend.fullName}
+            imgUrl={friend.imgUrl}
+          />
+        ))}
+      </div>
 
       <FullScreenModal
         title="Add Friend"
