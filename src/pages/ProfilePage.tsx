@@ -13,7 +13,7 @@ const ProfilePage = () => {
       <div className="page">
         <AppHeader title="Profile" />
         <ProfileHeader userProfile={userProfile!} />
-        <h2 className=" mt-8 mb-4 text-lg font-semibold">Games Played</h2>
+        <h2 className=" mt-8 mb-4 text-lg font-semibold">Your Games</h2>
 
         {userProfile?.games ? (
           Object.keys(userProfile!.games!).map((gameName) => (
@@ -26,7 +26,7 @@ const ProfilePage = () => {
             />
           ))
         ) : (
-          <Card className="text-center">
+          <Card className="text-center flex flex-col">
             <p className="font-semibold">No games played yet</p>
             <p>Complete a game to see your stats here!</p>
           </Card>
