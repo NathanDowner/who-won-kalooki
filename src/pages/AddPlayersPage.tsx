@@ -1,10 +1,14 @@
 import AddPlayerCard from '@/components/AddPlayerCard';
 import AppHeader from '@/components/AppHeader';
 import ButtonContainer from '@/components/ButtonContainer';
+import { FullScreenModal } from '@/components/FullScreenModal';
 import PlayerSearchbar from '@/components/PlayerSearchbar';
+import Portal from '@/components/Portal';
 import { useAuth } from '@/contexts/AuthContext';
+import SelectFriendsModal from '@/features/friends/components/SelectFriendsModal';
 import { Player } from '@/models/player.interface';
-import { UserProfile } from '@/models/user.model';
+import { SimpleUserProfile } from '@/models/user.model';
+import { PlusIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -22,6 +26,7 @@ const AddPlayersPage = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [players, setPlayers] = useState<Player[]>([]);
+  const [showAddFriendsModal, setShowAddFriendsModal] = useState(false);
 
   useEffect(() => {
     if (user && user.displayName && user.photoURL && userProfile) {
@@ -77,7 +82,7 @@ const AddPlayersPage = ({
     addPlayer(newPlayer);
   };
 
-  function addPlayerFromSearch(player: UserProfile) {
+  function addPlayerFromSearch(player: SimpleUserProfile) {
     addPlayer(
       {
         id: player.id,
@@ -87,6 +92,12 @@ const AddPlayersPage = ({
       },
       false,
     );
+  }
+
+  function handleAddFriends(friends: SimpleUserProfile[]) {
+    friends.forEach((friend) => {
+      addPlayerFromSearch(friend);
+    });
   }
 
   return (
@@ -132,14 +143,33 @@ const AddPlayersPage = ({
           </div>
         )}
       </div>
-      <ButtonContainer>
-        <button
-          disabled={players.length < 2}
-          onClick={handleStartGame}
-          className="btn btn-lg w-full"
+      <Portal>
+        <FullScreenModal
+          isOpen={showAddFriendsModal}
+          onClose={() => setShowAddFriendsModal(false)}
+          title="Select Friends"
         >
-          {startGameBtnText}
-        </button>
+          <SelectFriendsModal onSelectFriends={handleAddFriends} />
+        </FullScreenModal>
+      </Portal>
+
+      <ButtonContainer>
+        <div className="flex gap-4 w-full">
+          <button
+            onClick={() => setShowAddFriendsModal(true)}
+            className="btn btn-lg w-full -space-x-3 items-center flex-[1]"
+          >
+            <PlusIcon className="h-4 w-4" />
+            <UserGroupIcon className="h-6 w-6" />
+          </button>
+          <button
+            disabled={players.length < 2}
+            onClick={handleStartGame}
+            className="btn btn-lg w-full flex-[4]"
+          >
+            {startGameBtnText}
+          </button>
+        </div>
       </ButtonContainer>
     </div>
   );
