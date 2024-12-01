@@ -1,6 +1,6 @@
 import { Animations } from '@/components/animations';
 import ButtonContainer from '@/components/ButtonContainer';
-import PlayerCard from '@/components/PlayerCard';
+import PlayerScoreCard from '@/components/PlayerScoreCard';
 import Portal from '@/components/Portal';
 import { useAuth } from '@/contexts/AuthContext';
 import { saveGame, updateGame } from '@/lib/firebase';
@@ -137,7 +137,7 @@ const FinalScorePage = () => {
           .map((player, idx) => ({ ...player, score: totalsSoFar[idx] }))
           .sort((a, b) => a.score - b.score)
           .map((player, idx) => (
-            <PlayerCard
+            <PlayerScoreCard
               key={idx}
               playerName={player.name}
               imgUrl={player.imgUrl}

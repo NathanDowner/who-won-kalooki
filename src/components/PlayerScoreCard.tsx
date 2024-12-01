@@ -9,7 +9,13 @@ interface Props {
   order?: number;
 }
 
-const PlayerCard = ({ playerName, imgUrl, score, winner, order }: Props) => {
+const PlayerScoreCard = ({
+  playerName,
+  imgUrl,
+  score,
+  winner,
+  order,
+}: Props) => {
   return (
     <div
       key={playerName}
@@ -35,4 +41,4 @@ const PlayerCard = ({ playerName, imgUrl, score, winner, order }: Props) => {
   );
 };
 
-export default PlayerCard;
+export default PlayerScoreCard;
