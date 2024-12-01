@@ -1,17 +1,8 @@
 import {
   FriendInfo,
   Friendship,
-  FriendshipStatus,
   SimplifiedFriendshipInfo,
 } from './types/friend.interface';
-
-export const getPendingFriendRequests =
-  (userId: string) => (friendship: Friendship) =>
-    friendship.status === FriendshipStatus.Pending &&
-    friendship.initiator !== userId;
-
-export const getFriends = (friendship: Friendship) =>
-  friendship.status === FriendshipStatus.Accepted;
 
 export const toFriendInfo =
   (userId: string) =>

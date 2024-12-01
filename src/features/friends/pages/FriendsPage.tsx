@@ -4,45 +4,45 @@ import Card from '@/components/Card';
 import { BellIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { useGetFriends } from '../api/getFriends';
 import { useAuth } from '@/contexts/AuthContext';
-import PlayerCard from '@/components/PlayerCard';
 import AddFriendModal from '../components/AddFriendModal';
-import { useMemo, useState } from 'react';
-import {
-  FriendInfo,
-  SimplifiedFriendshipInfo,
-} from '../types/friend.interface';
-import {
-  getFriends,
-  getPendingFriendRequests,
-  toFriendInfo,
-  toSimplifiedFriendshipCurried,
-} from '../util';
+import { useEffect, useState } from 'react';
+import { SimplifiedFriendshipInfo } from '../types/friend.interface';
+import { toSimplifiedFriendshipCurried } from '../util';
 import { FullScreenModal } from '@/components/FullScreenModal';
 import { FriendRequestCard } from '../components/FriendRequestCard';
+import Portal from '@/components/Portal';
+import PlayerCard from '@/components/PlayerCard';
+import {
+  selectConfirmedFriends,
+  selectPendingFriendRequests,
+  setFriends,
+} from '../store/friendsSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 const FriendsPage = () => {
   const { user } = useAuth();
   const [friendships, loadingFriends, error] = useGetFriends(user!.uid);
   const [showAddFriendModal, setShowAddFriendModal] = useState(false);
+  const dispatch = useAppDispatch();
 
-  const friends: FriendInfo[] = useMemo(() => {
-    if (!friendships) return [];
+  const pendingFriendRequests: SimplifiedFriendshipInfo[] = useAppSelector(
+    selectPendingFriendRequests,
+  );
+  const confirmedFriends = useAppSelector(selectConfirmedFriends);
 
-    return friendships.filter(getFriends).map(toFriendInfo(user!.uid));
-  }, [friendships, user]);
-
-  const pendingFriendRequests: SimplifiedFriendshipInfo[] = useMemo(() => {
-    if (!friendships) return [];
-
-    return friendships
-      .filter(getPendingFriendRequests(user!.uid))
-      .map(toSimplifiedFriendshipCurried(user!.uid));
-  }, [friendships, user]);
+  useEffect(() => {
+    if (friendships) {
+      dispatch(
+        setFriends(friendships.map(toSimplifiedFriendshipCurried(user!.uid))),
+      );
+    }
+  }, [friendships]);
 
   return (
     <div className="page">
       <AppHeader
         title="Friends"
+        showShadow
         rightActionBtn={{
           icon: BellIcon,
           label: 'Friend Notifications',
@@ -56,7 +56,7 @@ const FriendsPage = () => {
         <div className=" pt-6 mb-4 space-y-2">
           <h2 className="text-lg font-semibold">Pending Requests</h2>
           {pendingFriendRequests.map((friend) => (
-            <FriendRequestCard friendship={friend} />
+            <FriendRequestCard key={friend.friendShipId} friendship={friend} />
           ))}
         </div>
       )}
@@ -79,7 +79,7 @@ const FriendsPage = () => {
         </Card>
       )}
 
-      {!loadingFriends && !friends.length && (
+      {!loadingFriends && !confirmedFriends.length && (
         <Card className="">
           <p className="font-semibold">You have no friends yet</p>
           <p>Use the botton above to find and connect with your friends!</p>
@@ -93,26 +93,24 @@ const FriendsPage = () => {
       )}
 
       <div className="space-y-2">
-        {friends.map((friend) => (
-          <PlayerCard
-            key={friend.id}
-            playerName={friend.fullName}
-            imgUrl={friend.imgUrl}
-          />
+        {confirmedFriends.map(({ profile }) => (
+          <PlayerCard key={profile.id} user={profile} />
         ))}
       </div>
 
-      <FullScreenModal
-        title="Add Friend"
-        isOpen={showAddFriendModal}
-        onClose={() => setShowAddFriendModal(false)}
-        children={
-          <AddFriendModal
-            friendships={friendships ?? []}
-            onClose={() => setShowAddFriendModal(false)}
-          />
-        }
-      />
+      <Portal>
+        <FullScreenModal
+          title="Add Friend"
+          isOpen={showAddFriendModal}
+          onClose={() => setShowAddFriendModal(false)}
+          children={
+            <AddFriendModal
+              friendships={friendships ?? []}
+              onClose={() => setShowAddFriendModal(false)}
+            />
+          }
+        />
+      </Portal>
     </div>
   );
 };
