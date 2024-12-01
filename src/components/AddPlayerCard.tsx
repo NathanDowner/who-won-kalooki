@@ -1,6 +1,6 @@
 import { Player } from '@/models/player.interface';
 import React, { useRef, useState } from 'react';
-import defaultUserImg from '@/assets/default-user.svg';
+import UserProfileImage from './UserProfileImage';
 
 interface Props {
   player: Player;
@@ -22,10 +22,7 @@ const AddPlayerCard = ({ player, onChange }: Props) => {
       onSubmit={handleSubmit}
       className={`flex gap-4 items-center border-4 text-xl border-gray-700 p-3 rounded-md`}
     >
-      <img
-        src={player.imgUrl ?? defaultUserImg}
-        className="border-gray-700 border-4 rounded-full w-14 h-14"
-      />
+      <UserProfileImage imgUrl={player.imgUrl} className="w-14 h-14" />
       <div className="flex flex-col items-start">
         <input
           ref={inputRef}

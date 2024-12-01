@@ -1,5 +1,5 @@
 import { getOrdinalSuffix } from '@/utils';
-import defaultUserImg from '@/assets/default-user.svg';
+import UserProfileImage from './UserProfileImage';
 
 interface Props {
   playerName: string;
@@ -23,11 +23,9 @@ const PlayerCard = ({ playerName, imgUrl, score, winner, order }: Props) => {
           {getOrdinalSuffix(order)}
         </div>
       )}
-      <img
-        src={imgUrl ?? defaultUserImg}
-        className={`${
-          winner ? 'border-yellow-500' : 'border-gray-700'
-        } border-4 rounded-full w-14 h-14`}
+      <UserProfileImage
+        imgUrl={imgUrl}
+        className={`${winner ? 'border-yellow-500' : ''} w-14 h-14`}
       />
       <span className="truncate-text">{playerName}</span>
       {score !== undefined && (
