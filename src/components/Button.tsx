@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react';
 interface ButtonProps extends PropsWithChildren {
   type?: 'button' | 'submit';
   expanded?: boolean;
-  btnStyle?: keyof typeof BUTTON_STYLES;
+  btnStyle?: keyof typeof BUTTON_STYLES | '';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   onClick?: () => void;
@@ -31,7 +31,7 @@ const Button = ({
   disabled = false,
   expanded = false,
   onClick,
-  btnStyle = 'primary',
+  btnStyle = '',
   size = 'md',
   type = 'button',
   className,
@@ -41,8 +41,8 @@ const Button = ({
       type={type}
       onClick={onClick}
       className={clsx(
-        'btn border-2 border-black',
-        BUTTON_STYLES[btnStyle],
+        'btn',
+        btnStyle && BUTTON_STYLES[btnStyle],
         BUTTON_SIZES[size],
         expanded && 'w-full',
         className,

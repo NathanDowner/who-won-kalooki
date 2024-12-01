@@ -1,4 +1,3 @@
-import ButtonContainer from '@/components/ButtonContainer';
 import RoundCard from '@/components/RoundCard';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -179,7 +178,7 @@ const RoundPage = () => {
               <div className="text-4xl">+</div> <div>Add Player</div>
             </div> */}
         </div>
-        <ButtonContainer>
+        <footer className="button-container">
           <button
             disabled={round! === '333'}
             onClick={handlePrevRound}
@@ -197,7 +196,7 @@ const RoundPage = () => {
           >
             Next Round
           </button>
-        </ButtonContainer>
+        </footer>
       </div>
       <Portal>
         <Animations.SlideUp withBackground={false} show={showKeypad}>

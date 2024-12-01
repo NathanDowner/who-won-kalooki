@@ -1,5 +1,4 @@
 import { Animations } from '@/components/animations';
-import ButtonContainer from '@/components/ButtonContainer';
 import PlayerScoreCard from '@/components/PlayerScoreCard';
 import Portal from '@/components/Portal';
 import { useAuth } from '@/contexts/AuthContext';
@@ -152,14 +151,14 @@ const FinalScorePage = () => {
           <ScoreSheetPage onClose={() => setShowScoreSheet(false)} />
         </Animations.SlideUp>
       </Portal>
-      <ButtonContainer>
+      <footer className="button-container">
         <button className="btn btn-lg flex-1" onClick={onPlayAgain}>
           Play Again
         </button>
         <button className="btn btn-lg flex-1" onClick={onStartOver}>
           Start Over
         </button>
-      </ButtonContainer>
+      </footer>
     </div>
   );
 };
