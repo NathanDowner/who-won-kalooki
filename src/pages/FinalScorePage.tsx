@@ -156,7 +156,7 @@ const FinalScorePage = () => {
           Play Again
         </button>
         <button className="btn btn-lg flex-1" onClick={onStartOver}>
-          Start Over
+          Go Home
         </button>
       </footer>
     </div>

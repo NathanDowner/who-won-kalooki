@@ -187,7 +187,7 @@ const RoundPage = () => {
             Prev
           </button>
           <button onClick={handleEndGame} className="btn btn-lg flex-1">
-            End Game
+            {round === '4444' ? 'End Game' : 'Save Game'}
           </button>
           <button
             disabled={round! === '4444' || stopMovementToNextRound}
