@@ -45,7 +45,17 @@ const AddPlayersPage = ({
   }, []);
 
   function handleStartGame() {
-    onStartGame(players);
+    if (!newPlayerName) {
+      return onStartGame(players);
+    }
+
+    const newPlayer: Player = { name: newPlayerName.trim() };
+
+    setPlayers((players) => {
+      const newPlayers = [...players, newPlayer];
+      onStartGame(newPlayers);
+      return newPlayers;
+    });
   }
 
   function updatePlayer(index: number, player: Player) {
@@ -140,11 +150,10 @@ const AddPlayersPage = ({
           />
         </form>
         {/* Add Player instructions */}
-        {players.length <= 2 && (
-          <div className="text-center text-gray-500 text-sm">
-            <p>Hit enter/return after inputting a name to save it!</p>
-          </div>
-        )}
+
+        <div className="text-center text-gray-500 text-sm">
+          <p>Hit enter/return after inputting a name to save it!</p>
+        </div>
       </div>
       <Portal>
         <FullScreenModal
