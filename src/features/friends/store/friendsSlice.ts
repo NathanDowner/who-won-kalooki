@@ -44,5 +44,7 @@ export const selectPendingFriendRequests = createSelector(
 );
 
 export const selectConfirmedFriends = createSelector(selectFriends, (friends) =>
-  friends.filter((friend) => friend.status === FriendshipStatus.Accepted),
+  friends
+    .filter((friend) => friend.status === FriendshipStatus.Accepted)
+    .map((friend) => friend.profile),
 );
