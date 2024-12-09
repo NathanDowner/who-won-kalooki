@@ -17,7 +17,7 @@ import { FirebaseError } from 'firebase/app';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import ScoreSheetPage from './ScoreSheetPage';
+import ScoreSheetPage from '../../../pages/ScoreSheetPage';
 import AppHeader from '@/components/AppHeader';
 import {
   ClipboardDocumentListIcon,

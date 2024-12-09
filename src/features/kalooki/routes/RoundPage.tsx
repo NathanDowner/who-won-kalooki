@@ -11,7 +11,7 @@ import { formatRound, getNextRound } from '@/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useBlocker, useNavigate, useParams } from 'react-router-dom';
 import { PENALTY_AMOUNT } from '@/utils/constants';
-import ScoreSheetPage from './ScoreSheetPage';
+import ScoreSheetPage from '../../../pages/ScoreSheetPage';
 import Portal from '@/components/Portal';
 import { Animations } from '@/components/animations';
 import Keypad from '@/components/Keypad';
@@ -69,7 +69,7 @@ const RoundPage = () => {
 
   const navigationBlocker = useBlocker(
     ({ nextLocation }) =>
-      !nextLocation.pathname.startsWith('/round') &&
+      !nextLocation.pathname.startsWith('/kalooki/round') &&
       nextLocation.pathname !== AppRoutes.finalScore,
   );
 
@@ -175,8 +175,8 @@ const RoundPage = () => {
             />
           ))}
           {/* <div className="rounded-md border-4 flex flex-col items-center justify-center text-2xl min-h-[212px] border-black border-dashed hover:border-solid">
-              <div className="text-4xl">+</div> <div>Add Player</div>
-            </div> */}
+            <div className="text-4xl">+</div> <div>Add Player</div>
+          </div> */}
         </div>
         <footer className="button-container">
           <button
