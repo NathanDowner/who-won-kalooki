@@ -24,6 +24,7 @@ import {
   HomeIcon,
 } from '@heroicons/react/24/outline';
 import { Player } from '@/models/player.interface';
+import { Timestamp } from 'firebase/firestore';
 
 function hasUserName(player: Player): boolean {
   return player.userName !== undefined;
@@ -48,6 +49,7 @@ const FinalScorePage = () => {
 
     if (user) {
       if (gameId) {
+        console.log('Time: ', Timestamp.now().toDate().toLocaleTimeString());
         try {
           toast.promise(
             updateGame({
@@ -55,6 +57,7 @@ const FinalScorePage = () => {
               scores: rounds,
               winner: { ...winner },
               isComplete: Math.max(...rounds['4444']) != 0,
+              endedAt: Timestamp.now(),
             }),
             {
               loading: 'Saving game...',
@@ -75,6 +78,7 @@ const FinalScorePage = () => {
               creator: players.find((player) => player.id === user.uid)!,
               scores: rounds,
               winner: winner,
+              endedAt: Timestamp.now(),
               isComplete: Math.max(...rounds['4444']) != 0,
               playerUserNames: players
                 .filter(hasUserName)
