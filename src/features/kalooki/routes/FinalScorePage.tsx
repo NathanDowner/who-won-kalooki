@@ -2,7 +2,6 @@ import { Animations } from '@/components/animations';
 import PlayerScoreCard from '@/components/PlayerScoreCard';
 import Portal from '@/components/Portal';
 import { useAuth } from '@/contexts/AuthContext';
-import { saveGame, updateGame } from '@/lib/firebase';
 import { GameType } from '@/models/gameType.enum';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -25,6 +24,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { Player } from '@/models/player.interface';
 import { Timestamp } from 'firebase/firestore';
+import { useSaveGame } from '../api/saveGame';
+import { useUpdateGame } from '../api/updateGame';
 
 function hasUserName(player: Player): boolean {
   return player.userName !== undefined;
@@ -35,6 +36,8 @@ const FinalScorePage = () => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { execute: saveGame } = useSaveGame();
+  const { execute: updateGame } = useUpdateGame();
 
   const [showScoreSheet, setShowScoreSheet] = useState(false);
   const players = useAppSelector(selectPlayers);
@@ -49,7 +52,6 @@ const FinalScorePage = () => {
 
     if (user) {
       if (gameId) {
-        console.log('Time: ', Timestamp.now().toDate().toLocaleTimeString());
         try {
           toast.promise(
             updateGame({
