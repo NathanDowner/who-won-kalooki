@@ -9,6 +9,7 @@ import {
 import { useDebouncedValue } from '@mantine/hooks';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import UserProfileImage from './UserProfileImage';
 
 interface PlayerSearchbarProps {
   onSelectPlayer: (player: UserProfile) => void;
@@ -58,9 +59,9 @@ const PlayerSearchbar = ({ onSelectPlayer }: PlayerSearchbarProps) => {
               value={user}
             >
               <div className="flex gap-2 items-center">
-                <img
-                  src={user.imgUrl}
-                  className="border-gray-700 border-2 rounded-full w-8 h-8"
+                <UserProfileImage
+                  imgUrl={user.imgUrl}
+                  className="border-2 w-8 h-8"
                 />
                 {user.fullName}{' '}
                 <span className="italic text-gray-400 group-hover:text-gray-500">
