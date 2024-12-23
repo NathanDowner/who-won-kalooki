@@ -5,7 +5,14 @@ import { UpdateGameDto } from '@/models/game.interface';
 
 const updateGame = async (game: UpdateGameDto) => {
   await setDoc(doc(db, 'games', game.id), game, {
-    mergeFields: ['scores', 'winner', 'isComplete', 'endedAt'],
+    mergeFields: [
+      'scores',
+      'winner',
+      'isComplete',
+      'endedAt',
+      'players',
+      'playerUserNames',
+    ],
   });
   return game.id;
 };

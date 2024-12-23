@@ -22,14 +22,10 @@ import {
   ClipboardDocumentListIcon,
   HomeIcon,
 } from '@heroicons/react/24/outline';
-import { Player } from '@/models/player.interface';
 import { Timestamp } from 'firebase/firestore';
 import { useSaveGame } from '../api/saveGame';
 import { useUpdateGame } from '../api/updateGame';
-
-function hasUserName(player: Player): boolean {
-  return player.userName !== undefined;
-}
+import { hasUserName } from '../utils';
 
 const FinalScorePage = () => {
   const [gameId] = useState(storage.getGameId());
@@ -49,6 +45,10 @@ const FinalScorePage = () => {
   function saveToFirebase() {
     const winningIndex = totalsSoFar.indexOf(lowestScore);
     const winner = players[winningIndex];
+    const isComplete = Math.max(...rounds['4444']) != 0;
+    const endedAt = Timestamp.now();
+    const creator = players.find((player) => player.id === user?.uid)!;
+    const playerUserNames = players.filter(hasUserName).map((p) => p.userName!);
 
     if (user) {
       if (gameId) {
@@ -58,8 +58,10 @@ const FinalScorePage = () => {
               id: gameId,
               scores: rounds,
               winner: { ...winner },
-              isComplete: Math.max(...rounds['4444']) != 0,
-              endedAt: Timestamp.now(),
+              players,
+              isComplete,
+              endedAt,
+              playerUserNames,
             }),
             {
               loading: 'Saving game...',
@@ -77,14 +79,12 @@ const FinalScorePage = () => {
             saveGame({
               type: GameType.Kalooki,
               players,
-              creator: players.find((player) => player.id === user.uid)!,
+              creator,
               scores: rounds,
               winner: winner,
-              endedAt: Timestamp.now(),
-              isComplete: Math.max(...rounds['4444']) != 0,
-              playerUserNames: players
-                .filter(hasUserName)
-                .map((p) => p.userName!),
+              endedAt,
+              isComplete,
+              playerUserNames,
             }),
             {
               loading: 'Saving game...',
@@ -115,7 +115,7 @@ const FinalScorePage = () => {
     }
 
     saveToFirebase();
-    storage.clearData();
+    storage.clearData(); // TODO: clear on start page
   }, []);
 
   return (

@@ -11,7 +11,7 @@ const saveGame = async (game: CreateGameDto): Promise<string> => {
   return docRef.id;
 };
 
-export const useSaveGame = (onSuccess?: () => void) => {
+export const useSaveGame = (onSuccess?: (gameId: string) => void) => {
   return useUpdateDocument<CreateGameDto, string>(saveGame, {
     successNotificationText: '',
     onSuccess,
