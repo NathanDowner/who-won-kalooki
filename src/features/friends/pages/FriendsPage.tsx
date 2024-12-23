@@ -1,7 +1,7 @@
 import AppHeader from '@/components/AppHeader';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
-import { BellIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { UserPlusIcon } from '@heroicons/react/24/outline';
 import AddFriendModal from '../components/AddFriendModal';
 import { useState } from 'react';
 import { SimplifiedFriendshipInfo } from '../types/friend.interface';
@@ -27,16 +27,7 @@ const FriendsPage = () => {
 
   return (
     <div className="page">
-      <AppHeader
-        title="Friends"
-        showShadow
-        rightActionBtn={{
-          icon: BellIcon,
-          label: 'Friend Notifications',
-          onClick: () => console.log('Friend Notifications Clicked'),
-          type: 'button',
-        }}
-      />
+      <AppHeader title="Friends" showShadow />
 
       {/* Pending requests */}
       {pendingFriendRequests.length > 0 && (
