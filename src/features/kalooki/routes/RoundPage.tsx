@@ -6,6 +6,7 @@ import {
   selectRoundScores,
   selectTotalsUpToRound,
   setRoundScores as saveRoundScores,
+  selectRounds,
 } from '@/store/scoreSlice';
 import { formatRound, getNextRound } from '@/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -22,25 +23,54 @@ import {
 } from '@heroicons/react/24/outline';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import clsx from 'clsx';
+import { storage } from '@/utils/storage';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSaveGame } from '../api/saveGame';
+import { useUpdateGame } from '../api/updateGame';
+import { Timestamp } from 'firebase/firestore';
+import { hasUserName } from '../utils';
+import { GameType } from '@/models/gameType.enum';
+import Button from '@/components/Button';
+import Loader from '@/components/Loader';
 
 const RoundPage = () => {
   const { round } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const storeGameId = (id: string) => {
+    setGameId(id);
+    storage.setGameId(id);
+  };
+
+  const { execute: saveGame, isLoading: savingGame } = useSaveGame(storeGameId);
+  const { execute: updateGame, isLoading: updatingGame } = useUpdateGame();
 
   const players = useAppSelector(selectPlayers);
   const currentRoundScores = useAppSelector(selectRoundScores(round!));
   const totalsSoFar = useAppSelector(selectTotalsUpToRound(round!));
+  const rounds = useAppSelector(selectRounds);
 
   const [roundScores, setRoundScores] = useState<number[]>(currentRoundScores);
   const [someoneRewarded, setSomeoneRewarded] = useState(false);
   const [showScoreSheet, setShowScoreSheet] = useState(false);
   const roundCardRefs = useRef<HTMLDivElement[]>([]);
+  const [gameId, setGameId] = useState(storage.getGameId());
 
   const [selectedCardIdx, setSelectedCardIdx] = useState<null | number>(null);
   const [showKeypad, setShowKeypad] = useState(false);
 
   const lowestScore = useMemo(() => Math.min(...totalsSoFar), [totalsSoFar]);
+
+  const isSavingGame = useMemo(
+    () => savingGame || updatingGame,
+    [savingGame, updatingGame],
+  );
+
+  useEffect(() => {
+    storage.setScores(rounds);
+  }, [rounds]);
 
   const stopMovementToNextRound = useMemo(() => {
     let zeroCount = 0;
@@ -84,9 +114,48 @@ const RoundPage = () => {
     dispatch(saveRoundScores({ round: round!, scores: roundScores }));
   };
 
-  const handleNextRound = () => {
+  const saveScores = async () => {
+    const lowestScore = Math.min(...totalsSoFar); // totals don't include current round scores
+    const newTotals = totalsSoFar.map(
+      (_, idx) => totalsSoFar[idx] + roundScores[idx],
+    );
+    const winningIndex = newTotals.indexOf(lowestScore);
+    const winner = players[winningIndex];
+    const creator = players.find((player) => player.id === user?.uid)!;
+    const playerUserNames = players.filter(hasUserName).map((p) => p.userName!);
+    const endedAt = Timestamp.now();
+    const scores = { ...rounds, [round!]: roundScores };
+
+    if (!user) return;
+
+    if (!gameId) {
+      await saveGame({
+        type: GameType.Kalooki,
+        players,
+        creator,
+        scores,
+        winner,
+        endedAt,
+        isComplete: false,
+        playerUserNames,
+      });
+    } else {
+      await updateGame({
+        id: gameId,
+        scores,
+        winner,
+        isComplete: Math.max(...rounds['4444']) !== 0,
+        endedAt,
+        players,
+        playerUserNames,
+      });
+    }
+  };
+
+  const handleNextRound = async () => {
     submitRound();
     setSomeoneRewarded(false);
+    await saveScores();
     navigate(AppRoutes.round(getNextRound(round!)));
   };
 
@@ -179,23 +248,25 @@ const RoundPage = () => {
           </div> */}
         </div>
         <footer className="button-container">
-          <button
+          <Button
             disabled={round! === '333'}
             onClick={handlePrevRound}
-            className="btn btn-lg flex-[2]"
+            size="lg"
+            className="flex-[2]"
           >
             Prev
-          </button>
-          <button onClick={handleEndGame} className="btn btn-lg flex-1">
+          </Button>
+          <Button onClick={handleEndGame} size="lg" className="flex-1">
             {round === '4444' ? 'End Game' : 'Save Game'}
-          </button>
-          <button
+          </Button>
+          <Button
             disabled={round! === '4444' || stopMovementToNextRound}
             onClick={handleNextRound}
-            className="btn btn-lg flex-[2]"
+            size="lg"
+            className="flex-[2]"
           >
             Next Round
-          </button>
+          </Button>
         </footer>
       </div>
       <Portal>
@@ -227,6 +298,7 @@ const RoundPage = () => {
         Are you sure you want to abandon this game? Your progress will not be
         saved.
       </ConfirmationModal>
+      <Loader isLoading={isSavingGame} text="Saving Round" />
     </>
   );
 };

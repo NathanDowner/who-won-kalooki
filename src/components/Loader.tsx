@@ -5,10 +5,15 @@ import { useDebouncedValue } from '@mantine/hooks';
 interface LoaderProps {
   isLoading: boolean;
   text?: string;
+  minLoadingTime?: number;
 }
 
-const Loader = ({ isLoading, text = 'Loading' }: LoaderProps) => {
-  const [debouncedLoading] = useDebouncedValue(isLoading, 500);
+const Loader = ({
+  isLoading,
+  text = 'Loading',
+  minLoadingTime = 500,
+}: LoaderProps) => {
+  const [debouncedLoading] = useDebouncedValue(isLoading, minLoadingTime);
 
   return (
     <AnimatePresence>
