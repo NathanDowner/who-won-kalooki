@@ -45,6 +45,13 @@ export const scoreSlice = createSlice({
       });
     },
 
+    setInitialScoresForNewPlayer: (state) => {
+      const rounds = Object.keys(state.rounds);
+      rounds.forEach((round) => {
+        state.rounds[round].push(0);
+      });
+    },
+
     bulkSetRoundScores: (
       state,
       action: PayloadAction<Record<string, number[]>>,
