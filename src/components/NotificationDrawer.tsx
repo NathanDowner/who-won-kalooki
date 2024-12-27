@@ -1,11 +1,5 @@
-import React from 'react'
+const NotificationDrawer = () => {
+  return <div>NotificationDrawer</div>;
+};
 
-type Props = {}
-
-const NotificationDrawer = (props: Props) => {
-  return (
-    <div>NotificationDrawer</div>
-  )
-}
-
-export default NotificationDrawer
+export default NotificationDrawer;
