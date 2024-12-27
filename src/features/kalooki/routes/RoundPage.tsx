@@ -115,10 +115,10 @@ const RoundPage = () => {
   };
 
   const saveScores = async () => {
-    const lowestScore = Math.min(...totalsSoFar); // totals don't include current round scores
     const newTotals = totalsSoFar.map(
       (_, idx) => totalsSoFar[idx] + roundScores[idx],
     );
+    const lowestScore = Math.min(...newTotals);
     const winningIndex = newTotals.indexOf(lowestScore);
     const winner = players[winningIndex];
     const creator = players.find((player) => player.id === user?.uid)!;
@@ -298,7 +298,11 @@ const RoundPage = () => {
         Are you sure you want to abandon this game? Your progress will not be
         saved.
       </ConfirmationModal>
-      <Loader isLoading={isSavingGame} text="Saving Round" />
+      <Loader
+        isLoading={isSavingGame}
+        text="Saving Round"
+        minLoadingTime={1000}
+      />
     </>
   );
 };
