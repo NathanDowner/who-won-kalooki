@@ -1,8 +1,14 @@
+import { NotificationDrawer } from '@/features/notifications';
 import Sidebar from '@/components/Sidebar';
+import { selectPendingFriendRequests } from '@/features/friends';
+import { useAppSelector } from '@/store/hooks';
 import { BellIcon } from '@heroicons/react/24/outline';
 import { Outlet } from 'react-router-dom';
+import clsx from 'clsx';
 
 const SidebarLayout = () => {
+  const friendRequests = useAppSelector(selectPendingFriendRequests);
+
   function handleSidebarClose() {
     const sidebar: HTMLInputElement | null =
       document.querySelector('.drawer-toggle');
@@ -43,8 +49,18 @@ const SidebarLayout = () => {
               <label
                 htmlFor="notification-drawer"
                 aria-label="open notification drawer"
-                className="btn btn-square btn-ghost"
+                className="btn btn-square btn-ghost relative"
               >
+                {!!friendRequests.length && (
+                  <div
+                    className={clsx(
+                      'absolute px-1 top-0 badge bg-orange-400 border-orange-400 rounded-full',
+                      friendRequests.length > 9 ? 'right-0' : 'right-1',
+                    )}
+                  >
+                    {friendRequests.length}
+                  </div>
+                )}
                 <BellIcon className="h-8" />
               </label>
             </div>
@@ -69,13 +85,12 @@ const SidebarLayout = () => {
         </div>
       </div>
 
-      {/* <div className="drawer drawer-end">
+      <div className="drawer drawer-end">
         <input
           type="checkbox"
           id="notification-drawer"
           className="drawer-toggle"
         />
-        <div className="drawer-content h-screen flex flex-col bg-none"></div>
         <div className="drawer-side z-50">
           <label
             htmlFor="notification-drawer"
@@ -83,10 +98,13 @@ const SidebarLayout = () => {
             className="drawer-overlay"
           ></label>
           <div className="menu px-4 w-80 max-w-[90%] min-h-full bg-white border-black border-l-4">
-            <Sidebar onClose={handleSidebarClose} />
+            <NotificationDrawer
+              onClose={handleSidebarClose}
+              friendRequests={friendRequests}
+            />
           </div>
         </div>
-      </div> */}
+      </div>
     </>
   );
 };
