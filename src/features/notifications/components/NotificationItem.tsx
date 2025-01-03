@@ -19,7 +19,6 @@ const NotificationItem = ({ notification, onClick }: Props) => {
       <div>
         <h2 className="font-bold">{notification.title}</h2>
         <p>{notification.body}</p>
-        <button onClick={onClick}>hello</button>
       </div>
     </div>
   );
