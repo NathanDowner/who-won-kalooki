@@ -11,7 +11,7 @@ import {
 import { formatRound, getNextRound } from '@/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useBlocker, useNavigate, useParams } from 'react-router-dom';
-import { PENALTY_AMOUNT } from '@/utils/constants';
+import { FINAL_ROUND, PENALTY_AMOUNT } from '@/utils/constants';
 import ScoreSheetPage from '../../../pages/ScoreSheetPage';
 import Portal from '@/components/Portal';
 import { Animations } from '@/components/animations';
@@ -99,7 +99,7 @@ const RoundPage = () => {
 
   const navigationBlocker = useBlocker(
     ({ nextLocation }) =>
-      !nextLocation.pathname.startsWith('/kalooki/round') &&
+      !nextLocation.pathname.startsWith('/kalooki/round/') &&
       nextLocation.pathname !== AppRoutes.finalScore,
   );
 
@@ -144,7 +144,7 @@ const RoundPage = () => {
         id: gameId,
         scores,
         winner,
-        isComplete: Math.max(...rounds['4444']) !== 0,
+        isComplete: Math.max(...rounds[FINAL_ROUND]) !== 0,
         endedAt,
         players,
         playerUserNames,
@@ -298,11 +298,7 @@ const RoundPage = () => {
         Are you sure you want to abandon this game? Your progress will not be
         saved.
       </ConfirmationModal>
-      <Loader
-        isLoading={isSavingGame}
-        text="Saving Round"
-        minLoadingTime={1000}
-      />
+      <Loader isLoading={isSavingGame} text="Saving Round" />
     </>
   );
 };

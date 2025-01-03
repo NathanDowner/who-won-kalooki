@@ -26,6 +26,7 @@ import { Timestamp } from 'firebase/firestore';
 import { useSaveGame } from '../api/saveGame';
 import { useUpdateGame } from '../api/updateGame';
 import { hasUserName } from '../utils';
+import { FINAL_ROUND, FIRST_ROUND } from '@/utils/constants';
 
 const FinalScorePage = () => {
   const [gameId] = useState(storage.getGameId());
@@ -38,14 +39,14 @@ const FinalScorePage = () => {
   const [showScoreSheet, setShowScoreSheet] = useState(false);
   const players = useAppSelector(selectPlayers);
   const rounds = useAppSelector(selectRounds);
-  const totalsSoFar = useAppSelector(selectTotalsUpToRound('4444', true));
+  const totalsSoFar = useAppSelector(selectTotalsUpToRound(FINAL_ROUND, true));
 
   const lowestScore = Math.min(...totalsSoFar);
 
   function saveToFirebase() {
     const winningIndex = totalsSoFar.indexOf(lowestScore);
     const winner = players[winningIndex];
-    const isComplete = Math.max(...rounds['4444']) != 0;
+    const isComplete = Math.max(...rounds[FINAL_ROUND]) != 0;
     const endedAt = Timestamp.now();
     const creator = players.find((player) => player.id === user?.uid)!;
     const playerUserNames = players.filter(hasUserName).map((p) => p.userName!);
@@ -102,7 +103,7 @@ const FinalScorePage = () => {
 
   function onPlayAgain() {
     dispatch(setInitialScores(players.length));
-    navigate(AppRoutes.round('333'));
+    navigate(AppRoutes.round(FIRST_ROUND));
   }
 
   function onStartOver() {
