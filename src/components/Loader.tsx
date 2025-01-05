@@ -14,10 +14,11 @@ const Loader = ({
   minLoadingTime = 500,
 }: LoaderProps) => {
   const [debouncedLoading] = useDebouncedValue(isLoading, minLoadingTime);
+  const showLoader = isLoading || debouncedLoading;
 
   return (
     <AnimatePresence>
-      {debouncedLoading && (
+      {showLoader && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
