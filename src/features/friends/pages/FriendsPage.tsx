@@ -15,15 +15,23 @@ import {
   selectPendingFriendRequests,
 } from '../store/friendsSlice';
 import { useAppSelector } from '@/store/hooks';
+import { SimpleUserProfile } from '@/models/user.model';
+import UserProfileComponent from '@/features/notifications/components/UserProfileComponent';
 
 const FriendsPage = () => {
   const [showAddFriendModal, setShowAddFriendModal] = useState(false);
+  const [currentFriendProfile, setCurrentFriendProfile] =
+    useState<SimpleUserProfile | null>(null);
 
   const pendingFriendRequests: SimplifiedFriendshipInfo[] = useAppSelector(
     selectPendingFriendRequests,
   );
   const confirmedFriends = useAppSelector(selectConfirmedFriends);
   const friendships = useAppSelector(selectFriends);
+
+  function onFriendCardClick(friend: SimpleUserProfile) {
+    setCurrentFriendProfile(friend);
+  }
 
   return (
     <div className="page">
@@ -51,7 +59,7 @@ const FriendsPage = () => {
       </div>
 
       {!confirmedFriends.length && (
-        <Card className="">
+        <Card>
           <p className="font-semibold">You have no friends yet</p>
           <p>Use the botton above to find and connect with your friends!</p>
         </Card>
@@ -59,11 +67,25 @@ const FriendsPage = () => {
 
       <div className="space-y-2">
         {confirmedFriends.map((friend) => (
-          <PlayerCard key={friend.id} user={friend} />
+          <PlayerCard
+            key={friend.id}
+            user={friend}
+            onClick={() => onFriendCardClick(friend)}
+          />
         ))}
       </div>
 
       <Portal>
+        {currentFriendProfile && (
+          <FullScreenModal
+            title={currentFriendProfile.fullName}
+            isOpen={!!currentFriendProfile}
+            onClose={() => setCurrentFriendProfile(null)}
+          >
+            <UserProfileComponent userProfile={currentFriendProfile} />
+          </FullScreenModal>
+        )}
+
         <FullScreenModal
           title="Add Friend"
           isOpen={showAddFriendModal}
