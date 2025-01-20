@@ -1,7 +1,7 @@
 import Card from '@/components/Card';
-import GameStatCard from '@/components/GameStatCard';
+// import GameStatCard from '@/components/GameStatCard';
 import ProfileHeader from '@/components/ProfileHeader';
-import { GameType } from '@/models/gameType.enum';
+// import { GameType } from '@/models/gameType.enum';
 import { SimpleUserProfile } from '@/models/user.model';
 import { formatName } from '@/utils';
 
@@ -20,7 +20,7 @@ const UserProfileComponent = ({
       <h2 className=" mt-8 mb-4 text-lg font-semibold">
         {isCurrentUser ? 'Your' : formatName(userProfile.fullName)}'s Games
       </h2>
-{/* add api hook to fetch game data */}
+      {/* add api hook to fetch game data */}
       {/* {userProfile.games ? (
         Object.keys(userProfile.games).map((gameName) => (
           <GameStatCard
