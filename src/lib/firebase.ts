@@ -1,18 +1,12 @@
 // Import the functions you need from the SDKs you need
-import {
-  CreateGameDto,
-  gameConverter,
-  UpdateGameDto,
-} from '@/models/game.interface';
+import { gameConverter } from '@/models/game.interface';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import {
-  addDoc,
   collection,
   getFirestore,
   where,
   query,
-  setDoc,
   deleteDoc,
   doc,
   orderBy,
@@ -47,14 +41,6 @@ if (location.hostname === 'localhost') {
   connectAuthEmulator(auth, 'http://localhost:9099');
 }
 
-export const saveGame = async (game: CreateGameDto): Promise<string> => {
-  const docRef = await addDoc(
-    collection(db, 'games').withConverter(gameConverter),
-    game,
-  );
-  return docRef.id;
-};
-
 export const useGetPreviousGames = (userName: string) => {
   const q = query(
     collection(db, 'games'),
@@ -63,13 +49,6 @@ export const useGetPreviousGames = (userName: string) => {
   ).withConverter(gameConverter);
 
   return useCollectionData(q, { initialValue: [] });
-};
-
-export const updateGame = async (game: UpdateGameDto) => {
-  await setDoc(doc(db, 'games', game.id), game, {
-    mergeFields: ['scores', 'winner', 'isComplete'],
-  });
-  return game.id;
 };
 
 export const deleteGame = async (gameId: string) => {

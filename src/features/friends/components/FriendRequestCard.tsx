@@ -150,7 +150,7 @@ export const FriendRequestCard = ({
                 loading={isUpdating}
                 onClick={() => handleUpdateRequest(FriendshipStatus.Declined)}
               >
-                Reject
+                Decline
               </Button>
             </div>
           )}

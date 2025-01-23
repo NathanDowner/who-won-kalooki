@@ -1,9 +1,7 @@
 import { Animations } from '@/components/animations';
-import ButtonContainer from '@/components/ButtonContainer';
-import PlayerCard from '@/components/PlayerCard';
+import PlayerScoreCard from '@/components/PlayerScoreCard';
 import Portal from '@/components/Portal';
 import { useAuth } from '@/contexts/AuthContext';
-import { saveGame, updateGame } from '@/lib/firebase';
 import { GameType } from '@/models/gameType.enum';
 import { AppRoutes } from '@/routes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -18,34 +16,40 @@ import { FirebaseError } from 'firebase/app';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import ScoreSheetPage from './ScoreSheetPage';
+import ScoreSheetPage from '../../../pages/ScoreSheetPage';
 import AppHeader from '@/components/AppHeader';
 import {
   ClipboardDocumentListIcon,
   HomeIcon,
 } from '@heroicons/react/24/outline';
-import { Player } from '@/models/player.interface';
-
-function hasUserName(player: Player): boolean {
-  return player.userName !== undefined;
-}
+import { Timestamp } from 'firebase/firestore';
+import { useSaveGame } from '../api/saveGame';
+import { useUpdateGame } from '../api/updateGame';
+import { hasUserName } from '../utils';
+import { FINAL_ROUND, FIRST_ROUND } from '@/utils/constants';
 
 const FinalScorePage = () => {
   const [gameId] = useState(storage.getGameId());
   const { user } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { execute: saveGame } = useSaveGame();
+  const { execute: updateGame } = useUpdateGame();
 
   const [showScoreSheet, setShowScoreSheet] = useState(false);
   const players = useAppSelector(selectPlayers);
   const rounds = useAppSelector(selectRounds);
-  const totalsSoFar = useAppSelector(selectTotalsUpToRound('4444', true));
+  const totalsSoFar = useAppSelector(selectTotalsUpToRound(FINAL_ROUND, true));
 
   const lowestScore = Math.min(...totalsSoFar);
 
   function saveToFirebase() {
     const winningIndex = totalsSoFar.indexOf(lowestScore);
     const winner = players[winningIndex];
+    const isComplete = Math.max(...rounds[FINAL_ROUND]) != 0;
+    const endedAt = Timestamp.now();
+    const creator = players.find((player) => player.id === user?.uid)!;
+    const playerUserNames = players.filter(hasUserName).map((p) => p.userName!);
 
     if (user) {
       if (gameId) {
@@ -55,7 +59,10 @@ const FinalScorePage = () => {
               id: gameId,
               scores: rounds,
               winner: { ...winner },
-              isComplete: Math.max(...rounds['4444']) != 0,
+              players,
+              isComplete,
+              endedAt,
+              playerUserNames,
             }),
             {
               loading: 'Saving game...',
@@ -73,13 +80,12 @@ const FinalScorePage = () => {
             saveGame({
               type: GameType.Kalooki,
               players,
-              creator: players.find((player) => player.id === user.uid)!,
+              creator,
               scores: rounds,
               winner: winner,
-              isComplete: Math.max(...rounds['4444']) != 0,
-              playerUserNames: players
-                .filter(hasUserName)
-                .map((p) => p.userName!),
+              endedAt,
+              isComplete,
+              playerUserNames,
             }),
             {
               loading: 'Saving game...',
@@ -97,7 +103,7 @@ const FinalScorePage = () => {
 
   function onPlayAgain() {
     dispatch(setInitialScores(players.length));
-    navigate(AppRoutes.round('333'));
+    navigate(AppRoutes.round(FIRST_ROUND));
   }
 
   function onStartOver() {
@@ -110,7 +116,7 @@ const FinalScorePage = () => {
     }
 
     saveToFirebase();
-    storage.clearData();
+    storage.clearData(); // TODO: clear on start page
   }, []);
 
   return (
@@ -137,7 +143,7 @@ const FinalScorePage = () => {
           .map((player, idx) => ({ ...player, score: totalsSoFar[idx] }))
           .sort((a, b) => a.score - b.score)
           .map((player, idx) => (
-            <PlayerCard
+            <PlayerScoreCard
               key={idx}
               playerName={player.name}
               imgUrl={player.imgUrl}
@@ -152,14 +158,14 @@ const FinalScorePage = () => {
           <ScoreSheetPage onClose={() => setShowScoreSheet(false)} />
         </Animations.SlideUp>
       </Portal>
-      <ButtonContainer>
+      <footer className="button-container">
         <button className="btn btn-lg flex-1" onClick={onPlayAgain}>
           Play Again
         </button>
         <button className="btn btn-lg flex-1" onClick={onStartOver}>
-          Start Over
+          Go Home
         </button>
-      </ButtonContainer>
+      </footer>
     </div>
   );
 };

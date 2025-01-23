@@ -1,39 +1,47 @@
-import { getOrdinalSuffix } from '@/utils';
-import defaultUserImg from '@/assets/default-user.svg';
+import Card from '@/components/Card';
+import UserProfileImage from '@/components/UserProfileImage';
+import { SimpleUserProfile } from '@/models/user.model';
+import clsx from 'clsx';
 
-interface Props {
-  playerName: string;
-  imgUrl?: string;
-  score?: number;
-  winner?: boolean;
-  order?: number;
-}
+type Props = {
+  user: SimpleUserProfile;
+  isSelected?: boolean;
+  onClick?: () => void;
+};
 
-const PlayerCard = ({ playerName, imgUrl, score, winner, order }: Props) => {
+const PlayerCard = ({ user, isSelected, onClick }: Props) => {
   return (
-    <div
-      key={playerName}
-      className={`${
-        winner ? 'bg-yellow-400 border-yellow-500' : 'border-gray-700'
-      } flex gap-4 items-center border-4 text-xl  p-3 rounded-md`}
+    <Card
+      onClick={onClick}
+      className={clsx(
+        'flex gap-4 items-center',
+        isSelected && 'border-green-600 bg-green-50',
+      )}
     >
-      {order && (
-        <div>
-          <span className="text-5xl tabular-nums">{order}</span>
-          {getOrdinalSuffix(order)}
+      <UserProfileImage
+        imgUrl={user.imgUrl}
+        className={clsx('w-14 h-14', isSelected && 'border-green-600')}
+      />
+      <div className="flex flex-col items-start text-xl">
+        <h3 className={clsx('truncate-text', isSelected && 'text-green-600')}>
+          {user.fullName}
+        </h3>
+
+        <small
+          className={clsx(
+            'text-gray-400 italic',
+            isSelected && 'text-green-600/60',
+          )}
+        >
+          @{user.userName}
+        </small>
+      </div>
+      {isSelected && (
+        <div className="grid place-items-center bg-green-400 rounded-e-sm text-white -m-3 ml-auto self-stretch">
+          <span className="p-2">✔</span>
         </div>
       )}
-      <img
-        src={imgUrl ?? defaultUserImg}
-        className={`${
-          winner ? 'border-yellow-500' : 'border-gray-700'
-        } border-4 rounded-full w-14 h-14`}
-      />
-      <span className="truncate-text">{playerName}</span>
-      {score !== undefined && (
-        <div className="ml-auto text-3xl font-bold">{score}</div>
-      )}
-    </div>
+    </Card>
   );
 };
 

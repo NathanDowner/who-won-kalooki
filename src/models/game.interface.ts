@@ -1,7 +1,6 @@
 import {
   DocumentData,
   FirestoreDataConverter,
-  serverTimestamp,
   Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
@@ -20,7 +19,7 @@ export interface Game {
   scores: Record<string, number[]>;
 }
 
-export type CreateGameDto = Omit<Game, 'id' | 'endedAt'>;
+export type CreateGameDto = Omit<Game, 'id'>;
 
 export type UpdateGameDto = Partial<Game> & { id: string };
 
@@ -34,7 +33,7 @@ export const gameConverter: FirestoreDataConverter<Game> = {
   toFirestore(game: WithFieldValue<CreateGameDto>): DocumentData {
     return {
       type: game.type,
-      endedAt: serverTimestamp(),
+      endedAt: game.endedAt,
       players: game.players,
       isComplete: game.isComplete,
       winner: game.winner,

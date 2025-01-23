@@ -1,7 +1,14 @@
+import { NotificationDrawer } from '@/features/notifications';
 import Sidebar from '@/components/Sidebar';
+import { selectPendingFriendRequests } from '@/features/friends';
+import { useAppSelector } from '@/store/hooks';
+import { BellIcon } from '@heroicons/react/24/outline';
 import { Outlet } from 'react-router-dom';
+import clsx from 'clsx';
 
 const SidebarLayout = () => {
+  const friendRequests = useAppSelector(selectPendingFriendRequests);
+
   function handleSidebarClose() {
     const sidebar: HTMLInputElement | null =
       document.querySelector('.drawer-toggle');
@@ -17,12 +24,12 @@ const SidebarLayout = () => {
         <input type="checkbox" id="side-menu" className="drawer-toggle" />
         <div className="drawer-content h-screen flex flex-col">
           {/* Navbar */}
-          <div className="!p-0 -mx-2 w-full navbar bg-none sticky top-0 z-50 flex-none">
-            <div className="flex-none pl-4">
+          <div className="!p-0  w-full navbar bg-none sticky top-0 z-50 flex-none">
+            <div className="px-4 flex w-full justify-between items-center">
               <label
                 htmlFor="side-menu"
                 aria-label="open sidebar"
-                className="btn btn-square btn-ghost"
+                className="btn btn-square btn-ghost flex-none"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -37,6 +44,24 @@ const SidebarLayout = () => {
                     d="M4 6h16M4 12h16M4 18h16"
                   ></path>
                 </svg>
+              </label>
+
+              <label
+                htmlFor="notification-drawer"
+                aria-label="open notification drawer"
+                className="btn btn-square btn-ghost relative"
+              >
+                {!!friendRequests.length && (
+                  <div
+                    className={clsx(
+                      'absolute px-1 top-0 badge bg-orange-400 border-orange-400 rounded-full',
+                      friendRequests.length > 9 ? 'right-0' : 'right-1',
+                    )}
+                  >
+                    {friendRequests.length}
+                  </div>
+                )}
+                <BellIcon className="h-8" />
               </label>
             </div>
           </div>
@@ -56,6 +81,27 @@ const SidebarLayout = () => {
           ></label>
           <div className="menu px-4 w-80 max-w-[90%] min-h-full bg-white border-black border-r-4">
             <Sidebar onClose={handleSidebarClose} />
+          </div>
+        </div>
+      </div>
+
+      <div className="drawer drawer-end">
+        <input
+          type="checkbox"
+          id="notification-drawer"
+          className="drawer-toggle"
+        />
+        <div className="drawer-side z-50">
+          <label
+            htmlFor="notification-drawer"
+            aria-label="close notification drawer"
+            className="drawer-overlay"
+          ></label>
+          <div className="menu px-4 w-80 max-w-[90%] min-h-full bg-white border-black border-l-4">
+            <NotificationDrawer
+              onClose={handleSidebarClose}
+              friendRequests={friendRequests}
+            />
           </div>
         </div>
       </div>

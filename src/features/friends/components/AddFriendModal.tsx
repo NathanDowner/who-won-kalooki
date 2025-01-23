@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import {
-  Friendship,
+  // Friendship,
   SimplifiedFriendshipInfo,
 } from '../types/friend.interface';
 import Input from '@/components/Input';
@@ -9,12 +9,12 @@ import { useUserSearch } from '@/features/user';
 import { useDebouncedValue } from '@mantine/hooks';
 import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/outline';
 import { FriendRequestCard } from './FriendRequestCard';
-import { toSimplifiedFriendship } from '../util';
+// import { toSimplifiedFriendship } from '../util';
 import { UserProfile } from '@/models/user.model';
 
 interface AddFriendModalProps {
   onClose: () => void;
-  friendships: Friendship[];
+  friendships: SimplifiedFriendshipInfo[];
 }
 
 const AddFriendModal = ({ friendships }: AddFriendModalProps) => {
@@ -50,13 +50,7 @@ const AddFriendModal = ({ friendships }: AddFriendModalProps) => {
   function findFriendshipById(
     userId: string,
   ): SimplifiedFriendshipInfo | undefined {
-    const found = friendships.find((friendship) =>
-      friendship.ids.includes(userId),
-    );
-
-    if (found) {
-      return toSimplifiedFriendship(found, userProfile!.id);
-    }
+    return friendships.find((friendship) => friendship.otherUserId === userId);
   }
 
   return (

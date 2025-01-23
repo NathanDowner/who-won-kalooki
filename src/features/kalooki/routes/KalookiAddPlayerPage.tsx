@@ -4,7 +4,7 @@ import { bulkAddPlayers } from '@/store/playersSlice';
 import { setInitialScores } from '@/store/scoreSlice';
 import { storage } from '@/utils/storage';
 import { useNavigate } from 'react-router-dom';
-import AddPlayersPage from './AddPlayersPage';
+import AddPlayersPage from '@/pages/AddPlayersPage';
 import { Player } from '@/models/player.interface';
 
 const KalookiAddPlayerPage = () => {

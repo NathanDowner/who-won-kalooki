@@ -8,16 +8,18 @@ export type CreateFriendshipDto = Omit<
   'createdAt' | 'updatedAt' | 'id'
 >;
 
-const sendFriendRequest = async (data: CreateFriendshipDto) => {
-  console.log('calling sendFriendRequest');
-  return setDoc(
-    doc(collection(db, 'friends').withConverter(friendshipConverter)),
-    data,
+const sendFriendRequest = async (
+  data: CreateFriendshipDto,
+): Promise<string> => {
+  const friendshipRef = doc(
+    collection(db, 'friends').withConverter(friendshipConverter),
   );
+  await setDoc(friendshipRef, data);
+  return friendshipRef.id;
 };
 
 export const useSendFriendRequest = (onSuccess?: () => void) => {
-  return useUpdateDocument<CreateFriendshipDto, void>(sendFriendRequest, {
+  return useUpdateDocument<CreateFriendshipDto, string>(sendFriendRequest, {
     successNotificationText: 'Friend request sent!',
     onSuccess,
   });

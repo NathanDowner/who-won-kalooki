@@ -25,6 +25,8 @@ export const INITIAL_SCORES: Record<string, number[]> = {
 
 export const PENALTY_AMOUNT = 50;
 export const ANIMATION_DURATION = 0.25;
+export const FINAL_ROUND = '4444';
+export const FIRST_ROUND = '333';
 
 // export const sampleGame = {
 //   type: GameType.Kalooki,

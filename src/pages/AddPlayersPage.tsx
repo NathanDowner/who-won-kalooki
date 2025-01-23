@@ -1,10 +1,15 @@
 import AddPlayerCard from '@/components/AddPlayerCard';
 import AppHeader from '@/components/AppHeader';
-import ButtonContainer from '@/components/ButtonContainer';
+import { FullScreenModal } from '@/components/FullScreenModal';
 import PlayerSearchbar from '@/components/PlayerSearchbar';
+import Portal from '@/components/Portal';
 import { useAuth } from '@/contexts/AuthContext';
+import { selectConfirmedFriends } from '@/features/friends';
+import SelectFriendsModal from '@/features/friends/components/SelectFriendsModal';
 import { Player } from '@/models/player.interface';
-import { UserProfile } from '@/models/user.model';
+import { SimpleUserProfile } from '@/models/user.model';
+import { useAppSelector } from '@/store/hooks';
+import { PlusIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -22,6 +27,8 @@ const AddPlayersPage = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [players, setPlayers] = useState<Player[]>([]);
+  const [showAddFriendsModal, setShowAddFriendsModal] = useState(false);
+  const friends = useAppSelector(selectConfirmedFriends);
 
   useEffect(() => {
     if (user && user.displayName && user.photoURL && userProfile) {
@@ -38,7 +45,17 @@ const AddPlayersPage = ({
   }, []);
 
   function handleStartGame() {
-    onStartGame(players);
+    if (!newPlayerName) {
+      return onStartGame(players);
+    }
+
+    const newPlayer: Player = { name: newPlayerName.trim() };
+
+    setPlayers((players) => {
+      const newPlayers = [...players, newPlayer];
+      onStartGame(newPlayers);
+      return newPlayers;
+    });
   }
 
   function updatePlayer(index: number, player: Player) {
@@ -77,7 +94,7 @@ const AddPlayersPage = ({
     addPlayer(newPlayer);
   };
 
-  function addPlayerFromSearch(player: UserProfile) {
+  function addPlayerFromSearch(player: SimpleUserProfile) {
     addPlayer(
       {
         id: player.id,
@@ -87,6 +104,13 @@ const AddPlayersPage = ({
       },
       false,
     );
+  }
+
+  function handleAddFriends(friends: SimpleUserProfile[]) {
+    friends.forEach((friend) => {
+      addPlayerFromSearch(friend);
+    });
+    setShowAddFriendsModal(false);
   }
 
   return (
@@ -126,21 +150,43 @@ const AddPlayersPage = ({
           />
         </form>
         {/* Add Player instructions */}
-        {players.length <= 2 && (
-          <div className="text-center text-gray-500 text-sm">
-            <p>Hit enter/return after inputting a name to save it!</p>
-          </div>
-        )}
+
+        <div className="text-center text-gray-500 text-sm">
+          <p>Hit enter/return after inputting a name to save it!</p>
+        </div>
       </div>
-      <ButtonContainer>
+      <Portal>
+        <FullScreenModal
+          isOpen={showAddFriendsModal}
+          onClose={() => setShowAddFriendsModal(false)}
+          title="Select Friends"
+        >
+          <SelectFriendsModal
+            onSelectFriends={handleAddFriends}
+            selectedFriendIds={players.filter((p) => p.id).map((p) => p.id!)}
+            friends={friends}
+          />
+        </FullScreenModal>
+      </Portal>
+
+      <footer className="button-container">
+        {friends.length != 0 && (
+          <button
+            onClick={() => setShowAddFriendsModal(true)}
+            className="btn btn-lg w-full -space-x-3 items-center flex-[1]"
+          >
+            <PlusIcon className="h-4 w-4" />
+            <UserGroupIcon className="h-6 w-6" />
+          </button>
+        )}
         <button
           disabled={players.length < 2}
           onClick={handleStartGame}
-          className="btn btn-lg w-full"
+          className="btn btn-lg w-full flex-[4]"
         >
           {startGameBtnText}
         </button>
-      </ButtonContainer>
+      </footer>
     </div>
   );
 };

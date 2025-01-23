@@ -7,11 +7,15 @@ type UseUpdateDocumentOptions<TResponse> = {
   successNotificationText?: string;
   showErrorToast?: boolean;
   initialData?: TResponse;
+  notificationDuration?: number;
 };
 
 export function useUpdateDocument<TData, TResponse>(
   updateFn: (data: TData) => Promise<TResponse>,
-  options: UseUpdateDocumentOptions<TResponse> = { showErrorToast: true },
+  options: UseUpdateDocumentOptions<TResponse> = {
+    showErrorToast: true,
+    notificationDuration: 4000,
+  },
 ): {
   error: FirebaseError | null;
   isLoading: boolean;
@@ -29,7 +33,8 @@ export function useUpdateDocument<TData, TResponse>(
       setIsLoading(true);
       setError(null);
       try {
-        const { onSuccess, successNotificationText } = options;
+        const { onSuccess, successNotificationText, notificationDuration } =
+          options;
         const resp = await updateFn(data);
 
         if (onSuccess) {
@@ -39,7 +44,9 @@ export function useUpdateDocument<TData, TResponse>(
         }
 
         if (successNotificationText) {
-          toast.success(successNotificationText);
+          toast.success(successNotificationText, {
+            duration: notificationDuration,
+          });
         }
       } catch (err: unknown) {
         console.log(err);
