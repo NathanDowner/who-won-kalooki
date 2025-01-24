@@ -7,6 +7,7 @@ import DefaultLayout from './layouts/DefaultLayout';
 import ProfilePage from './pages/ProfilePage';
 import { FriendsPage } from './features/friends/';
 import { KalookiRoutes } from './features/kalooki';
+import { RiskRoutes } from './features/risk';
 
 export const AppRoutes = {
   root: '/',
@@ -17,6 +18,10 @@ export const AppRoutes = {
   finalScore: '/kalooki/end',
   profile: '/profile',
   friends: '/friends',
+  risk: {
+    addPlayers: '/risk/add-players',
+    round: '/risk/round',
+  },
 };
 
 export const router = createBrowserRouter([
@@ -37,6 +42,7 @@ export const router = createBrowserRouter([
       { path: 'profile', element: <AuthGuard component={<ProfilePage />} /> },
       { path: 'friends', element: <AuthGuard component={<FriendsPage />} /> },
       { path: 'kalooki/*', children: KalookiRoutes },
+      { path: 'risk/*', children: RiskRoutes },
       { path: '*', element: <Navigate to={AppRoutes.start} /> },
     ],
   },

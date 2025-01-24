@@ -50,6 +50,11 @@ const Sidebar = ({ onClose }: SideBarProps) => {
         handler: () => setShowFeedbackModal(true),
         requiresAuth: false,
       },
+      {
+        label: 'Risk (Experimental)',
+        link: AppRoutes.risk.addPlayers,
+        requiresAuth: false,
+      },
     ],
     [],
   );
