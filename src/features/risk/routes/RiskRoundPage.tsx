@@ -133,7 +133,7 @@ const RiskRoundPage = () => {
           ))}
         </div>
 
-        {currentDefenderIdx && (
+        {currentDefenderIdx !== null && (
           <>
             <RiskBattle
               attacker={players[currentPlayerIdx]}
