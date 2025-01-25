@@ -1,6 +1,5 @@
 import { Player } from '@/models/player.interface';
 import { formatName } from '@/utils';
-import React from 'react';
 import Button from './Button';
 
 type Props = {

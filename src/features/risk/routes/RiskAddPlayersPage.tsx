@@ -4,7 +4,6 @@ import { AppRoutes } from '@/routes';
 import { useAppDispatch } from '@/store/hooks';
 import { bulkAddPlayers } from '@/store/playersSlice';
 import { storage } from '@/utils/storage';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const RiskAddPlayersPage = () => {

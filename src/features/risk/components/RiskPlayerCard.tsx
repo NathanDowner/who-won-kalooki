@@ -1,6 +1,6 @@
 import { Player } from '@/models/player.interface';
 import { formatName } from '@/utils';
-import React, { ForwardedRef, forwardRef, useMemo } from 'react';
+import { ForwardedRef, forwardRef, useMemo } from 'react';
 
 type Props = {
   player: Player;
